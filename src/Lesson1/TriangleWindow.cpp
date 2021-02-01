@@ -46,10 +46,10 @@ void TriangleWindow::render() {
 
   program_->setUniformValue(matrixUniform_, matrix);
 
-  glVertexAttribPointer(posAttr_, gVertices.size() / 3u, GL_FLOAT, GL_FALSE, 0,
-                        gVertices.data());
-  glVertexAttribPointer(colAttr_, gColors.size() / 3u, GL_FLOAT, GL_FALSE, 0,
-                        gColors.data());
+  glVertexAttribPointer(posAttr_, static_cast<GLint>(gVertices.size() / 3u),
+                        GL_FLOAT, GL_FALSE, 0, gVertices.data());
+  glVertexAttribPointer(colAttr_, static_cast<GLint>(gColors.size() / 3u),
+                        GL_FLOAT, GL_FALSE, 0, gColors.data());
 
   glEnableVertexAttribArray(posAttr_);
   glEnableVertexAttribArray(colAttr_);
