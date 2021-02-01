@@ -9,6 +9,7 @@ int main(int argc, char **argv) {
 
   QSurfaceFormat format;
   format.setSamples(16);
+  format.setVersion(2, 1);
 
   fgl::TriangleWindow window;
   window.setFormat(format);

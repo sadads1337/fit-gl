@@ -1,3 +1,5 @@
+#version 120
+
 attribute highp vec4 posAttr;
 attribute lowp vec4 colAttr;
 
