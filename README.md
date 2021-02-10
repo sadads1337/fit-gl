@@ -1,16 +1,16 @@
-# FIT OpengGL demo project 2021
+# FIT OpenGL demo project 2021
 
-Qt based demo project to demostrate how to use and implement basic 3D graphics features.
+Qt based demo project to demonstrate how to use and implement basic 3D graphics features.
 No optimizations exists. Use only for educational purposes.
 
 ## Requirements
 
-- git [https://git-scm.com](click!);
+- git [https://git-scm.com](https://git-scm.com);
 - C++17 compatible compiler;
-- CMake 3.10+ [https://cmake.org/](click!);
-- Qt 5 [https://www.qt.io/](click!);
+- CMake 3.10+ [https://cmake.org/](https://cmake.org/);
+- Qt 5 [https://www.qt.io/](https://www.qt.io/);
 - Your favourite IDE;
-- (Optionally) Ninja build [https://ninja-build.org/](click!).
+- (Optionally) Ninja build [https://ninja-build.org/](https://ninja-build.org/).
 
 ## Hardware requirements
 
