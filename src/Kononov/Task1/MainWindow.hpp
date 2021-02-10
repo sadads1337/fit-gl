@@ -35,7 +35,7 @@ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
 public slots:
-  void onMessageLogged(QOpenGLDebugMessage message);
+  static void onMessageLogged(const QOpenGLDebugMessage& message);
 
 private:
   std::shared_ptr<DirectionInputController> m_look_dir;

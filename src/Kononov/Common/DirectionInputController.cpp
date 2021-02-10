@@ -17,8 +17,9 @@ void DirectionInputController::mouseReleaseEvent(QMouseEvent *event) {
 }
 
 void DirectionInputController::mouseMoveEvent(QMouseEvent *event) {
-  if (event->buttons() && m_mousePressed)
+  if (m_mousePressed) {
     handleMove(event->pos());
+  }
 }
 
 void DirectionInputController::handleMove(const QPoint &position) {
@@ -43,6 +44,7 @@ QVector3D DirectionInputController::getRightDirection() const noexcept {
       .rotatedVector(QVector3D(1, 0, 0));
 }
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 QVector3D DirectionInputController::getUpDirection() const noexcept {
   return QVector3D(0, 1, 0);
 }

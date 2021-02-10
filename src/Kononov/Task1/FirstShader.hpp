@@ -31,21 +31,21 @@ public:
   void setViewPosition(QVector3D pos);
 
 private:
-  GLint m_vertex_position_attr = 0;
-  GLint m_vertex_normal_attr = 0;
-  GLint m_vertex_uv_attr = 0;
+  GLint m_vertex_position_attr;
+  GLint m_vertex_normal_attr;
+  GLint m_vertex_uv_attr;
 
-  GLint m_view_matrix_uniform = 0;
-  GLint m_model_matrix_uniform = 0;
-  GLint m_normal_matrix_uniform = 0;
+  GLint m_view_matrix_uniform;
+  GLint m_model_matrix_uniform;
+  GLint m_normal_matrix_uniform;
 
-  GLint m_diffuse_map_uniform = 0;
-  GLint m_ambient_strength_uniform = 0;
-  GLint m_specular_strength_uniform = 0;
-  GLint m_specular_pow_uniform = 0;
-  GLint m_light_color_uniform = 0;
-  GLint m_light_pos_uniform = 0;
-  GLint m_view_pos_uniform = 0;
+  GLint m_diffuse_map_uniform;
+  GLint m_ambient_strength_uniform;
+  GLint m_specular_strength_uniform;
+  GLint m_specular_pow_uniform;
+  GLint m_light_color_uniform;
+  GLint m_light_pos_uniform;
+  GLint m_view_pos_uniform;
 
   std::unique_ptr<QOpenGLShaderProgram> m_shader;
 };
