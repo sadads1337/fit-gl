@@ -2,7 +2,13 @@
 
 namespace Kononov {
 
-FirstShader::FirstShader() {
+FirstShader::FirstShader()
+    : m_vertex_position_attr(0), m_vertex_normal_attr(0), m_vertex_uv_attr(0),
+      m_view_matrix_uniform(0), m_model_matrix_uniform(0),
+      m_normal_matrix_uniform(0), m_diffuse_map_uniform(0),
+      m_ambient_strength_uniform(0), m_specular_strength_uniform(0),
+      m_specular_pow_uniform(0), m_light_color_uniform(0),
+      m_light_pos_uniform(0), m_view_pos_uniform(0) {
   /*
    * Shader program initialization
    */
@@ -17,8 +23,8 @@ FirstShader::FirstShader() {
    * Query locations of parameters
    */
   m_vertex_position_attr = m_shader->attributeLocation("vertex_position");
-  m_vertex_uv_attr = m_shader->attributeLocation("vertex_uv");
   m_vertex_normal_attr = m_shader->attributeLocation("vertex_normal");
+  m_vertex_uv_attr = m_shader->attributeLocation("vertex_uv");
 
   m_view_matrix_uniform = m_shader->uniformLocation("view_matrix");
   m_model_matrix_uniform = m_shader->uniformLocation("model_matrix");

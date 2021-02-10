@@ -30,7 +30,7 @@ public:
 private:
   void handleMove(const QPoint &position);
 
-  float m_sensitivity = 0.2;
+  float m_sensitivity = 0;
   bool m_mousePressed = false;
   QPoint m_lastPosition{};
   float m_yaw = 0;
