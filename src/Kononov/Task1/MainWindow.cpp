@@ -149,7 +149,7 @@ void MainWindow::render() {
   const auto pixel_ratio = devicePixelRatio();
   const auto ratio = (float)width() / (float)height();
 
-  glViewport(0, 0, (GLsizei)(width() * pixel_ratio / 2),
+  glViewport(0, 0, (GLsizei)(width() * pixel_ratio),
              (GLsizei)(height() * pixel_ratio));
 
   glClearColor(CLEAR_COLOR.x(), CLEAR_COLOR.y(), CLEAR_COLOR.z(),
