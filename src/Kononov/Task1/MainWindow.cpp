@@ -117,13 +117,21 @@ void MainWindow::init() {
     m_logger->enableMessages();
   }
 
-  m_skull = std::make_unique<FirstSceneObject>(
-      GL_TRIANGLES, ":/textures/skull-diffuse.jpg", ":/models/skull.vbo-ibo");
+  m_shader = std::make_shared<FirstShader>();
+
+  m_skull = std::make_unique<FirstSceneObject>(GL_TRIANGLES, m_shader,
+                                               ":/textures/skull-diffuse.jpg",
+                                               ":/models/skull.vbo-ibo");
+  m_skull->getShaderParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
+  m_skull->getShaderParameters().setDiffuseMap(0);
+  m_skull->getShaderParameters().setAmbient(AMBIENT_STRENGTH);
+  m_skull->getShaderParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
 
   m_cube = std::make_unique<FirstSceneObject>(
-      GL_TRIANGLE_STRIP, ":/textures/dice-diffuse.png",
+      GL_TRIANGLE_STRIP, m_shader, ":/textures/dice-diffuse.png",
       (char *)modelVertices.data(), modelVertices.size() * sizeof(GLfloat),
       (char *)modelIndices.data(), modelIndices.size() * sizeof(GLfloat));
+  m_cube->setShaderParameters(m_skull->getShaderParameters());
 
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
@@ -158,37 +166,25 @@ void MainWindow::render() {
   const float angle =
       ROTATION_SPEED * (float)m_frame / (float)screen()->refreshRate();
   const float model_scale = 0.1F;
-  const int model_rotation = -90;
   QMatrix4x4 model_matrix;
   model_matrix.rotate(angle, 0, 1, 0);
   model_matrix.scale(model_scale);
-  model_matrix.rotate(model_rotation, 1, 0, 0);
 
   m_skull->getShaderParameters().setViewPos(m_motion->getPosition());
-  m_skull->getShaderParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
-  m_skull->getShaderParameters().setDiffuseMap(0);
-  m_skull->getShaderParameters().setAmbient(AMBIENT_STRENGTH);
-  m_skull->getShaderParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
-
   m_skull->render(view_matrix, model_matrix);
 
   model_matrix.setToIdentity();
   model_matrix.translate(-3, 0, 0);
   model_matrix.scale(model_scale);
-  model_matrix.rotate(model_rotation, 1, 0, 0);
 
+  // View position is same
   m_skull->render(view_matrix, model_matrix);
-
-  m_cube->getShaderParameters().setViewPos(m_motion->getPosition());
-  m_cube->getShaderParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
-  m_cube->getShaderParameters().setDiffuseMap(0);
-  m_cube->getShaderParameters().setAmbient(AMBIENT_STRENGTH);
-  m_cube->getShaderParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
 
   model_matrix.setToIdentity();
   model_matrix.translate(4, 0, 0);
   model_matrix.rotate(-angle, 0, 1, 0);
 
+  m_cube->getShaderParameters().setViewPos(m_motion->getPosition());
   m_cube->render(view_matrix, model_matrix);
 
   m_frame++;

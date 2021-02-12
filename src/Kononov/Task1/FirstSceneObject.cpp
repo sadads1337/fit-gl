@@ -8,29 +8,6 @@
 
 namespace Kononov {
 
-void FirstSceneObject::initVao() {
-  const size_t stride = sizeof(GLfloat) * 8;
-  const size_t pos_offset = sizeof(GLfloat) * 0;
-  const size_t normal_offset = sizeof(GLfloat) * 3;
-  const size_t uv_offset = sizeof(GLfloat) * 6;
-
-  /*
-   * Create and configure VAO
-   */
-  m_vao = std::make_unique<QOpenGLVertexArrayObject>();
-  m_vao->create();
-  m_vao->bind();
-  m_vbo->bind();
-
-  // glVertexAttribPointer (specify location of values in vertex structure)
-  m_shader->setVertexPositionBuffer(pos_offset, stride);
-  m_shader->setVertexNormalBuffer(normal_offset, stride);
-  m_shader->setVertexUVBuffer(uv_offset, stride);
-
-  m_vbo->release();
-  m_vao->release();
-}
-
 std::unique_ptr<QOpenGLBuffer>
 FirstSceneObject::readGLBuffer(QDataStream &stream, QOpenGLBuffer::Type type) {
   // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg, hicpp-vararg)
@@ -55,10 +32,33 @@ FirstSceneObject::bufferFromData(const char *data, int size,
   return buffer;
 }
 
+void FirstSceneObject::initVao() {
+  const size_t stride = sizeof(GLfloat) * 8;
+  const size_t pos_offset = sizeof(GLfloat) * 0;
+  const size_t normal_offset = sizeof(GLfloat) * 3;
+  const size_t uv_offset = sizeof(GLfloat) * 6;
+
+  /*
+   * Create and configure VAO
+   */
+  m_vao = std::make_unique<QOpenGLVertexArrayObject>();
+  m_vao->create();
+  m_vao->bind();
+  m_vbo->bind();
+
+  // glVertexAttribPointer (specify location of values in vertex structure)
+  m_shader->setVertexPositionBuffer(pos_offset, stride);
+  m_shader->setVertexNormalBuffer(normal_offset, stride);
+  m_shader->setVertexUVBuffer(uv_offset, stride);
+
+  m_vbo->release();
+  m_vao->release();
+}
+
 FirstSceneObject::FirstSceneObject(GLenum primitive,
-                                   const QString &texture_file)
-    : m_primitive(primitive), m_shader_parameters(),
-      m_shader(std::make_unique<FirstShader>()) {
+                                   const QString &texture_file,
+                                   std::shared_ptr<FirstShader> &shader)
+    : m_primitive(primitive), m_shader_parameters(), m_shader(shader) {
   m_texture = std::make_unique<QOpenGLTexture>(QImage(texture_file).mirrored());
   m_texture->setMinificationFilter(QOpenGLTexture::Nearest);
   m_texture->setMagnificationFilter(QOpenGLTexture::Linear);
@@ -66,9 +66,10 @@ FirstSceneObject::FirstSceneObject(GLenum primitive,
 }
 
 FirstSceneObject::FirstSceneObject(GLenum primitive,
+                                   std::shared_ptr<FirstShader> &shader,
                                    const QString &texture_file,
                                    const QString &geometry_file)
-    : FirstSceneObject(primitive, texture_file) {
+    : FirstSceneObject(primitive, texture_file, shader) {
   QFile file(geometry_file);
   if (!file.open(QIODevice::ReadOnly)) {
     qDebug() << "Unable to open file " << geometry_file;
@@ -81,10 +82,11 @@ FirstSceneObject::FirstSceneObject(GLenum primitive,
 }
 
 FirstSceneObject::FirstSceneObject(GLenum primitive,
+                                   std::shared_ptr<FirstShader> &shader,
                                    const QString &texture_file,
                                    const char *vbo_data, int vbo_size,
                                    const char *ibo_data, int ibo_size)
-    : FirstSceneObject(primitive, texture_file) {
+    : FirstSceneObject(primitive, texture_file, shader) {
   m_vbo = bufferFromData(vbo_data, vbo_size, QOpenGLBuffer::VertexBuffer);
   m_ibo = bufferFromData(ibo_data, ibo_size, QOpenGLBuffer::IndexBuffer);
   initVao();
