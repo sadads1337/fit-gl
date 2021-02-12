@@ -21,19 +21,28 @@ private:
   std::unique_ptr<QOpenGLBuffer> m_ibo;
   std::unique_ptr<QOpenGLVertexArrayObject> m_vao;
 
+  void initVao();
+
+  static std::unique_ptr<QOpenGLBuffer> readGLBuffer(QDataStream &stream,
+                                                     QOpenGLBuffer::Type type);
+
+  static std::unique_ptr<QOpenGLBuffer>
+  bufferFromData(const char *data, int size, QOpenGLBuffer::Type type);
+
+  FirstSceneObject(GLenum primitive, const QString &texture_file);
+
 public:
   FirstSceneObject(GLenum primitive, const QString &texture_file,
                    const QString &geometry_file);
+  FirstSceneObject(GLenum primitive, const QString &texture_file,
+                   const char *vbo_data, int vbo_size, const char *ibo_data,
+                   int ibo_size);
 
   void render(QMatrix4x4 view, QMatrix4x4 model);
 
   [[nodiscard]] const FirstShaderParameters &getShaderParameters() const;
   [[nodiscard]] FirstShaderParameters &getShaderParameters();
   void setShaderParameters(const FirstShaderParameters &shader_parameters);
-
-private:
-  static std::unique_ptr<QOpenGLBuffer> readGLBuffer(QDataStream &stream,
-                                                     QOpenGLBuffer::Type type);
 };
 
 } // namespace Kononov
