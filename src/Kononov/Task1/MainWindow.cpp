@@ -5,6 +5,8 @@
 
 #include <array>
 
+#include "ShaderProgram.hpp"
+
 namespace Kononov {
 
 constexpr std::array<GLfloat, 192U> modelVertices = {
@@ -61,7 +63,7 @@ constexpr std::array<GLushort, 34U> modelIndices = {
 };
 
 static constexpr QVector3D INITIAL_CAMERA_POSITION(0, 1.3, 4);
-static constexpr QVector3D LIGHT_POSITION(3, 2, 0);
+static constexpr QVector3D LIGHT_POSITION(3, 2, 3);
 static constexpr QVector3D LIGHT_COLOR(1, 0.7, 0.7);
 static constexpr QVector4D CLEAR_COLOR(0, 0.5, 1, 1);
 
@@ -115,48 +117,8 @@ void MainWindow::init() {
     m_logger->enableMessages();
   }
 
-  /*
-   * Create and initialize shader program
-   */
-  m_program = std::make_unique<FirstShader>();
-
-  /*
-   * Create VBO/IBO (they can be created independently)
-   */
-
-  m_vbo = std::make_unique<QOpenGLBuffer>(QOpenGLBuffer::Type::VertexBuffer);
-  m_vbo->create();
-  m_vbo->bind();
-  // Fill it
-  m_vbo->allocate(modelVertices.data(), modelVertices.size() * sizeof(GLfloat));
-  // Do not release VBO. We still need it.
-
-  m_ibo = std::make_unique<QOpenGLBuffer>(QOpenGLBuffer::Type::IndexBuffer);
-  m_ibo->create();
-  m_ibo->bind();
-  // Fill it
-  m_ibo->allocate(modelIndices.data(), modelIndices.size() * sizeof(GLushort));
-  m_ibo->release(); // We do not need IBO for further initialization
-
-  /*
-   * Create and configure VBO
-   */
-  m_vao = std::make_unique<QOpenGLVertexArrayObject>();
-  m_vao->create();
-  m_vao->bind();
-
-  // glVertexAttribPointer (specify location of values in vertex structure)
-  // NOTE: VBO is still bound
-  const size_t stride = sizeof(GLfloat) * 8;
-  const size_t pos_offset = sizeof(GLfloat) * 0;
-  const size_t normal_offset = sizeof(GLfloat) * 3;
-  const size_t uv_offset = sizeof(GLfloat) * 6;
-  m_program->setVertexPositionBuffer(pos_offset, stride);
-  m_program->setVertexNormalBuffer(normal_offset, stride);
-  m_program->setVertexUVBuffer(uv_offset, stride);
-
-  m_vbo->release();
-  m_vao->release();
+  m_skull = std::make_unique<FirstSceneObject>(
+      GL_TRIANGLES, ":/textures/skull-diffuse.jpg", ":/models/skull.vbo-ibo");
 
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
@@ -166,16 +128,6 @@ void MainWindow::init() {
   m_motion = std::make_shared<MotionInputController>(m_look_dir);
   m_motion->setMotionSpeed(MOTION_SPEED);
   m_motion->setPosition(INITIAL_CAMERA_POSITION);
-
-  initTextures();
-}
-
-void MainWindow::initTextures() {
-  m_diffuse_map = std::make_unique<QOpenGLTexture>(
-      QImage(":/textures/dice-diffuse.png").mirrored());
-  m_diffuse_map->setMinificationFilter(QOpenGLTexture::Nearest);
-  m_diffuse_map->setMagnificationFilter(QOpenGLTexture::Linear);
-  m_diffuse_map->setWrapMode(QOpenGLTexture::Repeat);
 }
 
 void MainWindow::render() {
@@ -200,36 +152,27 @@ void MainWindow::render() {
 
   const float angle =
       ROTATION_SPEED * (float)m_frame / (float)screen()->refreshRate();
+  const float model_scale = 0.1F;
+  const int model_rotation = -90;
   QMatrix4x4 model_matrix;
   model_matrix.rotate(angle, 0, 1, 0);
+  model_matrix.scale(model_scale);
+  model_matrix.rotate(model_rotation, 1, 0, 0);
 
-  // To render we need to use concrete program, VAO and IBO (VBO is referenced
-  // by VAO)
-  m_program->bind();
-  m_vao->bind();
-  m_ibo->bind();
-  m_diffuse_map->bind();
+  m_skull->getShaderParameters().setViewPos(m_motion->getPosition());
+  m_skull->getShaderParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
+  m_skull->getShaderParameters().setDiffuseMap(0);
+  m_skull->getShaderParameters().setAmbient(AMBIENT_STRENGTH);
+  m_skull->getShaderParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
 
-  m_program->setMatrices(view_matrix, model_matrix);
-  m_program->setViewPosition(m_motion->getPosition());
-  m_program->setLightSource(LIGHT_POSITION, LIGHT_COLOR);
-  m_program->setDiffuseMap(0);
-  m_program->setAmbient(AMBIENT_STRENGTH);
-  m_program->setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
+  m_skull->render(view_matrix, model_matrix);
 
-  // glEnableVertexAttribArray (allow current VAO to affect attribute)
-  m_program->enableAttributeArrays();
+  model_matrix.setToIdentity();
+  model_matrix.translate(-3, 0, 0);
+  model_matrix.scale(model_scale);
+  model_matrix.rotate(model_rotation, 1, 0, 0);
 
-  glDrawElements(GL_TRIANGLE_STRIP, modelIndices.size(), GL_UNSIGNED_SHORT,
-                 nullptr);
-
-  // glDisableVertexAttribArray (because it is not bound to m_program ??? and
-  // can affect further rendering)
-  m_program->disableAttributeArrays();
-
-  m_ibo->release();
-  m_vao->release();
-  m_program->release();
+  m_skull->render(view_matrix, model_matrix);
 
   m_frame++;
 }
