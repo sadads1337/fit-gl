@@ -12,9 +12,9 @@ class PositionedObject {
 private:
   std::shared_ptr<PositionedObject> m_parent;
 
-  QVector3D m_position;
-  QQuaternion m_rotation;
-  QVector3D m_scale;
+  QVector3D m_position{};
+  QQuaternion m_rotation{};
+  QVector3D m_scale{1, 1, 1};
 
 public:
   [[nodiscard]] QMatrix4x4 getTransformMatrix() const;
