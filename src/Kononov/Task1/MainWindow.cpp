@@ -117,26 +117,54 @@ void MainWindow::init() {
     m_logger->enableMessages();
   }
 
-  m_shader = std::make_shared<FirstShader>();
-
-  m_skull = std::make_unique<FirstRenderable>(GL_TRIANGLES, m_shader,
-                                              ":/textures/skull-diffuse.jpg",
-                                              ":/models/skull.vbo-ibo");
-  m_skull->getShaderParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
-  m_skull->getShaderParameters().setDiffuseMap(0);
-  m_skull->getShaderParameters().setAmbient(AMBIENT_STRENGTH);
-  m_skull->getShaderParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
-
-  m_camera = std::make_shared<Camera>();
-
-  m_cube = std::make_unique<FirstRenderable>(
-      GL_TRIANGLE_STRIP, m_shader, ":/textures/dice-diffuse.png",
-      (char *)modelVertices.data(), modelVertices.size() * sizeof(GLfloat),
-      (char *)modelIndices.data(), modelIndices.size() * sizeof(GLfloat));
-  m_cube->setShaderParameters(m_skull->getShaderParameters());
-
+  /*
+   * Configure OpenGL
+   */
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
+
+  glClearColor(CLEAR_COLOR.x(), CLEAR_COLOR.y(), CLEAR_COLOR.z(),
+               CLEAR_COLOR.w());
+
+  /*
+   * Load and configure shaders and renderable objects
+   */
+  auto shader = std::make_shared<FirstShader>();
+
+  auto skull_rend = std::make_shared<FirstRenderable>(
+      GL_TRIANGLES, shader, ":/textures/skull-diffuse.jpg",
+      ":/models/skull.vbo-ibo");
+  skull_rend->getShaderParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
+  skull_rend->getShaderParameters().setDiffuseMap(0);
+  skull_rend->getShaderParameters().setAmbient(AMBIENT_STRENGTH);
+  skull_rend->getShaderParameters().setSpecular(SPECULAR_STRENGTH,
+                                                SPECULAR_POW);
+
+  auto cube_rend = std::make_shared<FirstRenderable>(
+      GL_TRIANGLE_STRIP, shader, ":/textures/dice-diffuse.png",
+      (char *)modelVertices.data(), modelVertices.size() * sizeof(GLfloat),
+      (char *)modelIndices.data(), modelIndices.size() * sizeof(GLfloat));
+  cube_rend->setShaderParameters(skull_rend->getShaderParameters());
+
+  /*
+   * Init scene objects
+   */
+  const QVector3D skull_scale(0.1F, 0.1F, 0.1F);
+  m_skull = std::make_shared<FirstSceneObject>();
+  m_skull->setRenderable(skull_rend);
+  m_skull->setScale(skull_scale);
+  m_skull->setPosition(QVector3D(-3, 0, 0));
+
+  m_skull_rotating = std::make_shared<FirstSceneObject>();
+  m_skull_rotating->setRenderable(skull_rend);
+  m_skull_rotating->setScale(skull_scale);
+  m_skull_rotating->setPosition(QVector3D(0, 0, 0));
+
+  m_cube = std::make_shared<FirstSceneObject>();
+  m_cube->setRenderable(cube_rend);
+  m_cube->setPosition(QVector3D(4, 0, 0));
+
+  m_camera = std::make_shared<Camera>();
 
   m_look_dir = std::make_shared<DirectionInputController>();
   m_look_dir->setSensitivity(MOUSE_SENSITIVITY);
@@ -147,9 +175,6 @@ void MainWindow::init() {
 
 void MainWindow::render() {
   m_motion->update();
-
-  glClearColor(CLEAR_COLOR.x(), CLEAR_COLOR.y(), CLEAR_COLOR.z(),
-               CLEAR_COLOR.w());
 
   // NOLINTNEXTLINE(hicpp-signed-bitwise)
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -164,27 +189,10 @@ void MainWindow::render() {
 
   const float angle =
       ROTATION_SPEED * (float)m_frame / (float)screen()->refreshRate();
-  const float model_scale = 0.1F;
-  QMatrix4x4 model_matrix;
-  model_matrix.rotate(angle, 0, 1, 0);
-  model_matrix.scale(model_scale);
-
-  m_skull->getShaderParameters().setViewPos(m_camera->getAbsolutePosition());
-  m_skull->render(m_camera->getProjectionViewMatrix(), model_matrix);
-
-  model_matrix.setToIdentity();
-  model_matrix.translate(-3, 0, 0);
-  model_matrix.scale(model_scale);
-
-  // View position is same
-  m_skull->render(m_camera->getProjectionViewMatrix(), model_matrix);
-
-  model_matrix.setToIdentity();
-  model_matrix.translate(4, 0, 0);
-  model_matrix.rotate(-angle, 0, 1, 0);
-
-  m_cube->getShaderParameters().setViewPos(m_motion->getPosition());
-  m_cube->render(m_camera->getProjectionViewMatrix(), model_matrix);
+  m_skull_rotating->setRotation(QQuaternion::fromAxisAndAngle(0, 1, 0, angle));
+  m_skull_rotating->render(*m_camera);
+  m_skull->render(*m_camera);
+  m_cube->render(*m_camera);
 
   m_frame++;
 }
