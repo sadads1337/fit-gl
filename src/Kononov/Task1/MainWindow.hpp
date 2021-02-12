@@ -37,6 +37,7 @@ private:
   std::shared_ptr<DirectionInputController> m_look_dir;
   std::shared_ptr<MotionInputController> m_motion;
 
+  std::shared_ptr<FirstShader> m_shader;
   std::unique_ptr<FirstSceneObject> m_skull;
   std::unique_ptr<FirstSceneObject> m_cube;
 
