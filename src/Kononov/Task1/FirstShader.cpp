@@ -2,99 +2,147 @@
 
 namespace Kononov {
 
-FirstShader::FirstShader()
-    : m_vertex_position_attr(0), m_vertex_normal_attr(0), m_vertex_uv_attr(0),
-      m_view_matrix_uniform(0), m_model_matrix_uniform(0),
-      m_normal_matrix_uniform(0), m_diffuse_map_uniform(0),
-      m_ambient_strength_uniform(0), m_specular_strength_uniform(0),
-      m_specular_pow_uniform(0), m_light_color_uniform(0),
-      m_light_pos_uniform(0), m_view_pos_uniform(0) {
+FirstShader::FirstShader() {
   /*
    * Shader program initialization
    */
-  m_shader = std::make_unique<QOpenGLShaderProgram>();
-  m_shader->addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                    ":/shaders/first.vs");
-  m_shader->addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                    ":/shaders/first.fs");
-  m_shader->link();
+  const auto &shader = getShader();
+
+  const char *const vertex_shader = ":/shaders/first.vs";
+  const char *const fragment_shader = ":/shaders/first.fs";
+  shader->addShaderFromSourceFile(QOpenGLShader::Vertex, vertex_shader);
+  shader->addShaderFromSourceFile(QOpenGLShader::Fragment, fragment_shader);
+  shader->link();
 
   /*
    * Query locations of parameters
    */
-  m_vertex_position_attr = m_shader->attributeLocation("vertex_position");
-  m_vertex_normal_attr = m_shader->attributeLocation("vertex_normal");
-  m_vertex_uv_attr = m_shader->attributeLocation("vertex_uv");
+  m_vertex_position_attr = shader->attributeLocation("vertex_position");
+  m_vertex_normal_attr = shader->attributeLocation("vertex_normal");
+  m_vertex_uv_attr = shader->attributeLocation("vertex_uv");
 
-  m_view_matrix_uniform = m_shader->uniformLocation("view_matrix");
-  m_model_matrix_uniform = m_shader->uniformLocation("model_matrix");
-  m_normal_matrix_uniform = m_shader->uniformLocation("normal_matrix");
+  m_view_matrix_uniform = shader->uniformLocation("view_matrix");
+  m_model_matrix_uniform = shader->uniformLocation("model_matrix");
+  m_normal_matrix_uniform = shader->uniformLocation("normal_matrix");
 
-  m_diffuse_map_uniform = m_shader->uniformLocation("diffuse_map");
-  m_ambient_strength_uniform = m_shader->uniformLocation("ambient_strength");
-  m_specular_strength_uniform = m_shader->uniformLocation("specular_strength");
-  m_specular_pow_uniform = m_shader->uniformLocation("specular_pow");
-  m_light_color_uniform = m_shader->uniformLocation("light_color");
-  m_light_pos_uniform = m_shader->uniformLocation("light_pos");
-  m_view_pos_uniform = m_shader->uniformLocation("view_pos");
+  m_diffuse_map_uniform = shader->uniformLocation("diffuse_map");
+  m_ambient_strength_uniform = shader->uniformLocation("ambient_strength");
+  m_specular_strength_uniform = shader->uniformLocation("specular_strength");
+  m_specular_pow_uniform = shader->uniformLocation("specular_pow");
+  m_light_color_uniform = shader->uniformLocation("light_color");
+  m_light_pos_uniform = shader->uniformLocation("light_pos");
+  m_view_pos_uniform = shader->uniformLocation("view_pos");
 }
 
-void FirstShader::bind() { m_shader->bind(); }
-
-void FirstShader::release() { m_shader->release(); }
-
 void FirstShader::enableAttributeArrays() {
-  m_shader->enableAttributeArray(m_vertex_position_attr);
-  m_shader->enableAttributeArray(m_vertex_uv_attr);
-  m_shader->enableAttributeArray(m_vertex_normal_attr);
+  getShader()->enableAttributeArray(m_vertex_position_attr);
+  getShader()->enableAttributeArray(m_vertex_uv_attr);
+  getShader()->enableAttributeArray(m_vertex_normal_attr);
 }
 
 void FirstShader::disableAttributeArrays() {
-  m_shader->disableAttributeArray(m_vertex_position_attr);
-  m_shader->disableAttributeArray(m_vertex_uv_attr);
-  m_shader->disableAttributeArray(m_vertex_normal_attr);
+  getShader()->disableAttributeArray(m_vertex_position_attr);
+  getShader()->disableAttributeArray(m_vertex_uv_attr);
+  getShader()->disableAttributeArray(m_vertex_normal_attr);
 }
 
 void FirstShader::setVertexPositionBuffer(int offset, int stride) {
-  m_shader->setAttributeBuffer(m_vertex_position_attr, GL_FLOAT, offset, 3,
-                               stride);
+  getShader()->setAttributeBuffer(m_vertex_position_attr, GL_FLOAT, offset, 3,
+                                  stride);
 }
 
 void FirstShader::setVertexNormalBuffer(int offset, int stride) {
-  m_shader->setAttributeBuffer(m_vertex_normal_attr, GL_FLOAT, offset, 3,
-                               stride);
+  getShader()->setAttributeBuffer(m_vertex_normal_attr, GL_FLOAT, offset, 3,
+                                  stride);
 }
 
 void FirstShader::setVertexUVBuffer(int offset, int stride) {
-  m_shader->setAttributeBuffer(m_vertex_uv_attr, GL_FLOAT, offset, 2, stride);
+  getShader()->setAttributeBuffer(m_vertex_uv_attr, GL_FLOAT, offset, 2,
+                                  stride);
 }
 
 void FirstShader::setMatrices(QMatrix4x4 view, QMatrix4x4 model) {
-  m_shader->setUniformValue(m_view_matrix_uniform, view);
-  m_shader->setUniformValue(m_model_matrix_uniform, model);
-  m_shader->setUniformValue(m_normal_matrix_uniform, model.normalMatrix());
+  getShader()->setUniformValue(FirstShader::m_view_matrix_uniform, view);
+  getShader()->setUniformValue(FirstShader::m_model_matrix_uniform, model);
+  getShader()->setUniformValue(FirstShader::m_normal_matrix_uniform,
+                               model.normalMatrix());
 }
 
-void FirstShader::setDiffuseMap(GLint unit) {
-  m_shader->setUniformValue(m_diffuse_map_uniform, unit);
+void FirstShader::setParameters(FirstShaderParameters params) {
+  getShader()->setUniformValue(m_diffuse_map_uniform, params.getDiffuseMap());
+  getShader()->setUniformValue(m_ambient_strength_uniform,
+                               params.getAmbientStrength());
+  getShader()->setUniformValue(m_specular_strength_uniform,
+                               params.getSpecularStrength());
+  getShader()->setUniformValue(m_specular_pow_uniform, params.getSpecularPow());
+  getShader()->setUniformValue(m_light_pos_uniform, params.getLightPos());
+  getShader()->setUniformValue(m_light_color_uniform, params.getLightColor());
+  getShader()->setUniformValue(m_view_pos_uniform, params.getViewPos());
 }
 
-void FirstShader::setAmbient(GLfloat strength) {
-  m_shader->setUniformValue(m_ambient_strength_uniform, strength);
+void FirstShaderParameters::setAmbient(GLfloat strength) {
+  setAmbientStrength(strength);
 }
 
-void FirstShader::setSpecular(GLfloat strength, GLfloat pow) {
-  m_shader->setUniformValue(m_specular_strength_uniform, strength);
-  m_shader->setUniformValue(m_specular_pow_uniform, pow);
+void FirstShaderParameters::setSpecular(GLfloat strength, GLfloat pow) {
+  setSpecularStrength(strength);
+  setSpecularPow(pow);
 }
 
-void FirstShader::setLightSource(QVector3D pos, QVector3D color) {
-  m_shader->setUniformValue(m_light_pos_uniform, pos);
-  m_shader->setUniformValue(m_light_color_uniform, color);
+void FirstShaderParameters::setLightSource(QVector3D pos, QVector3D color) {
+  setLightPos(pos);
+  setLightColor(color);
 }
 
-void FirstShader::setViewPosition(QVector3D pos) {
-  m_shader->setUniformValue(m_view_pos_uniform, pos);
+GLint FirstShaderParameters::getDiffuseMap() const { return m_diffuse_map; }
+
+void FirstShaderParameters::setDiffuseMap(GLint diffuse_map) {
+  m_diffuse_map = diffuse_map;
+}
+
+GLfloat FirstShaderParameters::getAmbientStrength() const {
+  return m_ambient_strength;
+}
+
+void FirstShaderParameters::setAmbientStrength(GLfloat ambient_strength) {
+  m_ambient_strength = ambient_strength;
+}
+
+GLfloat FirstShaderParameters::getSpecularStrength() const {
+  return m_specular_strength;
+}
+
+void FirstShaderParameters::setSpecularStrength(GLfloat specular_strength) {
+  m_specular_strength = specular_strength;
+}
+
+GLfloat FirstShaderParameters::getSpecularPow() const { return m_specular_pow; }
+
+void FirstShaderParameters::setSpecularPow(GLfloat specular_pow) {
+  m_specular_pow = specular_pow;
+}
+
+const QVector3D &FirstShaderParameters::getLightColor() const {
+  return m_light_color;
+}
+
+void FirstShaderParameters::setLightColor(const QVector3D &light_color) {
+  m_light_color = light_color;
+}
+
+const QVector3D &FirstShaderParameters::getLightPos() const {
+  return m_light_pos;
+}
+
+void FirstShaderParameters::setLightPos(const QVector3D &light_pos) {
+  m_light_pos = light_pos;
+}
+
+const QVector3D &FirstShaderParameters::getViewPos() const {
+  return m_view_pos;
+}
+void FirstShaderParameters::setViewPos(const QVector3D &view_pos) {
+  m_view_pos = view_pos;
 }
 
 } // namespace Kononov

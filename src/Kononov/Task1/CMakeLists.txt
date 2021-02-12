@@ -7,12 +7,20 @@ add_executable(KononovTask1
 
         textures.qrc
         textures/dice-diffuse.png
+        textures/skull-diffuse.jpg
+
+        models.qrc
+        models/skull.vbo-ibo
 
         main.cpp
         MainWindow.cpp
         MainWindow.hpp
+        ShaderProgram.cpp
+        ShaderProgram.hpp
         FirstShader.cpp
-        FirstShader.hpp)
+        FirstShader.hpp
+        FirstSceneObject.cpp
+        FirstSceneObject.hpp)
 
 target_link_libraries(KononovTask1
         PRIVATE Qt5::Widgets

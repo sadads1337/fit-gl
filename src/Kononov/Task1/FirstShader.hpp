@@ -6,14 +6,15 @@
 #include <QVector3D>
 #include <QVector4D>
 
+#include "ShaderProgram.hpp"
+
 namespace Kononov {
 
-class FirstShader {
+class FirstShaderParameters;
+
+class FirstShader : public ShaderProgram {
 public:
   FirstShader();
-
-  void bind();
-  void release();
 
   void enableAttributeArrays();
   void disableAttributeArrays();
@@ -22,13 +23,9 @@ public:
   void setVertexNormalBuffer(int offset, int stride);
   void setVertexUVBuffer(int offset, int stride);
 
-  void setMatrices(QMatrix4x4 view, QMatrix4x4 model);
+  void setMatrices(QMatrix4x4 view, QMatrix4x4 model) override;
 
-  void setDiffuseMap(GLint unit);
-  void setAmbient(GLfloat strength);
-  void setSpecular(GLfloat strength, GLfloat pow);
-  void setLightSource(QVector3D pos, QVector3D color);
-  void setViewPosition(QVector3D pos);
+  void setParameters(FirstShaderParameters params);
 
 private:
   GLint m_vertex_position_attr;
@@ -46,8 +43,37 @@ private:
   GLint m_light_color_uniform;
   GLint m_light_pos_uniform;
   GLint m_view_pos_uniform;
+};
 
-  std::unique_ptr<QOpenGLShaderProgram> m_shader;
+class FirstShaderParameters {
+public:
+  void setAmbient(GLfloat strength);
+  void setSpecular(GLfloat strength, GLfloat pow);
+  void setLightSource(QVector3D pos, QVector3D color);
+
+  [[nodiscard]] GLint getDiffuseMap() const;
+  void setDiffuseMap(GLint diffuse_map);
+  [[nodiscard]] GLfloat getAmbientStrength() const;
+  void setAmbientStrength(GLfloat ambient_strength);
+  [[nodiscard]] GLfloat getSpecularStrength() const;
+  void setSpecularStrength(GLfloat specular_strength);
+  [[nodiscard]] GLfloat getSpecularPow() const;
+  void setSpecularPow(GLfloat specular_pow);
+  [[nodiscard]] const QVector3D &getLightColor() const;
+  void setLightColor(const QVector3D &light_color);
+  [[nodiscard]] const QVector3D &getLightPos() const;
+  void setLightPos(const QVector3D &light_pos);
+  [[nodiscard]] const QVector3D &getViewPos() const;
+  void setViewPos(const QVector3D &view_pos);
+
+private:
+  GLint m_diffuse_map{};
+  GLfloat m_ambient_strength{};
+  GLfloat m_specular_strength{};
+  GLfloat m_specular_pow{};
+  QVector3D m_light_color;
+  QVector3D m_light_pos;
+  QVector3D m_view_pos;
 };
 
 } // namespace Kononov
