@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include <QOpenGLDebugLogger>
 #include <QMouseEvent>
+#include <QOpenGLDebugLogger>
 
 #include <DirectionInputController.hpp>
 #include <MotionInputController.hpp>
@@ -32,12 +32,13 @@ public slots:
   static void onMessageLogged(const QOpenGLDebugMessage &message);
 
 private:
+  std::unique_ptr<QOpenGLDebugLogger> m_logger;
+
   std::shared_ptr<DirectionInputController> m_look_dir;
   std::shared_ptr<MotionInputController> m_motion;
 
   std::unique_ptr<FirstSceneObject> m_skull;
-
-  std::unique_ptr<QOpenGLDebugLogger> m_logger;
+  std::unique_ptr<FirstSceneObject> m_cube;
 
   // Frame counter for animation.
   int m_frame = 0;

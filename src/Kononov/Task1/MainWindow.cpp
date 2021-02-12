@@ -53,7 +53,7 @@ constexpr std::array<GLfloat, 192U> modelVertices = {
 // index of the second strip needs to be duplicated. If
 // connecting strips have same vertex order then only last
 // index of the first strip needs to be duplicated.
-constexpr std::array<GLushort, 34U> modelIndices = {
+constexpr std::array<GLuint, 34U> modelIndices = {
     0,  1,  2,  3,  3,      // Face 0 - triangle strip ( v0,  v1,  v2,  v3)
     4,  4,  5,  6,  7,  7,  // Face 1 - triangle strip ( v4,  v5,  v6,  v7)
     8,  8,  9,  10, 11, 11, // Face 2 - triangle strip ( v8,  v9, v10, v11)
@@ -120,6 +120,11 @@ void MainWindow::init() {
   m_skull = std::make_unique<FirstSceneObject>(
       GL_TRIANGLES, ":/textures/skull-diffuse.jpg", ":/models/skull.vbo-ibo");
 
+  m_cube = std::make_unique<FirstSceneObject>(
+      GL_TRIANGLE_STRIP, ":/textures/dice-diffuse.png",
+      (char *)modelVertices.data(), modelVertices.size() * sizeof(GLfloat),
+      (char *)modelIndices.data(), modelIndices.size() * sizeof(GLfloat));
+
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
 
@@ -173,6 +178,18 @@ void MainWindow::render() {
   model_matrix.rotate(model_rotation, 1, 0, 0);
 
   m_skull->render(view_matrix, model_matrix);
+
+  m_cube->getShaderParameters().setViewPos(m_motion->getPosition());
+  m_cube->getShaderParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
+  m_cube->getShaderParameters().setDiffuseMap(0);
+  m_cube->getShaderParameters().setAmbient(AMBIENT_STRENGTH);
+  m_cube->getShaderParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
+
+  model_matrix.setToIdentity();
+  model_matrix.translate(4, 0, 0);
+  model_matrix.rotate(-angle, 0, 1, 0);
+
+  m_cube->render(view_matrix, model_matrix);
 
   m_frame++;
 }
