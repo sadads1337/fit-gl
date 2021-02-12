@@ -32,7 +32,7 @@ private:
   GLint m_vertex_normal_attr;
   GLint m_vertex_uv_attr;
 
-  GLint m_view_matrix_uniform;
+  GLint m_model_view_matrix_uniform;
   GLint m_model_matrix_uniform;
   GLint m_normal_matrix_uniform;
 
