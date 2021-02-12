@@ -20,7 +20,9 @@ add_executable(KononovTask1
         FirstShader.cpp
         FirstShader.hpp
         FirstRenderable.cpp
-        FirstRenderable.hpp)
+        FirstRenderable.hpp
+        FirstSceneObject.cpp
+        FirstSceneObject.hpp)
 
 target_link_libraries(KononovTask1
         PRIVATE Qt5::Widgets

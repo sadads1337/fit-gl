@@ -5,12 +5,13 @@
 #include <QMouseEvent>
 #include <QOpenGLDebugLogger>
 
+#include <Camera.hpp>
 #include <DirectionInputController.hpp>
 #include <MotionInputController.hpp>
-#include <Camera.hpp>
 
 #include "Base/GLWindow.hpp"
 #include "FirstRenderable.hpp"
+#include "FirstSceneObject.hpp"
 #include "FirstShader.hpp"
 
 namespace Kononov {
@@ -40,9 +41,9 @@ private:
 
   std::shared_ptr<Camera> m_camera;
 
-  std::shared_ptr<FirstShader> m_shader;
-  std::unique_ptr<FirstRenderable> m_skull;
-  std::unique_ptr<FirstRenderable> m_cube;
+  std::shared_ptr<FirstSceneObject> m_skull;
+  std::shared_ptr<FirstSceneObject> m_skull_rotating;
+  std::shared_ptr<FirstSceneObject> m_cube;
 
   // Frame counter for animation.
   int m_frame = 0;
