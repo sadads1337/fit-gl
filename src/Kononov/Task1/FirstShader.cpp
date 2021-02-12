@@ -21,7 +21,7 @@ FirstShader::FirstShader() {
   m_vertex_normal_attr = shader->attributeLocation("vertex_normal");
   m_vertex_uv_attr = shader->attributeLocation("vertex_uv");
 
-  m_view_matrix_uniform = shader->uniformLocation("view_matrix");
+  m_model_view_matrix_uniform = shader->uniformLocation("model_view_matrix");
   m_model_matrix_uniform = shader->uniformLocation("model_matrix");
   m_normal_matrix_uniform = shader->uniformLocation("normal_matrix");
 
@@ -62,7 +62,8 @@ void FirstShader::setVertexUVBuffer(int offset, int stride) {
 }
 
 void FirstShader::setMatrices(QMatrix4x4 view, QMatrix4x4 model) {
-  getShader()->setUniformValue(FirstShader::m_view_matrix_uniform, view);
+  getShader()->setUniformValue(FirstShader::m_model_view_matrix_uniform,
+                               view * model);
   getShader()->setUniformValue(FirstShader::m_model_matrix_uniform, model);
   getShader()->setUniformValue(FirstShader::m_normal_matrix_uniform,
                                model.normalMatrix());
