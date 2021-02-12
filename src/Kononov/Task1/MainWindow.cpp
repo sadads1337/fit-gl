@@ -62,7 +62,7 @@ constexpr std::array<GLuint, 34U> modelIndices = {
     20, 20, 21, 22, 23      // Face 5 - triangle strip (v20, v21, v22, v23)
 };
 
-static constexpr QVector3D INITIAL_CAMERA_POSITION(0, 1.3, 4);
+static constexpr QVector3D INITIAL_CAMERA_POSITION(0, 1.3, 8);
 static constexpr QVector3D LIGHT_POSITION(3, 2, 3);
 static constexpr QVector3D LIGHT_COLOR(1, 0.7, 0.7);
 static constexpr QVector4D CLEAR_COLOR(0, 0.5, 1, 1);
@@ -127,6 +127,8 @@ void MainWindow::init() {
   m_skull->getShaderParameters().setAmbient(AMBIENT_STRENGTH);
   m_skull->getShaderParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
 
+  m_camera = std::make_shared<Camera>();
+
   m_cube = std::make_unique<FirstRenderable>(
       GL_TRIANGLE_STRIP, m_shader, ":/textures/dice-diffuse.png",
       (char *)modelVertices.data(), modelVertices.size() * sizeof(GLfloat),
@@ -146,22 +148,19 @@ void MainWindow::init() {
 void MainWindow::render() {
   m_motion->update();
 
-  const auto pixel_ratio = devicePixelRatio();
-  const auto ratio = (float)width() / (float)height();
-
-  glViewport(0, 0, (GLsizei)(width() * pixel_ratio),
-             (GLsizei)(height() * pixel_ratio));
-
   glClearColor(CLEAR_COLOR.x(), CLEAR_COLOR.y(), CLEAR_COLOR.z(),
                CLEAR_COLOR.w());
 
   // NOLINTNEXTLINE(hicpp-signed-bitwise)
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  QMatrix4x4 view_matrix;
-  view_matrix.perspective(PERSPECTIVE_FOV, ratio, NEAR_PLANE, FAR_PLANE);
-  view_matrix.rotate(m_look_dir->getRotation());
-  view_matrix.translate(-m_motion->getPosition());
+  const auto pixel_ratio = devicePixelRatio();
+  const auto ratio = (float)width() / (float)height();
+  m_camera->setPerspective(PERSPECTIVE_FOV, ratio, NEAR_PLANE, FAR_PLANE);
+  m_camera->setPosition(m_motion->getPosition());
+  m_camera->setRotation(m_look_dir->getRotation().inverted());
+  m_camera->beginRender((GLsizei)(width() * pixel_ratio),
+                        (GLsizei)(height() * pixel_ratio));
 
   const float angle =
       ROTATION_SPEED * (float)m_frame / (float)screen()->refreshRate();
@@ -170,22 +169,22 @@ void MainWindow::render() {
   model_matrix.rotate(angle, 0, 1, 0);
   model_matrix.scale(model_scale);
 
-  m_skull->getShaderParameters().setViewPos(m_motion->getPosition());
-  m_skull->render(view_matrix, model_matrix);
+  m_skull->getShaderParameters().setViewPos(m_camera->getAbsolutePosition());
+  m_skull->render(m_camera->getProjectionViewMatrix(), model_matrix);
 
   model_matrix.setToIdentity();
   model_matrix.translate(-3, 0, 0);
   model_matrix.scale(model_scale);
 
   // View position is same
-  m_skull->render(view_matrix, model_matrix);
+  m_skull->render(m_camera->getProjectionViewMatrix(), model_matrix);
 
   model_matrix.setToIdentity();
   model_matrix.translate(4, 0, 0);
   model_matrix.rotate(-angle, 0, 1, 0);
 
   m_cube->getShaderParameters().setViewPos(m_motion->getPosition());
-  m_cube->render(view_matrix, model_matrix);
+  m_cube->render(m_camera->getProjectionViewMatrix(), model_matrix);
 
   m_frame++;
 }

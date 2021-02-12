@@ -6,7 +6,9 @@ add_library(KononovCommon
         MotionInputController.cpp
         MotionInputController.hpp
         PositionedObject.cpp
-        PositionedObject.hpp)
+        PositionedObject.hpp
+        Camera.cpp
+        Camera.hpp)
 
 target_include_directories(KononovCommon
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

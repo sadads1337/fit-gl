@@ -7,6 +7,7 @@
 
 #include <DirectionInputController.hpp>
 #include <MotionInputController.hpp>
+#include <Camera.hpp>
 
 #include "Base/GLWindow.hpp"
 #include "FirstRenderable.hpp"
@@ -36,6 +37,8 @@ private:
 
   std::shared_ptr<DirectionInputController> m_look_dir;
   std::shared_ptr<MotionInputController> m_motion;
+
+  std::shared_ptr<Camera> m_camera;
 
   std::shared_ptr<FirstShader> m_shader;
   std::unique_ptr<FirstRenderable> m_skull;
