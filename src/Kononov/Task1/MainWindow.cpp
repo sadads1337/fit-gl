@@ -119,15 +119,15 @@ void MainWindow::init() {
 
   m_shader = std::make_shared<FirstShader>();
 
-  m_skull = std::make_unique<FirstSceneObject>(GL_TRIANGLES, m_shader,
-                                               ":/textures/skull-diffuse.jpg",
-                                               ":/models/skull.vbo-ibo");
+  m_skull = std::make_unique<FirstRenderable>(GL_TRIANGLES, m_shader,
+                                              ":/textures/skull-diffuse.jpg",
+                                              ":/models/skull.vbo-ibo");
   m_skull->getShaderParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
   m_skull->getShaderParameters().setDiffuseMap(0);
   m_skull->getShaderParameters().setAmbient(AMBIENT_STRENGTH);
   m_skull->getShaderParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
 
-  m_cube = std::make_unique<FirstSceneObject>(
+  m_cube = std::make_unique<FirstRenderable>(
       GL_TRIANGLE_STRIP, m_shader, ":/textures/dice-diffuse.png",
       (char *)modelVertices.data(), modelVertices.size() * sizeof(GLfloat),
       (char *)modelIndices.data(), modelIndices.size() * sizeof(GLfloat));
@@ -149,7 +149,7 @@ void MainWindow::render() {
   const auto pixel_ratio = devicePixelRatio();
   const auto ratio = (float)width() / (float)height();
 
-  glViewport(0, 0, (GLsizei)(width() * pixel_ratio),
+  glViewport(0, 0, (GLsizei)(width() * pixel_ratio / 2),
              (GLsizei)(height() * pixel_ratio));
 
   glClearColor(CLEAR_COLOR.x(), CLEAR_COLOR.y(), CLEAR_COLOR.z(),

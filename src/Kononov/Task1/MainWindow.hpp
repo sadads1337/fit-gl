@@ -9,7 +9,7 @@
 #include <MotionInputController.hpp>
 
 #include "Base/GLWindow.hpp"
-#include "FirstSceneObject.hpp"
+#include "FirstRenderable.hpp"
 #include "FirstShader.hpp"
 
 namespace Kononov {
@@ -38,8 +38,8 @@ private:
   std::shared_ptr<MotionInputController> m_motion;
 
   std::shared_ptr<FirstShader> m_shader;
-  std::unique_ptr<FirstSceneObject> m_skull;
-  std::unique_ptr<FirstSceneObject> m_cube;
+  std::unique_ptr<FirstRenderable> m_skull;
+  std::unique_ptr<FirstRenderable> m_cube;
 
   // Frame counter for animation.
   int m_frame = 0;
