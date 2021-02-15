@@ -24,29 +24,45 @@ void DirectionInputController::mouseMoveEvent(QMouseEvent *event) {
 
 void DirectionInputController::handleMove(const QPoint &position) {
   auto diff = position - m_lastPosition;
-  m_yaw += (float)diff.x() * m_sensitivity;
-  m_pitch += (float)diff.y() * m_sensitivity;
+  m_yaw -= (float)diff.x() * m_sensitivity;
+  m_pitch -= (float)diff.y() * m_sensitivity;
   m_lastPosition = position;
+
+  if (m_object != nullptr) {
+    m_object->setRotation(getRotation());
+  }
 }
 
 QQuaternion DirectionInputController::getRotation() const noexcept {
-  return QQuaternion::fromEulerAngles(m_pitch, 0, 0) *
-         QQuaternion::fromEulerAngles(0, m_yaw, 0);
+  return QQuaternion::fromEulerAngles(m_pitch, m_yaw, 0);
 }
 
 QVector3D DirectionInputController::getWalkDirection() const noexcept {
-  return QQuaternion::fromEulerAngles(0, -m_yaw, 0)
+  return QQuaternion::fromEulerAngles(0, m_yaw, 0)
       .rotatedVector(QVector3D(0, 0, -1));
 }
 
 QVector3D DirectionInputController::getRightDirection() const noexcept {
-  return QQuaternion::fromEulerAngles(0, -m_yaw, 0)
+  return QQuaternion::fromEulerAngles(0, m_yaw, 0)
       .rotatedVector(QVector3D(1, 0, 0));
 }
 
 // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 QVector3D DirectionInputController::getUpDirection() const noexcept {
   return QVector3D(0, 1, 0);
+}
+
+const std::shared_ptr<PositionedObject> &
+DirectionInputController::getObject() const {
+  return m_object;
+}
+
+void DirectionInputController::setObject(
+    const std::shared_ptr<PositionedObject> &object) {
+  m_object = object;
+  if (m_object != nullptr) {
+    m_object->setRotation(getRotation());
+  }
 }
 
 float DirectionInputController::getSensitivity() const { return m_sensitivity; }

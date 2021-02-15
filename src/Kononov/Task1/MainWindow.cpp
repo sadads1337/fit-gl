@@ -167,6 +167,7 @@ void MainWindow::init() {
   m_camera = std::make_shared<Camera>();
 
   m_look_dir = std::make_shared<DirectionInputController>();
+  m_look_dir->setObject(m_camera);
   m_look_dir->setSensitivity(MOUSE_SENSITIVITY);
   m_motion = std::make_shared<MotionInputController>(m_look_dir);
   m_motion->setMotionSpeed(MOTION_SPEED);
@@ -183,7 +184,7 @@ void MainWindow::render() {
   const auto ratio = (float)width() / (float)height();
   m_camera->setPerspective(PERSPECTIVE_FOV, ratio, NEAR_PLANE, FAR_PLANE);
   m_camera->setPosition(m_motion->getPosition());
-  m_camera->setRotation(m_look_dir->getRotation().inverted());
+  // m_camera->setRotation(m_look_dir->getRotation().inverted());
   m_camera->beginRender((GLsizei)(width() * pixel_ratio),
                         (GLsizei)(height() * pixel_ratio));
 
