@@ -17,11 +17,30 @@ QMatrix4x4 PositionedObject::getAbsoluteTransformMatrix() const {
   return getTransformMatrix();
 }
 
+QQuaternion PositionedObject::getAbsoluteRotation() const {
+  if (m_parent != nullptr) {
+    return m_parent->getAbsoluteRotation() * m_rotation;
+  }
+  return getRotation();
+}
+
 QVector3D PositionedObject::getAbsolutePosition() const {
   if (m_parent != nullptr) {
     return m_parent->getAbsoluteTransformMatrix() * m_position;
   }
   return m_position;
+}
+
+QVector3D PositionedObject::getForwardDirection() const noexcept {
+  return getAbsoluteRotation().rotatedVector(QVector3D(0, 0, -1));
+}
+
+QVector3D PositionedObject::getRightDirection() const noexcept {
+  return getAbsoluteRotation().rotatedVector(QVector3D(1, 0, 0));
+}
+
+QVector3D PositionedObject::getUpDirection() const noexcept {
+  return getAbsoluteRotation().rotatedVector(QVector3D(0, 1, 0));
 }
 
 const std::shared_ptr<PositionedObject> &PositionedObject::getParent() const {
