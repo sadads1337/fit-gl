@@ -8,7 +8,9 @@ add_library(KononovCommon
         PositionedObject.cpp
         PositionedObject.hpp
         Camera.cpp
-        Camera.hpp)
+        Camera.hpp
+        ShaderProgram.cpp
+        ShaderProgram.hpp)
 
 target_include_directories(KononovCommon
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

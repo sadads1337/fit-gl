@@ -6,7 +6,7 @@
 #include <QVector3D>
 #include <QVector4D>
 
-#include "ShaderProgram.hpp"
+#include <ShaderProgram.hpp>
 
 namespace Kononov {
 
