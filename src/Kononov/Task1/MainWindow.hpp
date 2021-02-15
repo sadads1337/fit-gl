@@ -36,8 +36,8 @@ public slots:
 private:
   std::unique_ptr<QOpenGLDebugLogger> m_logger;
 
-  std::shared_ptr<DirectionInputController> m_look_dir;
-  std::shared_ptr<MotionInputController> m_motion;
+  std::shared_ptr<DirectionInputController> m_direction_input_controller;
+  std::shared_ptr<MotionInputController> m_motion_input_controller;
 
   std::shared_ptr<Camera> m_camera;
 

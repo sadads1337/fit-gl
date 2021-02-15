@@ -84,23 +84,23 @@ void MainWindow::onMessageLogged(const QOpenGLDebugMessage &message) {
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event) {
-  m_look_dir->mousePressEvent(event);
+  m_direction_input_controller->mousePressEvent(event);
 }
 
 void MainWindow::mouseMoveEvent(QMouseEvent *event) {
-  m_look_dir->mouseMoveEvent(event);
+  m_direction_input_controller->mouseMoveEvent(event);
 }
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
-  m_look_dir->mouseReleaseEvent(event);
+  m_direction_input_controller->mouseReleaseEvent(event);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
-  m_motion->keyPressEvent(event);
+  m_motion_input_controller->keyPressEvent(event);
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
-  m_motion->keyReleaseEvent(event);
+  m_motion_input_controller->keyReleaseEvent(event);
 }
 
 void MainWindow::init() {
@@ -165,17 +165,20 @@ void MainWindow::init() {
   m_cube->setPosition(QVector3D(4, 0, 0));
 
   m_camera = std::make_shared<Camera>();
+  m_camera->setPosition(INITIAL_CAMERA_POSITION);
 
-  m_look_dir = std::make_shared<DirectionInputController>();
-  m_look_dir->setObject(m_camera);
-  m_look_dir->setSensitivity(MOUSE_SENSITIVITY);
-  m_motion = std::make_shared<MotionInputController>(m_look_dir);
-  m_motion->setMotionSpeed(MOTION_SPEED);
-  m_motion->setPosition(INITIAL_CAMERA_POSITION);
+  m_direction_input_controller = std::make_shared<DirectionInputController>();
+  m_direction_input_controller->setObject(m_camera);
+  m_direction_input_controller->setSensitivity(MOUSE_SENSITIVITY);
+
+  m_motion_input_controller = std::make_shared<MotionInputController>();
+  m_motion_input_controller->setObject(m_camera);
+  m_motion_input_controller->setDirectionSource(m_direction_input_controller);
+  m_motion_input_controller->setMotionSpeed(MOTION_SPEED);
 }
 
 void MainWindow::render() {
-  m_motion->update();
+  m_motion_input_controller->update();
 
   // NOLINTNEXTLINE(hicpp-signed-bitwise)
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -183,8 +186,6 @@ void MainWindow::render() {
   const auto pixel_ratio = devicePixelRatio();
   const auto ratio = (float)width() / (float)height();
   m_camera->setPerspective(PERSPECTIVE_FOV, ratio, NEAR_PLANE, FAR_PLANE);
-  m_camera->setPosition(m_motion->getPosition());
-  // m_camera->setRotation(m_look_dir->getRotation().inverted());
   m_camera->beginRender((GLsizei)(width() * pixel_ratio),
                         (GLsizei)(height() * pixel_ratio));
 

@@ -11,25 +11,24 @@ namespace Kononov {
 
 class MotionInputController {
 public:
-  explicit MotionInputController(
-      std::shared_ptr<DirectionInputController> look_dir);
-
   void keyPressEvent(QKeyEvent *event);
   void keyReleaseEvent(QKeyEvent *event);
 
   void update();
 
+  const std::shared_ptr<PositionedObject> &getObject() const;
+  void setObject(const std::shared_ptr<PositionedObject> &object);
+  const std::shared_ptr<DirectionInputController> &getDirectionSource() const;
+  void setDirectionSource(
+      const std::shared_ptr<DirectionInputController> &direction_source);
+
   float getMotionSpeed() const;
   void setMotionSpeed(float motion_speed);
-
-  const QVector3D &getPosition() const;
-  void setPosition(const QVector3D &position);
-
 private:
   float m_motion_speed = 0;
 
-  QVector3D m_position;
-  std::shared_ptr<DirectionInputController> m_look_dir;
+  std::shared_ptr<PositionedObject> m_object;
+  std::shared_ptr<DirectionInputController> m_direction_source;
   std::unordered_set<int> m_pressed_keys;
 };
 
