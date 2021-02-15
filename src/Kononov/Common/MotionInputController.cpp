@@ -2,10 +2,6 @@
 
 namespace Kononov {
 
-MotionInputController::MotionInputController(
-    std::shared_ptr<DirectionInputController> look_dir)
-    : m_look_dir(std::move(look_dir)) {}
-
 void MotionInputController::keyPressEvent(QKeyEvent *event) {
   m_pressed_keys.insert(event->key());
 }
@@ -15,38 +11,57 @@ void MotionInputController::keyReleaseEvent(QKeyEvent *event) {
 }
 
 void MotionInputController::update() {
+  if (m_object == nullptr || m_direction_source == nullptr) {
+    return;
+  }
+  QVector3D pos = m_object->getPosition();
+
   QVector3D hor_direction;
   QVector3D vert_direction;
   if (m_pressed_keys.find(Qt::Key::Key_W) != m_pressed_keys.end()) {
-    hor_direction += m_look_dir->getWalkDirection();
+    hor_direction += m_direction_source->getWalkDirection();
   }
   if (m_pressed_keys.find(Qt::Key::Key_S) != m_pressed_keys.end()) {
-    hor_direction -= m_look_dir->getWalkDirection();
+    hor_direction -= m_direction_source->getWalkDirection();
   }
   if (m_pressed_keys.find(Qt::Key::Key_A) != m_pressed_keys.end()) {
-    hor_direction -= m_look_dir->getRightDirection();
+    hor_direction -= m_direction_source->getRightDirection();
   }
   if (m_pressed_keys.find(Qt::Key::Key_D) != m_pressed_keys.end()) {
-    hor_direction += m_look_dir->getRightDirection();
+    hor_direction += m_direction_source->getRightDirection();
   }
 
   if (m_pressed_keys.find(Qt::Key::Key_Space) != m_pressed_keys.end()) {
-    vert_direction += m_look_dir->getUpDirection();
+    vert_direction += m_direction_source->getUpDirection();
   }
   if (m_pressed_keys.find(Qt::Key::Key_Shift) != m_pressed_keys.end()) {
-    vert_direction -= m_look_dir->getUpDirection();
+    vert_direction -= m_direction_source->getUpDirection();
   }
 
-  m_position += m_motion_speed * hor_direction.normalized();
-  m_position += m_motion_speed * vert_direction;
+  pos += m_motion_speed * hor_direction.normalized();
+  pos += m_motion_speed * vert_direction;
+
+  m_object->setPosition(pos);
 }
 
-const QVector3D &MotionInputController::getPosition() const {
-  return m_position;
+const std::shared_ptr<PositionedObject> &
+MotionInputController::getObject() const {
+  return m_object;
 }
 
-void MotionInputController::setPosition(const QVector3D &position) {
-  m_position = position;
+void MotionInputController::setObject(
+    const std::shared_ptr<PositionedObject> &object) {
+  m_object = object;
+}
+
+const std::shared_ptr<DirectionInputController> &
+MotionInputController::getDirectionSource() const {
+  return m_direction_source;
+}
+
+void MotionInputController::setDirectionSource(
+    const std::shared_ptr<DirectionInputController> &direction_source) {
+  m_direction_source = direction_source;
 }
 
 float MotionInputController::getMotionSpeed() const { return m_motion_speed; }
