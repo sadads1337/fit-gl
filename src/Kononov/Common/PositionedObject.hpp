@@ -19,7 +19,12 @@ private:
 public:
   [[nodiscard]] QMatrix4x4 getTransformMatrix() const;
   [[nodiscard]] QMatrix4x4 getAbsoluteTransformMatrix() const;
+  [[nodiscard]] QQuaternion getAbsoluteRotation() const;
   [[nodiscard]] QVector3D getAbsolutePosition() const;
+
+  [[nodiscard]] QVector3D getForwardDirection() const noexcept;
+  [[nodiscard]] QVector3D getRightDirection() const noexcept;
+  [[nodiscard]] QVector3D getUpDirection() const noexcept;
 
   [[nodiscard]] const std::shared_ptr<PositionedObject> &getParent() const;
   void setParent(const std::shared_ptr<PositionedObject> &parent);
