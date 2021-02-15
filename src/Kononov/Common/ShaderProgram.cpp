@@ -1,5 +1,5 @@
 #include "ShaderProgram.hpp"
-#include "FirstShader.hpp"
+#include "Kononov/Task1/FirstShader.hpp"
 
 namespace Kononov {
 

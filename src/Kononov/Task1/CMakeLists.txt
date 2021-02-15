@@ -15,8 +15,6 @@ add_executable(KononovTask1
         main.cpp
         MainWindow.cpp
         MainWindow.hpp
-        ShaderProgram.cpp
-        ShaderProgram.hpp
         FirstShader.cpp
         FirstShader.hpp
         FirstRenderable.cpp
