@@ -1,8 +1,12 @@
 #pragma once
 
+#include <memory>
+
 #include <QMouseEvent>
 #include <QQuaternion>
 #include <QVector3D>
+
+#include "PositionedObject.hpp"
 
 namespace Kononov {
 
@@ -18,6 +22,9 @@ public:
   [[nodiscard]] QVector3D getRightDirection() const noexcept;
   [[nodiscard]] QVector3D getUpDirection() const noexcept;
 
+  [[nodiscard]] const std::shared_ptr<PositionedObject> &getObject() const;
+  void setObject(const std::shared_ptr<PositionedObject> &object);
+
   [[nodiscard]] float getSensitivity() const;
   void setSensitivity(float sensitivity);
 
@@ -30,6 +37,7 @@ public:
 private:
   void handleMove(const QPoint &position);
 
+  std::shared_ptr<PositionedObject> m_object = nullptr;
   float m_sensitivity = 0;
   bool m_mousePressed = false;
   QPoint m_lastPosition{};
