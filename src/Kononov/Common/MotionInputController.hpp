@@ -16,14 +16,16 @@ public:
 
   void update();
 
-  const std::shared_ptr<PositionedObject> &getObject() const;
+  const std::shared_ptr<PositionedObject> &getObject() const noexcept;
   void setObject(const std::shared_ptr<PositionedObject> &object);
-  const std::shared_ptr<DirectionInputController> &getDirectionSource() const;
+  const std::shared_ptr<DirectionInputController> &
+  getDirectionSource() const noexcept;
   void setDirectionSource(
       const std::shared_ptr<DirectionInputController> &direction_source);
 
-  float getMotionSpeed() const;
+  float getMotionSpeed() const noexcept;
   void setMotionSpeed(float motion_speed);
+
 private:
   float m_motion_speed = 0;
 

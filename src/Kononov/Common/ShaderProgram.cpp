@@ -10,7 +10,8 @@ void ShaderProgram::bind() { m_shader->bind(); }
 
 void ShaderProgram::release() { m_shader->release(); }
 
-const std::unique_ptr<QOpenGLShaderProgram> &ShaderProgram::getShader() const {
+const std::unique_ptr<QOpenGLShaderProgram> &
+ShaderProgram::getShader() const noexcept {
   return m_shader;
 }
 

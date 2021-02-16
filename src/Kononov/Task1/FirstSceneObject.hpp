@@ -15,7 +15,8 @@ private:
 public:
   void render(const Camera &camera);
 
-  [[nodiscard]] const std::shared_ptr<FirstRenderable> &getRenderable() const;
+  [[nodiscard]] const std::shared_ptr<FirstRenderable> &
+  getRenderable() const noexcept;
   void setRenderable(const std::shared_ptr<FirstRenderable> &renderable);
 };
 

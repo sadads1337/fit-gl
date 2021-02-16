@@ -13,7 +13,7 @@ private:
   std::unique_ptr<QOpenGLShaderProgram> m_shader;
 
 protected:
-  [[nodiscard]] const std::unique_ptr<QOpenGLShaderProgram> &getShader() const;
+  [[nodiscard]] const std::unique_ptr<QOpenGLShaderProgram> &getShader() const noexcept;
 
 public:
   ShaderProgram();

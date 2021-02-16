@@ -23,7 +23,7 @@ FirstRenderable::readGLBuffer(QDataStream &stream, QOpenGLBuffer::Type type) {
 
 std::unique_ptr<QOpenGLBuffer>
 FirstRenderable::bufferFromData(const char *data, int size,
-                                 QOpenGLBuffer::Type type) {
+                                QOpenGLBuffer::Type type) {
   auto buffer = std::make_unique<QOpenGLBuffer>(type);
   buffer->create();
   buffer->bind();
@@ -55,9 +55,8 @@ void FirstRenderable::initVao() {
   m_vao->release();
 }
 
-FirstRenderable::FirstRenderable(GLenum primitive,
-                                   const QString &texture_file,
-                                   std::shared_ptr<FirstShader> &shader)
+FirstRenderable::FirstRenderable(GLenum primitive, const QString &texture_file,
+                                 std::shared_ptr<FirstShader> &shader)
     : m_primitive(primitive), m_shader_parameters(), m_shader(shader) {
   m_texture = std::make_unique<QOpenGLTexture>(QImage(texture_file).mirrored());
   m_texture->setMinificationFilter(QOpenGLTexture::Nearest);
@@ -66,9 +65,9 @@ FirstRenderable::FirstRenderable(GLenum primitive,
 }
 
 FirstRenderable::FirstRenderable(GLenum primitive,
-                                   std::shared_ptr<FirstShader> &shader,
-                                   const QString &texture_file,
-                                   const QString &geometry_file)
+                                 std::shared_ptr<FirstShader> &shader,
+                                 const QString &texture_file,
+                                 const QString &geometry_file)
     : FirstRenderable(primitive, texture_file, shader) {
   QFile file(geometry_file);
   if (!file.open(QIODevice::ReadOnly)) {
@@ -82,10 +81,10 @@ FirstRenderable::FirstRenderable(GLenum primitive,
 }
 
 FirstRenderable::FirstRenderable(GLenum primitive,
-                                   std::shared_ptr<FirstShader> &shader,
-                                   const QString &texture_file,
-                                   const char *vbo_data, int vbo_size,
-                                   const char *ibo_data, int ibo_size)
+                                 std::shared_ptr<FirstShader> &shader,
+                                 const QString &texture_file,
+                                 const char *vbo_data, int vbo_size,
+                                 const char *ibo_data, int ibo_size)
     : FirstRenderable(primitive, texture_file, shader) {
   m_vbo = bufferFromData(vbo_data, vbo_size, QOpenGLBuffer::VertexBuffer);
   m_ibo = bufferFromData(ibo_data, ibo_size, QOpenGLBuffer::IndexBuffer);
@@ -120,11 +119,12 @@ void FirstRenderable::render(QMatrix4x4 view, QMatrix4x4 model) {
   m_shader->release();
 }
 
-const FirstShaderParameters &FirstRenderable::getShaderParameters() const {
+const FirstShaderParameters &
+FirstRenderable::getShaderParameters() const noexcept {
   return m_shader_parameters;
 }
 
-FirstShaderParameters &FirstRenderable::getShaderParameters() {
+FirstShaderParameters &FirstRenderable::getShaderParameters() noexcept {
   return m_shader_parameters;
 }
 
