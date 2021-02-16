@@ -24,8 +24,8 @@ void DirectionInputController::mouseMoveEvent(QMouseEvent *event) {
 
 void DirectionInputController::handleMove(const QPoint &position) {
   auto diff = position - m_lastPosition;
-  m_yaw -= (float)diff.x() * m_sensitivity;
-  m_pitch -= (float)diff.y() * m_sensitivity;
+  m_yaw -= static_cast<float>(diff.x()) * m_sensitivity;
+  m_pitch -= static_cast<float>(diff.y()) * m_sensitivity;
   m_lastPosition = position;
 
   if (m_object != nullptr) {
