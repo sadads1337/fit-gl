@@ -13,10 +13,15 @@ private:
   std::unique_ptr<QOpenGLShaderProgram> m_shader;
 
 protected:
-  [[nodiscard]] const std::unique_ptr<QOpenGLShaderProgram> &getShader() const noexcept;
+  [[nodiscard]] QOpenGLShaderProgram &getShader() const noexcept;
 
 public:
   ShaderProgram();
+  ShaderProgram(const ShaderProgram &) = delete;
+  ShaderProgram(ShaderProgram &&) = default;
+  virtual ~ShaderProgram() = default;
+  ShaderProgram &operator=(const ShaderProgram &) = delete;
+  ShaderProgram &operator=(ShaderProgram &&) = default;
 
   void bind();
   void release();
