@@ -13,7 +13,7 @@ void FirstSceneObject::render(const Camera &camera) {
 }
 
 const std::shared_ptr<FirstRenderable> &
-FirstSceneObject::getRenderable() const {
+FirstSceneObject::getRenderable() const noexcept {
   return m_renderable;
 }
 

@@ -53,7 +53,7 @@ QVector3D DirectionInputController::getUpDirection() const noexcept {
 }
 
 const std::shared_ptr<PositionedObject> &
-DirectionInputController::getObject() const {
+DirectionInputController::getObject() const noexcept {
   return m_object;
 }
 
@@ -65,19 +65,21 @@ void DirectionInputController::setObject(
   }
 }
 
-float DirectionInputController::getSensitivity() const { return m_sensitivity; }
+float DirectionInputController::getSensitivity() const noexcept {
+  return m_sensitivity;
+}
 
 void DirectionInputController::setSensitivity(float sensitivity) {
   DirectionInputController::m_sensitivity = sensitivity;
 }
 
-float DirectionInputController::getYaw() const { return m_yaw; }
+float DirectionInputController::getYaw() const noexcept { return m_yaw; }
 
 void DirectionInputController::setYaw(float yaw) {
   DirectionInputController::m_yaw = yaw;
 }
 
-float DirectionInputController::getPitch() const { return m_pitch; }
+float DirectionInputController::getPitch() const noexcept { return m_pitch; }
 
 void DirectionInputController::setPitch(float pitch) {
   DirectionInputController::m_pitch = pitch;

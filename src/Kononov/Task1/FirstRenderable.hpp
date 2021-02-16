@@ -30,19 +30,20 @@ private:
   void initVao();
 
   FirstRenderable(GLenum primitive, const QString &texture_file,
-                   std::shared_ptr<FirstShader> &shader);
+                  std::shared_ptr<FirstShader> &shader);
 
 public:
   FirstRenderable(GLenum primitive, std::shared_ptr<FirstShader> &shader,
-                   const QString &texture_file, const QString &geometry_file);
+                  const QString &texture_file, const QString &geometry_file);
   FirstRenderable(GLenum primitive, std::shared_ptr<FirstShader> &shader,
-                   const QString &texture_file, const char *vbo_data,
-                   int vbo_size, const char *ibo_data, int ibo_size);
+                  const QString &texture_file, const char *vbo_data,
+                  int vbo_size, const char *ibo_data, int ibo_size);
 
   void render(QMatrix4x4 view, QMatrix4x4 model);
 
-  [[nodiscard]] const FirstShaderParameters &getShaderParameters() const;
-  [[nodiscard]] FirstShaderParameters &getShaderParameters();
+  [[nodiscard]] const FirstShaderParameters &
+  getShaderParameters() const noexcept;
+  [[nodiscard]] FirstShaderParameters &getShaderParameters() noexcept;
   void setShaderParameters(const FirstShaderParameters &shader_parameters);
 };
 

@@ -45,7 +45,7 @@ void MotionInputController::update() {
 }
 
 const std::shared_ptr<PositionedObject> &
-MotionInputController::getObject() const {
+MotionInputController::getObject() const noexcept {
   return m_object;
 }
 
@@ -55,7 +55,7 @@ void MotionInputController::setObject(
 }
 
 const std::shared_ptr<DirectionInputController> &
-MotionInputController::getDirectionSource() const {
+MotionInputController::getDirectionSource() const noexcept {
   return m_direction_source;
 }
 
@@ -64,7 +64,9 @@ void MotionInputController::setDirectionSource(
   m_direction_source = direction_source;
 }
 
-float MotionInputController::getMotionSpeed() const { return m_motion_speed; }
+float MotionInputController::getMotionSpeed() const noexcept {
+  return m_motion_speed;
+}
 
 void MotionInputController::setMotionSpeed(float motion_speed) {
   m_motion_speed = motion_speed;

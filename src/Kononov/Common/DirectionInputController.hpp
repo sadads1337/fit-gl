@@ -22,16 +22,17 @@ public:
   [[nodiscard]] QVector3D getRightDirection() const noexcept;
   [[nodiscard]] QVector3D getUpDirection() const noexcept;
 
-  [[nodiscard]] const std::shared_ptr<PositionedObject> &getObject() const;
+  [[nodiscard]] const std::shared_ptr<PositionedObject> &
+  getObject() const noexcept;
   void setObject(const std::shared_ptr<PositionedObject> &object);
 
-  [[nodiscard]] float getSensitivity() const;
+  [[nodiscard]] float getSensitivity() const noexcept;
   void setSensitivity(float sensitivity);
 
-  [[nodiscard]] float getYaw() const;
+  [[nodiscard]] float getYaw() const noexcept;
   void setYaw(float yaw);
 
-  [[nodiscard]] float getPitch() const;
+  [[nodiscard]] float getPitch() const noexcept;
   void setPitch(float pitch);
 
 private:

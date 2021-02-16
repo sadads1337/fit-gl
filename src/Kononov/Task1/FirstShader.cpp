@@ -95,13 +95,15 @@ void FirstShaderParameters::setLightSource(QVector3D pos, QVector3D color) {
   setLightColor(color);
 }
 
-GLint FirstShaderParameters::getDiffuseMap() const { return m_diffuse_map; }
+GLint FirstShaderParameters::getDiffuseMap() const noexcept {
+  return m_diffuse_map;
+}
 
 void FirstShaderParameters::setDiffuseMap(GLint diffuse_map) {
   m_diffuse_map = diffuse_map;
 }
 
-GLfloat FirstShaderParameters::getAmbientStrength() const {
+GLfloat FirstShaderParameters::getAmbientStrength() const noexcept {
   return m_ambient_strength;
 }
 
@@ -109,7 +111,7 @@ void FirstShaderParameters::setAmbientStrength(GLfloat ambient_strength) {
   m_ambient_strength = ambient_strength;
 }
 
-GLfloat FirstShaderParameters::getSpecularStrength() const {
+GLfloat FirstShaderParameters::getSpecularStrength() const noexcept {
   return m_specular_strength;
 }
 
@@ -117,13 +119,15 @@ void FirstShaderParameters::setSpecularStrength(GLfloat specular_strength) {
   m_specular_strength = specular_strength;
 }
 
-GLfloat FirstShaderParameters::getSpecularPow() const { return m_specular_pow; }
+GLfloat FirstShaderParameters::getSpecularPow() const noexcept {
+  return m_specular_pow;
+}
 
 void FirstShaderParameters::setSpecularPow(GLfloat specular_pow) {
   m_specular_pow = specular_pow;
 }
 
-const QVector3D &FirstShaderParameters::getLightColor() const {
+const QVector3D &FirstShaderParameters::getLightColor() const noexcept {
   return m_light_color;
 }
 
@@ -131,7 +135,7 @@ void FirstShaderParameters::setLightColor(const QVector3D &light_color) {
   m_light_color = light_color;
 }
 
-const QVector3D &FirstShaderParameters::getLightPos() const {
+const QVector3D &FirstShaderParameters::getLightPos() const noexcept {
   return m_light_pos;
 }
 
@@ -139,9 +143,10 @@ void FirstShaderParameters::setLightPos(const QVector3D &light_pos) {
   m_light_pos = light_pos;
 }
 
-const QVector3D &FirstShaderParameters::getViewPos() const {
+const QVector3D &FirstShaderParameters::getViewPos() const noexcept {
   return m_view_pos;
 }
+
 void FirstShaderParameters::setViewPos(const QVector3D &view_pos) {
   m_view_pos = view_pos;
 }

@@ -12,15 +12,15 @@ private:
   float m_height;
 
 public:
-  Viewport(float x, float y, float width, float height);
+  Viewport(float x, float y, float width, float height) noexcept;
 
-  [[nodiscard]] float getX() const;
+  [[nodiscard]] float getX() const noexcept;
   void setX(float x);
-  [[nodiscard]] float getY() const;
+  [[nodiscard]] float getY() const noexcept;
   void setY(float y);
-  [[nodiscard]] float getWidth() const;
+  [[nodiscard]] float getWidth() const noexcept;
   void setWidth(float width);
-  [[nodiscard]] float getHeight() const;
+  [[nodiscard]] float getHeight() const noexcept;
   void setHeight(float height);
 };
 
@@ -34,11 +34,11 @@ public:
 
   void beginRender(float screen_width, float screen_height);
 
-  [[nodiscard]] QMatrix4x4 getProjectionViewMatrix() const;
+  [[nodiscard]] QMatrix4x4 getProjectionViewMatrix() const noexcept;
 
-  [[nodiscard]] const Viewport &getViewport() const;
+  [[nodiscard]] const Viewport &getViewport() const noexcept;
   void setViewport(const Viewport &viewport);
-  [[nodiscard]] const QMatrix4x4 &getProjection() const;
+  [[nodiscard]] const QMatrix4x4 &getProjection() const noexcept;
   void setProjection(const QMatrix4x4 &projection);
 };
 

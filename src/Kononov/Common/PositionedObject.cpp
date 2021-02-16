@@ -2,7 +2,7 @@
 
 namespace Kononov {
 
-QMatrix4x4 PositionedObject::getTransformMatrix() const {
+QMatrix4x4 PositionedObject::getTransformMatrix() const noexcept {
   QMatrix4x4 res;
   res.translate(m_position);
   res.rotate(m_rotation);
@@ -10,21 +10,21 @@ QMatrix4x4 PositionedObject::getTransformMatrix() const {
   return res;
 }
 
-QMatrix4x4 PositionedObject::getAbsoluteTransformMatrix() const {
+QMatrix4x4 PositionedObject::getAbsoluteTransformMatrix() const noexcept {
   if (m_parent != nullptr) {
     return m_parent->getAbsoluteTransformMatrix() * getTransformMatrix();
   }
   return getTransformMatrix();
 }
 
-QQuaternion PositionedObject::getAbsoluteRotation() const {
+QQuaternion PositionedObject::getAbsoluteRotation() const noexcept {
   if (m_parent != nullptr) {
     return m_parent->getAbsoluteRotation() * m_rotation;
   }
   return getRotation();
 }
 
-QVector3D PositionedObject::getAbsolutePosition() const {
+QVector3D PositionedObject::getAbsolutePosition() const noexcept {
   if (m_parent != nullptr) {
     return m_parent->getAbsoluteTransformMatrix() * m_position;
   }
@@ -43,7 +43,8 @@ QVector3D PositionedObject::getUpDirection() const noexcept {
   return getAbsoluteRotation().rotatedVector(QVector3D(0, 1, 0));
 }
 
-const std::shared_ptr<PositionedObject> &PositionedObject::getParent() const {
+const std::shared_ptr<PositionedObject> &
+PositionedObject::getParent() const noexcept {
   return m_parent;
 }
 
@@ -52,19 +53,23 @@ void PositionedObject::setParent(
   m_parent = parent;
 }
 
-const QVector3D &PositionedObject::getPosition() const { return m_position; }
+const QVector3D &PositionedObject::getPosition() const noexcept {
+  return m_position;
+}
 
 void PositionedObject::setPosition(const QVector3D &position) {
   m_position = position;
 }
 
-const QQuaternion &PositionedObject::getRotation() const { return m_rotation; }
+const QQuaternion &PositionedObject::getRotation() const noexcept {
+  return m_rotation;
+}
 
 void PositionedObject::setRotation(const QQuaternion &rotation) {
   m_rotation = rotation;
 }
 
-const QVector3D &PositionedObject::getScale() const { return m_scale; }
+const QVector3D &PositionedObject::getScale() const noexcept { return m_scale; }
 
 void PositionedObject::setScale(const QVector3D &scale) { m_scale = scale; }
 
