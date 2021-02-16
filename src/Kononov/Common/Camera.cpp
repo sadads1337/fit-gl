@@ -1,7 +1,6 @@
 #include "Camera.hpp"
 
-#include <QOpenGLContext>
-#include <QOpenGLFunctions>
+#include "GLUtil.hpp"
 
 namespace Kononov {
 
@@ -31,7 +30,7 @@ void Camera::beginRender(float screen_width, float screen_height) {
   float w = m_viewport.getWidth() * screen_width;
   float h = m_viewport.getHeight() * screen_height;
   // TODO: cache projection*view matrix
-  QOpenGLContext::currentContext()->functions()->glViewport(x, y, w, h);
+  GLUtil::requireFunctions()->glViewport(x, y, w, h);
 }
 
 const Viewport &Camera::getViewport() const noexcept { return m_viewport; }
