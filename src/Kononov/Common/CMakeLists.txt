@@ -10,7 +10,9 @@ add_library(KononovCommon
         Camera.cpp
         Camera.hpp
         ShaderProgram.cpp
-        ShaderProgram.hpp)
+        ShaderProgram.hpp
+        GLUtil.cpp
+        GLUtil.hpp)
 
 target_include_directories(KononovCommon
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

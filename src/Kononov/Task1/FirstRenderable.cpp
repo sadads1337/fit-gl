@@ -3,8 +3,8 @@
 #include <QDataStream>
 #include <QDebug>
 #include <QFile>
-#include <QOpenGLContext>
-#include <QOpenGLFunctions>
+
+#include <GLUtil.hpp>
 
 namespace Kononov {
 
@@ -106,7 +106,7 @@ void FirstRenderable::render(QMatrix4x4 view, QMatrix4x4 model) {
   m_shader->enableAttributeArrays();
 
   const size_t count = m_ibo->size() / sizeof(GLuint);
-  QOpenGLContext::currentContext()->functions()->glDrawElements(
+  GLUtil::requireFunctions()->glDrawElements(
       m_primitive, count, GL_UNSIGNED_INT, nullptr);
 
   // glDisableVertexAttribArray (because it is not bound to m_program ??? and
