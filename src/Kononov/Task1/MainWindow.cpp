@@ -142,8 +142,10 @@ void MainWindow::init() {
 
   auto cube_rend = std::make_shared<FirstRenderable>(
       GL_TRIANGLE_STRIP, shader, ":/textures/dice-diffuse.png",
-      (char *)modelVertices.data(), modelVertices.size() * sizeof(GLfloat),
-      (char *)modelIndices.data(), modelIndices.size() * sizeof(GLfloat));
+      reinterpret_cast<const char *>(modelVertices.data()),
+      modelVertices.size() * sizeof(GLfloat),
+      reinterpret_cast<const char *>(modelIndices.data()),
+      modelIndices.size() * sizeof(GLfloat));
   cube_rend->setShaderParameters(skull_rend->getShaderParameters());
 
   /*
@@ -184,13 +186,13 @@ void MainWindow::render() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   const auto pixel_ratio = devicePixelRatio();
-  const auto ratio = (float)width() / (float)height();
+  const auto ratio = static_cast<float>(width()) / static_cast<float>(height());
   m_camera->setPerspective(PERSPECTIVE_FOV, ratio, NEAR_PLANE, FAR_PLANE);
   m_camera->beginRender((GLsizei)(width() * pixel_ratio),
                         (GLsizei)(height() * pixel_ratio));
 
-  const float angle =
-      ROTATION_SPEED * (float)m_frame / (float)screen()->refreshRate();
+  const float angle = ROTATION_SPEED * static_cast<float>(m_frame) /
+                      static_cast<float>(screen()->refreshRate());
   m_skull_rotating->setRotation(QQuaternion::fromAxisAndAngle(0, 1, 0, angle));
   m_skull_rotating->render(*m_camera);
   m_skull->render(*m_camera);
