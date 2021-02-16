@@ -12,6 +12,8 @@ uniform vec3 light_color;
 uniform vec3 light_pos;
 uniform vec3 view_pos;
 
+out vec4 frag_color;
+
 void main() {
     vec3 ambient_light = ambient_strength * light_color;
 
@@ -25,5 +27,5 @@ void main() {
     float spec = pow(max(dot(view_dir, ref_dir), 0), specular_pow);
     vec3 specular_light = specular_strength * spec * light_color;
 
-    gl_FragColor = vec4(ambient_light + diffuse_light + specular_light, 1) * texture(diffuse_map, frag_uv);
+    frag_color = vec4(ambient_light + diffuse_light + specular_light, 1) * texture(diffuse_map, frag_uv);
 }
