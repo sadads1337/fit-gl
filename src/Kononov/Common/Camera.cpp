@@ -1,5 +1,7 @@
 #include "Camera.hpp"
 
+#include <cmath>
+
 #include "GLUtil.hpp"
 
 namespace Kononov {
@@ -16,6 +18,10 @@ float Viewport::getHeight() const noexcept { return m_height; }
 void Viewport::setHeight(float height) { m_height = height; }
 
 void Camera::setPerspective(float fov, float ratio, float near, float far) {
+  if (!std::isnormal(fov) || !std::isnormal(ratio) || !std::isnormal(near) ||
+      !std::isnormal(far)) {
+    throw std::domain_error("Invalid argument value");
+  }
   m_projection.setToIdentity();
   m_projection.perspective(fov / ratio, ratio, near, far);
 }
