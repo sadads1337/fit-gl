@@ -7,7 +7,7 @@
 
 #include "ShaderProgram.hpp"
 
-namespace Kononov {
+namespace {
 
 constexpr std::array<GLfloat, 192U> modelVertices = {
     -1.0F, -1.0F, 1.0F, 0, 0, 1, 0.0F, 0.0F,  // v0
@@ -62,22 +62,26 @@ constexpr std::array<GLuint, 34U> modelIndices = {
     20, 20, 21, 22, 23      // Face 5 - triangle strip (v20, v21, v22, v23)
 };
 
-static constexpr QVector3D INITIAL_CAMERA_POSITION(0, 1.3, 8);
-static constexpr QVector3D LIGHT_POSITION(3, 2, 3);
-static constexpr QVector3D LIGHT_COLOR(1, 0.7, 0.7);
-static constexpr QVector4D CLEAR_COLOR(0, 0.5, 1, 1);
+} // namespace
 
-static const float PERSPECTIVE_FOV = 60.0F;
-static const float NEAR_PLANE = 0.1F;
-static const float FAR_PLANE = 100.0F;
+namespace Kononov {
 
-static const float AMBIENT_STRENGTH = 0.3F;
-static const float SPECULAR_STRENGTH = 0.5F;
-static const int SPECULAR_POW = 32;
+constexpr QVector3D INITIAL_CAMERA_POSITION(0, 1.3, 8);
+constexpr QVector3D LIGHT_POSITION(3, 2, 3);
+constexpr QVector3D LIGHT_COLOR(1, 0.7, 0.7);
+constexpr QVector4D CLEAR_COLOR(0, 0.5, 1, 1);
 
-static const float MOUSE_SENSITIVITY = 0.2F;
-static const float ROTATION_SPEED = 30.0F;
-static const float MOTION_SPEED = 0.1F;
+constexpr float PERSPECTIVE_FOV = 60.0F;
+constexpr float NEAR_PLANE = 0.1F;
+constexpr float FAR_PLANE = 100.0F;
+
+constexpr float AMBIENT_STRENGTH = 0.3F;
+constexpr float SPECULAR_STRENGTH = 0.5F;
+constexpr int SPECULAR_POW = 32;
+
+constexpr float MOUSE_SENSITIVITY = 0.2F;
+constexpr float ROTATION_SPEED = 30.0F;
+constexpr float MOTION_SPEED = 0.1F;
 
 void MainWindow::onMessageLogged(const QOpenGLDebugMessage &message) {
   qDebug() << message;

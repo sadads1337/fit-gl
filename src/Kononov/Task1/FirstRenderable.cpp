@@ -106,8 +106,8 @@ void FirstRenderable::render(QMatrix4x4 view, QMatrix4x4 model) {
   m_shader->enableAttributeArrays();
 
   const size_t count = m_ibo->size() / sizeof(GLuint);
-  GLUtil::requireFunctions()->glDrawElements(
-      m_primitive, count, GL_UNSIGNED_INT, nullptr);
+  GLUtil::requireFunctions()->glDrawElements(m_primitive, count,
+                                             GL_UNSIGNED_INT, nullptr);
 
   // glDisableVertexAttribArray (because it is not bound to m_program ??? and
   // can affect further rendering)

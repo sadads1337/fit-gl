@@ -3,13 +3,13 @@
 
 #include "MainWindow.hpp"
 
-static const int GL_VERSION_MAJOR = 3;
-static const int GL_VERSION_MINOR = 3;
+constexpr int GL_VERSION_MAJOR = 3;
+constexpr int GL_VERSION_MINOR = 3;
 
-static const int Q_SURFACE_NUM_SAMPLES = 16;
-static const int Q_SURFACE_DEPTH_BUFFER_SIZE = 24;
+constexpr int Q_SURFACE_NUM_SAMPLES = 16;
+constexpr int Q_SURFACE_DEPTH_BUFFER_SIZE = 24;
 
-static constexpr QSize WINDOW_SIZE(640, 480);
+constexpr QSize WINDOW_SIZE(640, 480);
 
 int main(int argc, char **argv) {
   QGuiApplication app(argc, argv);
