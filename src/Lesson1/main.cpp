@@ -1,22 +1,20 @@
-
+#include "cubewindow.h"
 #include <QApplication>
-#include <QSurfaceFormat>
 
-#include "TriangleWindow.hpp"
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
 
-int main(int argc, char **argv) {
-  QGuiApplication app(argc, argv);
+    QSurfaceFormat format;
+    format.setSamples(16);
 
-  QSurfaceFormat format;
-  format.setSamples(16);
-  format.setVersion(2, 1);
+    CubeWindow window;
+    window.setFormat(format);
+    window.resize(640, 480);
 
-  fgl::TriangleWindow window;
-  window.setFormat(format);
-  window.resize(640, 480);
-  window.show();
+    window.show();
 
-  window.setAnimated(true);
+    window.setAnimating(true);
 
-  return app.exec();
+    return app.exec();
 }
