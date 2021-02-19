@@ -1,8 +1,8 @@
 #include "GLUtil.hpp"
 
-namespace Kononov {
+namespace Kononov::GL {
 
-QOpenGLContext *GLUtil::requireContext() {
+QOpenGLContext *requireContext() {
   QOpenGLContext *context = QOpenGLContext::currentContext();
   if (context == nullptr) {
     throw std::runtime_error("No current OpenGL context");
@@ -10,8 +10,6 @@ QOpenGLContext *GLUtil::requireContext() {
   return context;
 }
 
-QOpenGLFunctions *GLUtil::requireFunctions() {
-  return requireContext()->functions();
-}
+QOpenGLFunctions *requireFunctions() { return requireContext()->functions(); }
 
-} // namespace Kononov
+} // namespace Kononov::GL

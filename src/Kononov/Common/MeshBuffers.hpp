@@ -54,8 +54,8 @@ public:
     // by VAO)
     m_vao->bind();
     m_ibo->bind();
-    GLUtil::requireFunctions()->glDrawElements(m_primitive, m_count,
-                                               glTypeToEnum<TIndex>(), nullptr);
+    GL::requireFunctions()->glDrawElements(m_primitive, m_count,
+                                           GL::typeToEnum<TIndex>(), nullptr);
     m_ibo->release();
     m_vao->release();
   }

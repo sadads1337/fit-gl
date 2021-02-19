@@ -3,21 +3,18 @@
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 
-namespace Kononov {
+namespace Kononov::GL {
 
-template <typename T> constexpr GLenum glTypeToEnum();
-template <> constexpr GLenum glTypeToEnum<GLfloat>() { return GL_FLOAT; }
-template <> constexpr GLenum glTypeToEnum<GLint>() { return GL_INT; }
-template <> constexpr GLenum glTypeToEnum<GLuint>() { return GL_UNSIGNED_INT; }
-template <> constexpr GLenum glTypeToEnum<GLshort>() { return GL_SHORT; }
-template <> constexpr GLenum glTypeToEnum<GLushort>() {
+template <typename T> constexpr GLenum typeToEnum();
+template <> constexpr GLenum typeToEnum<GLfloat>() { return GL_FLOAT; }
+template <> constexpr GLenum typeToEnum<GLint>() { return GL_INT; }
+template <> constexpr GLenum typeToEnum<GLuint>() { return GL_UNSIGNED_INT; }
+template <> constexpr GLenum typeToEnum<GLshort>() { return GL_SHORT; }
+template <> constexpr GLenum typeToEnum<GLushort>() {
   return GL_UNSIGNED_SHORT;
 }
 
-class GLUtil {
-public:
-  static QOpenGLContext *requireContext();
-  static QOpenGLFunctions *requireFunctions();
-};
+QOpenGLContext *requireContext();
+QOpenGLFunctions *requireFunctions();
 
-} // namespace Kononov
+} // namespace Kononov::GL
