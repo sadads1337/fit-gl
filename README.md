@@ -3,6 +3,10 @@
 Qt based demo project to demonstrate how to use and implement basic 3D graphics features.
 No optimizations exists. Use only for educational purposes.
 
+## Purposes
+
+Student submission is the main goal of this repository. Do not use this code in production!!!
+
 ## Requirements
 
 - git [https://git-scm.com](https://git-scm.com);
