@@ -3,47 +3,47 @@
 #include <QOpenGLFunctions>
 #include <QScreen>
 
-#include <array>
+#include <vector>
 
 #include "ShaderProgram.hpp"
 
 namespace {
 
-constexpr std::array<GLfloat, 192U> modelVertices = {
-    -1.0F, -1.0F, 1.0F, 0, 0, 1, 0.0F, 0.0F,  // v0
-    1.0F, -1.0F, 1.0F, 0, 0, 1, 0.333F, 0.0F, // v1
-    -1.0F, 1.0F, 1.0F, 0, 0, 1, 0.0F, 0.5F,   // v2
-    1.0F, 1.0F, 1.0F, 0, 0, 1, 0.333F, 0.5F,  // v3
+std::vector<Kononov::Vertex> modelVertices = {
+    {{-1.0F, -1.0F, 1.0F}, {0, 0, 1}, {0.0F, 0.0F}},  // v0
+    {{1.0F, -1.0F, 1.0F}, {0, 0, 1}, {0.333F, 0.0F}}, // v1
+    {{-1.0F, 1.0F, 1.0F}, {0, 0, 1}, {0.0F, 0.5F}},   // v2
+    {{1.0F, 1.0F, 1.0F}, {0, 0, 1}, {0.333F, 0.5F}},  // v3
 
     // Vertex data for face 1
-    1.0F, -1.0F, 1.0F, 1, 0, 0, 0.0F, 0.5F,    // v4
-    1.0F, -1.0F, -1.0F, 1, 0, 0, 0.333F, 0.5F, // v5
-    1.0F, 1.0F, 1.0F, 1, 0, 0, 0.0F, 1.0F,     // v6
-    1.0F, 1.0F, -1.0F, 1, 0, 0, 0.333F, 1.0F,  // v7
+    {{1.0F, -1.0F, 1.0F}, {1, 0, 0}, {0.0F, 0.5F}},    // v4
+    {{1.0F, -1.0F, -1.0F}, {1, 0, 0}, {0.333F, 0.5F}}, // v5
+    {{1.0F, 1.0F, 1.0F}, {1, 0, 0}, {0.0F, 1.0F}},     // v6
+    {{1.0F, 1.0F, -1.0F}, {1, 0, 0}, {0.333F, 1.0F}},  // v7
 
     // Vertex data for face 2
-    1.0F, -1.0F, -1.0F, 0, 0, -1, 0.666F, 0.5F, // v8
-    -1.0F, -1.0F, -1.0F, 0, 0, -1, 1.0F, 0.5F,  // v9
-    1.0F, 1.0F, -1.0F, 0, 0, -1, 0.666F, 1.0F,  // v10
-    -1.0F, 1.0F, -1.0F, 0, 0, -1, 1.0F, 1.0F,   // v11
+    {{1.0F, -1.0F, -1.0F}, {0, 0, -1}, {0.666F, 0.5F}}, // v8
+    {{-1.0F, -1.0F, -1.0F}, {0, 0, -1}, {1.0F, 0.5F}},  // v9
+    {{1.0F, 1.0F, -1.0F}, {0, 0, -1}, {0.666F, 1.0F}},  // v10
+    {{-1.0F, 1.0F, -1.0F}, {0, 0, -1}, {1.0F, 1.0F}},   // v11
 
     // Vertex data for face 3
-    -1.0F, -1.0F, -1.0F, -1, 0, 0, 0.666F, 0.0F, // v12
-    -1.0F, -1.0F, 1.0F, -1, 0, 0, 1.0F, 0.0F,    // v13
-    -1.0F, 1.0F, -1.0F, -1, 0, 0, 0.666F, 0.5F,  // v14
-    -1.0F, 1.0F, 1.0F, -1, 0, 0, 1.0F, 0.5F,     // v15
+    {{-1.0F, -1.0F, -1.0F}, {-1, 0, 0}, {0.666F, 0.0F}}, // v12
+    {{-1.0F, -1.0F, 1.0F}, {-1, 0, 0}, {1.0F, 0.0F}},    // v13
+    {{-1.0F, 1.0F, -1.0F}, {-1, 0, 0}, {0.666F, 0.5F}},  // v14
+    {{-1.0F, 1.0F, 1.0F}, {-1, 0, 0}, {1.0F, 0.5F}},     // v15
 
     // Vertex data for face 4
-    -1.0F, -1.0F, -1.0F, 0, -1, 0, 0.333F, 0.0F, // v16
-    1.0F, -1.0F, -1.0F, 0, -1, 0, 0.666F, 0.0F,  // v17
-    -1.0F, -1.0F, 1.0F, 0, -1, 0, 0.333F, 0.5F,  // v18
-    1.0F, -1.0F, 1.0F, 0, -1, 0, 0.666F, 0.5F,   // v19
+    {{-1.0F, -1.0F, -1.0F}, {0, -1, 0}, {0.333F, 0.0F}}, // v16
+    {{1.0F, -1.0F, -1.0F}, {0, -1, 0}, {0.666F, 0.0F}},  // v17
+    {{-1.0F, -1.0F, 1.0F}, {0, -1, 0}, {0.333F, 0.5F}},  // v18
+    {{1.0F, -1.0F, 1.0F}, {0, -1, 0}, {0.666F, 0.5F}},   // v19
 
     // Vertex data for face 5
-    -1.0F, 1.0F, 1.0F, 0, 1, 0, 0.333F, 0.5F,  // v20
-    1.0F, 1.0F, 1.0F, 0, 1, 0, 0.666F, 0.5F,   // v21
-    -1.0F, 1.0F, -1.0F, 0, 1, 0, 0.333F, 1.0F, // v22
-    1.0F, 1.0F, -1.0F, 0, 1, 0, 0.666F, 1.0F   // v23
+    {{-1.0F, 1.0F, 1.0F}, {0, 1, 0}, {0.333F, 0.5F}},  // v20
+    {{1.0F, 1.0F, 1.0F}, {0, 1, 0}, {0.666F, 0.5F}},   // v21
+    {{-1.0F, 1.0F, -1.0F}, {0, 1, 0}, {0.333F, 1.0F}}, // v22
+    {{1.0F, 1.0F, -1.0F}, {0, 1, 0}, {0.666F, 1.0F}},  // v23
 };
 
 // Indices for drawing cube faces using triangle strips.
@@ -53,7 +53,7 @@ constexpr std::array<GLfloat, 192U> modelVertices = {
 // index of the second strip needs to be duplicated. If
 // connecting strips have same vertex order then only last
 // index of the first strip needs to be duplicated.
-constexpr std::array<GLuint, 34U> modelIndices = {
+std::vector<GLuint> modelIndices = {
     0,  1,  2,  3,  3,      // Face 0 - triangle strip ( v0,  v1,  v2,  v3)
     4,  4,  5,  6,  7,  7,  // Face 1 - triangle strip ( v4,  v5,  v6,  v7)
     8,  8,  9,  10, 11, 11, // Face 2 - triangle strip ( v8,  v9, v10, v11)
@@ -145,11 +145,8 @@ void MainWindow::init() {
                                                 SPECULAR_POW);
 
   auto cube_rend = std::make_shared<FirstRenderable>(
-      GL_TRIANGLE_STRIP, shader, ":/textures/dice-diffuse.png",
-      reinterpret_cast<const char *>(modelVertices.data()),
-      modelVertices.size() * sizeof(GLfloat),
-      reinterpret_cast<const char *>(modelIndices.data()),
-      modelIndices.size() * sizeof(GLfloat));
+      GL_TRIANGLE_STRIP, shader, ":/textures/dice-diffuse.png", modelVertices,
+      modelIndices);
   cube_rend->setShaderParameters(skull_rend->getShaderParameters());
 
   /*

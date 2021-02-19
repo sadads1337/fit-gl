@@ -8,20 +8,17 @@
 
 #include <ShaderProgram.hpp>
 
+#include "Vertex.hpp"
+
 namespace Kononov {
 
 class FirstShaderParameters;
 
-class FirstShader : public ShaderProgram {
+class FirstShader : public ShaderProgram<Vertex> {
 public:
   FirstShader();
 
-  void enableAttributeArrays();
-  void disableAttributeArrays();
-
-  void setVertexPositionBuffer(int offset, int stride);
-  void setVertexNormalBuffer(int offset, int stride);
-  void setVertexUVBuffer(int offset, int stride);
+  void setupCurrentVao() override;
 
   void setMatrices(QMatrix4x4 view, QMatrix4x4 model) override;
 

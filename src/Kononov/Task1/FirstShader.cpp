@@ -1,5 +1,7 @@
 #include "FirstShader.hpp"
 
+#include <GLUtil.hpp>
+
 namespace Kononov {
 
 FirstShader::FirstShader() {
@@ -34,51 +36,44 @@ FirstShader::FirstShader() {
   m_view_pos_uniform = shader.uniformLocation("view_pos");
 }
 
-void FirstShader::enableAttributeArrays() {
-  getShader().enableAttributeArray(m_vertex_position_attr);
-  getShader().enableAttributeArray(m_vertex_uv_attr);
-  getShader().enableAttributeArray(m_vertex_normal_attr);
-}
+void FirstShader::setupCurrentVao() {
+  QOpenGLShaderProgram &shader = getShader();
 
-void FirstShader::disableAttributeArrays() {
-  getShader().disableAttributeArray(m_vertex_position_attr);
-  getShader().disableAttributeArray(m_vertex_uv_attr);
-  getShader().disableAttributeArray(m_vertex_normal_attr);
-}
+  constexpr auto stride = sizeof(Vertex);
+  shader.setAttributeBuffer(m_vertex_position_attr, GL_FLOAT,
+                            offsetof(Vertex, position), 3, stride);
+  shader.setAttributeBuffer(m_vertex_normal_attr, GL_FLOAT,
+                            offsetof(Vertex, normal), 3, stride);
+  shader.setAttributeBuffer(m_vertex_uv_attr, GL_FLOAT, offsetof(Vertex, uv), 2,
+                            stride);
 
-void FirstShader::setVertexPositionBuffer(int offset, int stride) {
-  getShader().setAttributeBuffer(m_vertex_position_attr, GL_FLOAT, offset, 3,
-                                  stride);
-}
-
-void FirstShader::setVertexNormalBuffer(int offset, int stride) {
-  getShader().setAttributeBuffer(m_vertex_normal_attr, GL_FLOAT, offset, 3,
-                                  stride);
-}
-
-void FirstShader::setVertexUVBuffer(int offset, int stride) {
-  getShader().setAttributeBuffer(m_vertex_uv_attr, GL_FLOAT, offset, 2,
-                                  stride);
+  shader.enableAttributeArray(m_vertex_position_attr);
+  shader.enableAttributeArray(m_vertex_uv_attr);
+  shader.enableAttributeArray(m_vertex_normal_attr);
 }
 
 void FirstShader::setMatrices(QMatrix4x4 view, QMatrix4x4 model) {
-  getShader().setUniformValue(FirstShader::m_model_view_matrix_uniform,
-                               view * model);
-  getShader().setUniformValue(FirstShader::m_model_matrix_uniform, model);
-  getShader().setUniformValue(FirstShader::m_normal_matrix_uniform,
-                               model.normalMatrix());
+  QOpenGLShaderProgram &shader = getShader();
+
+  shader.setUniformValue(FirstShader::m_model_view_matrix_uniform,
+                         view * model);
+  shader.setUniformValue(FirstShader::m_model_matrix_uniform, model);
+  shader.setUniformValue(FirstShader::m_normal_matrix_uniform,
+                         model.normalMatrix());
 }
 
 void FirstShader::setParameters(FirstShaderParameters params) {
-  getShader().setUniformValue(m_diffuse_map_uniform, params.getDiffuseMap());
-  getShader().setUniformValue(m_ambient_strength_uniform,
-                               params.getAmbientStrength());
-  getShader().setUniformValue(m_specular_strength_uniform,
-                               params.getSpecularStrength());
-  getShader().setUniformValue(m_specular_pow_uniform, params.getSpecularPow());
-  getShader().setUniformValue(m_light_pos_uniform, params.getLightPos());
-  getShader().setUniformValue(m_light_color_uniform, params.getLightColor());
-  getShader().setUniformValue(m_view_pos_uniform, params.getViewPos());
+  QOpenGLShaderProgram &shader = getShader();
+
+  shader.setUniformValue(m_diffuse_map_uniform, params.getDiffuseMap());
+  shader.setUniformValue(m_ambient_strength_uniform,
+                         params.getAmbientStrength());
+  shader.setUniformValue(m_specular_strength_uniform,
+                         params.getSpecularStrength());
+  shader.setUniformValue(m_specular_pow_uniform, params.getSpecularPow());
+  shader.setUniformValue(m_light_pos_uniform, params.getLightPos());
+  shader.setUniformValue(m_light_color_uniform, params.getLightColor());
+  shader.setUniformValue(m_view_pos_uniform, params.getViewPos());
 }
 
 void FirstShaderParameters::setAmbient(GLfloat strength) {

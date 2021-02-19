@@ -13,6 +13,7 @@ add_executable(KononovTask1
         models/skull.vbo-ibo
 
         main.cpp
+        Vertex.hpp
         MainWindow.cpp
         MainWindow.hpp
         FirstShader.cpp

@@ -19,10 +19,10 @@ private:
 public:
   PositionedObject() = default;
   PositionedObject(const PositionedObject &) = default;
-  PositionedObject(PositionedObject &&) = default;
+  PositionedObject(PositionedObject &&) noexcept = default;
   virtual ~PositionedObject() = default;
   PositionedObject &operator=(const PositionedObject &) = default;
-  PositionedObject &operator=(PositionedObject &&) = default;
+  PositionedObject &operator=(PositionedObject &&) noexcept = default;
 
   [[nodiscard]] QMatrix4x4 getTransformMatrix() const noexcept;
   [[nodiscard]] QMatrix4x4 getAbsoluteTransformMatrix() const noexcept;
