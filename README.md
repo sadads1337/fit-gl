@@ -13,7 +13,7 @@ Student submission is the main goal of this repository. Do not use this code in 
 - C++17 compatible compiler;
 - CMake 3.10+ [https://cmake.org/](https://cmake.org/);
 - Qt 5 [https://www.qt.io/](https://www.qt.io/);
-- Your favourite IDE;
+- (Optionally) Your favourite IDE;
 - (Optionally) Ninja build [https://ninja-build.org/](https://ninja-build.org/).
 
 ## Hardware requirements
