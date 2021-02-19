@@ -24,7 +24,7 @@ Student submission is the main goal of this repository. Do not use this code in 
 
 - Clone this repository `git clone <url> <path>`;
 - Go to root folder `cd <path-to-repo-root>`;
-- Create and go to build folder `mkdir -p build-release`;
+- Create and go to build folder `mkdir -p build-release; cd build-release`;
 - Run CMake `cmake .. -G <generator-name> -DCMAKE_PREFIX_PATH=<path-to-qt-installation> -DCMAKE_BUILD_TYPE=Release`;
 - Run build. For Ninja generator it looks like `ninja -j<number-of-threads-to-build>`.
 
