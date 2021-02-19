@@ -5,6 +5,7 @@
 
 #include <vector>
 
+#include "FirstRenderable.hpp"
 #include "ShaderProgram.hpp"
 
 namespace {
@@ -153,17 +154,17 @@ void MainWindow::init() {
    * Init scene objects
    */
   const QVector3D skull_scale(0.1F, 0.1F, 0.1F);
-  m_skull = std::make_shared<FirstSceneObject>();
+  m_skull = std::make_shared<SceneObject>();
   m_skull->setRenderable(skull_rend);
   m_skull->setScale(skull_scale);
   m_skull->setPosition(QVector3D(-3, 0, 0));
 
-  m_skull_rotating = std::make_shared<FirstSceneObject>();
+  m_skull_rotating = std::make_shared<SceneObject>();
   m_skull_rotating->setRenderable(skull_rend);
   m_skull_rotating->setScale(skull_scale);
   m_skull_rotating->setPosition(QVector3D(0, 0, 0));
 
-  m_cube = std::make_shared<FirstSceneObject>();
+  m_cube = std::make_shared<SceneObject>();
   m_cube->setRenderable(cube_rend);
   m_cube->setPosition(QVector3D(4, 0, 0));
 

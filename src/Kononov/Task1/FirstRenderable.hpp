@@ -9,12 +9,13 @@
 #include <QString>
 
 #include <MeshBuffers.hpp>
+#include <Renderable.hpp>
 
 #include "FirstShader.hpp"
 
 namespace Kononov {
 
-class FirstRenderable {
+class FirstRenderable : public Renderable {
 private:
   FirstShaderParameters m_shader_parameters;
   std::shared_ptr<FirstShader> m_shader;
@@ -32,7 +33,7 @@ public:
                   const std::vector<Vertex> &vertices,
                   const std::vector<GLuint> &indices);
 
-  void render(QMatrix4x4 view, QMatrix4x4 model);
+  void render(Camera camera, QMatrix4x4 model_matrix) override;
 
   [[nodiscard]] const FirstShaderParameters &
   getShaderParameters() const noexcept;

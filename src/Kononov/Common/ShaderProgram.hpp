@@ -6,6 +6,8 @@
 #include <QVector3D>
 #include <QVector4D>
 
+#include "Camera.hpp"
+
 namespace Kononov {
 
 template <typename TVertex> class ShaderProgram {
@@ -28,7 +30,7 @@ public:
   void bind() { m_shader->bind(); }
   void release() { m_shader->release(); }
   virtual void setupCurrentVao() = 0;
-  virtual void setMatrices(QMatrix4x4 view, QMatrix4x4 model) = 0;
+  virtual void prepare(Camera camera, QMatrix4x4 model_matrix) = 0;
 };
 
 } // namespace Kononov

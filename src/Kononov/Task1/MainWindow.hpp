@@ -8,10 +8,9 @@
 #include <Camera.hpp>
 #include <DirectionInputController.hpp>
 #include <MotionInputController.hpp>
+#include <SceneObject.hpp>
 
 #include "Base/GLWindow.hpp"
-#include "FirstRenderable.hpp"
-#include "FirstSceneObject.hpp"
 #include "FirstShader.hpp"
 
 namespace Kononov {
@@ -41,9 +40,9 @@ private:
 
   std::shared_ptr<Camera> m_camera;
 
-  std::shared_ptr<FirstSceneObject> m_skull;
-  std::shared_ptr<FirstSceneObject> m_skull_rotating;
-  std::shared_ptr<FirstSceneObject> m_cube;
+  std::shared_ptr<SceneObject> m_skull;
+  std::shared_ptr<SceneObject> m_skull_rotating;
+  std::shared_ptr<SceneObject> m_cube;
 
   // Frame counter for animation.
   int m_frame = 0;

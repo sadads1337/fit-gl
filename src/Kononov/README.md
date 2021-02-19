@@ -30,5 +30,5 @@ Class `FirstRenderable` represents some mesh stored in `VBO` and `IBO` with some
 
 Class `FirstShader` is responsible for loading shader and linking shader attributes to `VBO`.
 
-Class `FirstSceneObject` represents object placed in the scene. The class inherits from `PositionedObject` and contains
+Class `SceneObject` represents object placed in the scene. The class inherits from `PositionedObject` and contains
 reference to `FirstRenderable` object.

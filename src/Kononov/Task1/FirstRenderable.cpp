@@ -70,12 +70,12 @@ FirstRenderable::FirstRenderable(GLenum primitive,
   m_mesh->setupVao(*m_shader);
 }
 
-void FirstRenderable::render(QMatrix4x4 view, QMatrix4x4 model) {
+void FirstRenderable::render(Camera camera, QMatrix4x4 model_matrix) {
   m_texture->bind();
   m_shader->bind();
 
-  m_shader->setMatrices(view, model);
   m_shader->setParameters(m_shader_parameters);
+  m_shader->prepare(camera, model_matrix);
 
   m_mesh->drawElements();
 

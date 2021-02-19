@@ -20,7 +20,7 @@ public:
 
   void setupCurrentVao() override;
 
-  void setMatrices(QMatrix4x4 view, QMatrix4x4 model) override;
+  void prepare(Camera camera, QMatrix4x4 model_matrix) override;
 
   void setParameters(FirstShaderParameters params);
 
@@ -60,8 +60,6 @@ public:
   void setLightColor(const QVector3D &light_color);
   [[nodiscard]] const QVector3D &getLightPos() const noexcept;
   void setLightPos(const QVector3D &light_pos);
-  [[nodiscard]] const QVector3D &getViewPos() const noexcept;
-  void setViewPos(const QVector3D &view_pos);
 
 private:
   GLint m_diffuse_map;
@@ -70,7 +68,6 @@ private:
   GLfloat m_specular_pow;
   QVector3D m_light_color;
   QVector3D m_light_pos;
-  QVector3D m_view_pos;
 };
 
 } // namespace Kononov

@@ -52,14 +52,14 @@ void FirstShader::setupCurrentVao() {
   shader.enableAttributeArray(m_vertex_normal_attr);
 }
 
-void FirstShader::setMatrices(QMatrix4x4 view, QMatrix4x4 model) {
+void FirstShader::prepare(Camera camera, QMatrix4x4 model_matrix) {
   QOpenGLShaderProgram &shader = getShader();
 
-  shader.setUniformValue(FirstShader::m_model_view_matrix_uniform,
-                         view * model);
-  shader.setUniformValue(FirstShader::m_model_matrix_uniform, model);
-  shader.setUniformValue(FirstShader::m_normal_matrix_uniform,
-                         model.normalMatrix());
+  shader.setUniformValue(m_view_pos_uniform, camera.getAbsolutePosition());
+  shader.setUniformValue(m_model_view_matrix_uniform,
+                         camera.getProjectionViewMatrix() * model_matrix);
+  shader.setUniformValue(m_model_matrix_uniform, model_matrix);
+  shader.setUniformValue(m_normal_matrix_uniform, model_matrix.normalMatrix());
 }
 
 void FirstShader::setParameters(FirstShaderParameters params) {
@@ -73,7 +73,6 @@ void FirstShader::setParameters(FirstShaderParameters params) {
   shader.setUniformValue(m_specular_pow_uniform, params.getSpecularPow());
   shader.setUniformValue(m_light_pos_uniform, params.getLightPos());
   shader.setUniformValue(m_light_color_uniform, params.getLightColor());
-  shader.setUniformValue(m_view_pos_uniform, params.getViewPos());
 }
 
 void FirstShaderParameters::setAmbient(GLfloat strength) {
@@ -136,14 +135,6 @@ const QVector3D &FirstShaderParameters::getLightPos() const noexcept {
 
 void FirstShaderParameters::setLightPos(const QVector3D &light_pos) {
   m_light_pos = light_pos;
-}
-
-const QVector3D &FirstShaderParameters::getViewPos() const noexcept {
-  return m_view_pos;
-}
-
-void FirstShaderParameters::setViewPos(const QVector3D &view_pos) {
-  m_view_pos = view_pos;
 }
 
 } // namespace Kononov

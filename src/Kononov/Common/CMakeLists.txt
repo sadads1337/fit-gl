@@ -7,12 +7,15 @@ add_library(KononovCommon
         MotionInputController.hpp
         PositionedObject.cpp
         PositionedObject.hpp
+        SceneObject.cpp
+        SceneObject.hpp
         Camera.cpp
         Camera.hpp
-        ShaderProgram.hpp
         GLUtil.cpp
         GLUtil.hpp
-        MeshBuffers.hpp)
+        ShaderProgram.hpp
+        MeshBuffers.hpp
+        Renderable.hpp)
 
 target_include_directories(KononovCommon
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
