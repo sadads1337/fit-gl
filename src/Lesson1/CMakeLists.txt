@@ -1,48 +1,20 @@
-cmake_minimum_required(VERSION 3.5)
+set(LESSON1_SRCS
+    main.cpp
+    TriangleWindow.cpp
+    TriangleWindow.hpp
 
-project(Task1 LANGUAGES CXX)
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
-
-set(PROJECT_SOURCES
-        main.cpp
-        mymainwindow.cpp
-        mymainwindow.h
-        plainobject3d.cpp
-        plainobject3d.h
-        CubeObject.h
-        cubeedges.cpp
-        cubeedges.h
-        cube.cpp
-        cube.h
-        cubewindow.cpp
-        cubewindow.h
+    shaders.qrc
+    Shaders/triangle.fs
+    Shaders/triangle.vs
 )
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(Task1
-        ${PROJECT_SOURCES}
-    )
-else()
-    if(ANDROID)
-        add_library(Task1 SHARED
-            ${PROJECT_SOURCES}
-        )
-    else()
-        add_executable(Task1
-            ${PROJECT_SOURCES}
-        )
-    endif()
-endif()
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-target_link_libraries(Task1 PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+add_executable(lesson1 ${LESSON1_SRCS})
+
+target_link_libraries(lesson1
+    PRIVATE
+        Qt5::Widgets
+        FGL::Base
+)
+

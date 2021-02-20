@@ -1,12 +1,13 @@
 #include "plainobject3d.h"
 
+
 void PlainObject3D::initialize()
 {
     setVertices();
 }
 
 
-void PlainObject3D::render(QOpenGLShaderProgram* program)
+void PlainObject3D::render(std::shared_ptr<QOpenGLShaderProgram>& program)
 {
     if(!is_init_) {
         initializeOpenGLFunctions();
@@ -29,4 +30,5 @@ void PlainObject3D::render(QOpenGLShaderProgram* program)
 
     glDisableVertexAttribArray(m_colAttr);
     glDisableVertexAttribArray(m_posAttr);
+
 }

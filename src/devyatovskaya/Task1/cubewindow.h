@@ -1,8 +1,8 @@
-#ifndef CUBEWINDOW_H
-#define CUBEWINDOW_H
+#pragma once
 
 #include <QOpenGLShaderProgram>
 #include <QColorDialog>
+#include <memory>
 #include "mymainwindow.h"
 #include "cube.h"
 #include "cubeedges.h"
@@ -18,19 +18,17 @@ public:
     void initialize() override;
     void render() override;
 
-    ~CubeWindow();
-
 private:
     GLint m_posAttr = 0;
     GLint m_colAttr = 0;
     GLint m_matrixUniform = 0;
 
-    QOpenGLShaderProgram *m_program = nullptr;
+    std::shared_ptr<QOpenGLShaderProgram> m_program;
 
     Cube cube {1.0f};
     CubeEdges edges {1.0f};
 
-    QColorDialog* c_dialog;
+    QColorDialog c_dialog;
 
     QVector2D mousePressPosition;
     QVector3D rotationAxis;
@@ -39,4 +37,3 @@ private:
 
     void setRotation();
 };
-#endif // CUBEWINDOW_H
