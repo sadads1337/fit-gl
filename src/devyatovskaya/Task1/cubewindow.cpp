@@ -1,6 +1,7 @@
 #include "cubewindow.h"
 #include <QMouseEvent>
 
+
 static const char *vertexShaderSource =
     "attribute highp vec4 posAttr;\n"
     "attribute lowp vec4 colAttr;\n"
@@ -20,7 +21,7 @@ static const char *fragmentShaderSource =
 
 void CubeWindow::initialize()
 {
-    m_program = new QOpenGLShaderProgram(this);
+    m_program = std::make_shared<QOpenGLShaderProgram>(this);
     m_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource);
     m_program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource);
     m_program->link();
@@ -31,9 +32,8 @@ void CubeWindow::initialize()
     cube.initialize();
     edges.initialize();
 
-    c_dialog = new QColorDialog();
-    c_dialog->setOptions(QColorDialog::NoButtons);
-    c_dialog->setVisible(1);
+    c_dialog.setOptions(QColorDialog::NoButtons);
+    c_dialog.setVisible(1);
 }
 
 
@@ -79,19 +79,12 @@ void CubeWindow::render()
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
-    cube.setColor(c_dialog->currentColor());
+    cube.setColor(c_dialog.currentColor());
 
     cube.render(m_program);
     edges.render(m_program);
 
     m_program->release();
-}
-
-
-CubeWindow::~CubeWindow()
-{
-    delete m_program;
-    delete c_dialog;
 }
 
 

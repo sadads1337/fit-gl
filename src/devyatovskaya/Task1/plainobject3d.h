@@ -1,9 +1,10 @@
-#ifndef PLAINOBJECT3D_H
-#define PLAINOBJECT3D_H
+#pragma once
 
 #include <QOpenGLFunctions>
 #include <QColor>
 #include <QOpenGLShaderProgram>
+#include <memory>
+
 
 class PlainObject3D : protected QOpenGLFunctions
 {
@@ -11,7 +12,7 @@ public:
     PlainObject3D() = default;
 
     void initialize();
-    void render(QOpenGLShaderProgram* program);
+    void render(std::shared_ptr<QOpenGLShaderProgram>& program);
 
     virtual void setColor(const QColor& color) = 0;
 
@@ -26,5 +27,3 @@ protected:
     virtual void setVertices() = 0;
     virtual void drawArrays() = 0;
 };
-
-#endif // PLAINOBJECT3D_H
