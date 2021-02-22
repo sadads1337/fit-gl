@@ -10,7 +10,7 @@
 
 namespace {
 
-std::vector<Kononov::Vertex> modelVertices = {
+const std::vector<Kononov::Vertex> modelVertices = {
     {{-1.0F, -1.0F, 1.0F}, {0, 0, 1}, {0.0F, 0.0F}},  // v0
     {{1.0F, -1.0F, 1.0F}, {0, 0, 1}, {0.333F, 0.0F}}, // v1
     {{-1.0F, 1.0F, 1.0F}, {0, 0, 1}, {0.0F, 0.5F}},   // v2
@@ -54,7 +54,7 @@ std::vector<Kononov::Vertex> modelVertices = {
 // index of the second strip needs to be duplicated. If
 // connecting strips have same vertex order then only last
 // index of the first strip needs to be duplicated.
-std::vector<GLuint> modelIndices = {
+const std::vector<GLuint> modelIndices = {
     0,  1,  2,  3,  3,      // Face 0 - triangle strip ( v0,  v1,  v2,  v3)
     4,  4,  5,  6,  7,  7,  // Face 1 - triangle strip ( v4,  v5,  v6,  v7)
     8,  8,  9,  10, 11, 11, // Face 2 - triangle strip ( v8,  v9, v10, v11)
