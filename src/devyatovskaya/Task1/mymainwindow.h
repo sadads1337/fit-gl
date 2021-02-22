@@ -1,5 +1,8 @@
 #include <QWindow>
 #include <QOpenGLFunctions>
+#include <memory>
+#include <QOpenGLPaintDevice>
+#include <QOpenGLContext>
 
 QT_BEGIN_NAMESPACE
 class QPainter;
@@ -12,14 +15,13 @@ class MyMainWindow : public QWindow, protected QOpenGLFunctions
     Q_OBJECT
 public:
     explicit MyMainWindow(QWindow *parent = nullptr);
-    ~MyMainWindow();
 
-    virtual void render(QPainter *painter);
+    virtual void render(const QPainter &painter);
     virtual void render();
 
     virtual void initialize();
 
-    void setAnimating(bool animating);
+    void setAnimating(bool animating = false);
 
 public slots:
     void renderLater();
@@ -33,6 +35,6 @@ protected:
 private:
     bool m_animating = false;
 
-    QOpenGLContext *m_context = nullptr;
-    QOpenGLPaintDevice *m_device = nullptr;
+    std::unique_ptr<QOpenGLContext> context_ = nullptr;
+    std::unique_ptr<QOpenGLPaintDevice> device_ = nullptr;
 };

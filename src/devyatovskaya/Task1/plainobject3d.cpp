@@ -14,9 +14,9 @@ void PlainObject3D::render(std::shared_ptr<QOpenGLShaderProgram>& program)
         is_init_ = true;
     }
 
-    auto m_posAttr = program->attributeLocation("posAttr");
+    const auto m_posAttr = program->attributeLocation("posAttr");
     Q_ASSERT(m_posAttr != -1);
-    auto m_colAttr = program->attributeLocation("colAttr");
+    const auto m_colAttr = program->attributeLocation("colAttr");
     Q_ASSERT(m_colAttr != -1);
 
 
