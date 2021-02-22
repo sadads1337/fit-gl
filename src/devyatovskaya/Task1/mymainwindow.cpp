@@ -1,7 +1,7 @@
 #include "mymainwindow.h"
 
-#include <QOpenGLPaintDevice>
 #include <QPainter>
+#include <cassert>
 
 MyMainWindow::MyMainWindow(QWindow *parent)
     : QWindow(parent)
@@ -9,33 +9,24 @@ MyMainWindow::MyMainWindow(QWindow *parent)
     setSurfaceType(QWindow::OpenGLSurface);
 }
 
-MyMainWindow::~MyMainWindow()
-{
-    delete m_device;
-}
+void MyMainWindow::render(const QPainter &) {}
 
-void MyMainWindow::render(QPainter *painter)
-{
-    Q_UNUSED(painter);
-}
-
-void MyMainWindow::initialize()
-{
-
-}
+void MyMainWindow::initialize(){}
 
 void MyMainWindow::render()
 {
-    if (!m_device)
-        m_device = new QOpenGLPaintDevice;
+    if (!device_) {
+        device_ = std::make_unique<QOpenGLPaintDevice>(size());
+      }
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-    m_device->setSize(size() * devicePixelRatio());
-    m_device->setDevicePixelRatio(devicePixelRatio());
+    const auto pixelRatio = devicePixelRatio();
+    device_->setSize(size() * pixelRatio);
+    device_->setDevicePixelRatio(pixelRatio);
 
-    QPainter painter(m_device);
-    render(&painter);
+    const QPainter painter{device_.get()};
+    render(painter);
 }
 
 void MyMainWindow::renderLater()
@@ -45,6 +36,7 @@ void MyMainWindow::renderLater()
 
 bool MyMainWindow::event(QEvent *event)
 {
+    assert(event);
     switch (event->type()) {
     case QEvent::UpdateRequest:
         renderNow();
@@ -54,10 +46,8 @@ bool MyMainWindow::event(QEvent *event)
     }
 }
 
-void MyMainWindow::exposeEvent(QExposeEvent *event)
+void MyMainWindow::exposeEvent(QExposeEvent *)
 {
-    Q_UNUSED(event);
-
     if (isExposed())
         renderNow();
 }
@@ -69,15 +59,18 @@ void MyMainWindow::renderNow()
 
     bool needsInitialize = false;
 
-    if (!m_context) {
-        m_context = new QOpenGLContext(this);
-        m_context->setFormat(requestedFormat());
-        m_context->create();
+    if (!context_) {
+        context_ = std::make_unique<QOpenGLContext>(this);
+        context_->setFormat(requestedFormat());
+        context_->create();
 
         needsInitialize = true;
-    }
+      }
 
-    m_context->makeCurrent(this);
+    const auto contextBindSuccess = context_->makeCurrent(this);
+     if (!contextBindSuccess) {
+       return;
+     }
 
     if (needsInitialize) {
         initializeOpenGLFunctions();
@@ -86,7 +79,7 @@ void MyMainWindow::renderNow()
 
     render();
 
-    m_context->swapBuffers(this);
+     context_->swapBuffers(this);
 
     if (m_animating)
         renderLater();
