@@ -6,6 +6,7 @@
 #include <memory>
 
 
+
 class PlainObject3D : protected QOpenGLFunctions
 {
 public:
