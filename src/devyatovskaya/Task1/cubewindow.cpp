@@ -19,7 +19,7 @@ static const char *fragmentShaderSource =
     "}\n";
 
 
-void CubeWindow::initialize()
+void CubeWindow::init()
 {
     m_program = std::make_shared<QOpenGLShaderProgram>(this);
     m_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource);
