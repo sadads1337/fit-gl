@@ -3,19 +3,20 @@
 #include <QOpenGLShaderProgram>
 #include <QColorDialog>
 #include <memory>
-#include "mymainwindow.h"
+
+#include "Base/GLWindow.hpp"
 #include "cube.h"
 #include "cubeedges.h"
 
-class CubeWindow : public MyMainWindow
+class CubeWindow : public fgl::GLWindow
 {
 public:
-    using MyMainWindow::MyMainWindow;
+    using GLWindow::GLWindow;
 
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
 
-    void initialize() override;
+    void init() override;
     void render() override;
 
 private:
