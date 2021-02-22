@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 
     window.show();
 
-    window.setAnimating(true);
+    window.setAnimated(true);
 
     return app.exec();
 }
