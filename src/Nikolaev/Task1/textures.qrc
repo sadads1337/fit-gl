@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>models/skull.vbo-ibo</file>
+        <file>cube.png</file>
     </qresource>
 </RCC>
