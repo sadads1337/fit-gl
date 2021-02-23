@@ -2,7 +2,7 @@
 // Created by andre on 21.02.2021.
 //
 
-#include "geometryengine.h"
+#include "GeometryEngine.h"
 
 #include <QVector2D>
 #include <QVector3D>

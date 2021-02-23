@@ -2,16 +2,13 @@ set(Task1_SRCS
         main.cpp
 
         MainWindow.cpp MainWindow.h
-        geometryengine.cpp geometryengine.h
+        GeometryEngine.cpp GeometryEngine.h
         Controller/InputController.cpp Controller/InputController.h
 
         shaders.qrc
         Shaders/vshader.glsl
         Shaders/fshader.glsl
-
-        textures.qrc
-        cube.png
-        cube.pro)
+        )
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
