@@ -1,6 +1,7 @@
 #include "Camera.hpp"
 
 #include <cmath>
+#include <stdexcept>
 
 #include "GLUtil.hpp"
 
@@ -17,13 +18,14 @@ void Viewport::setWidth(float width) { m_width = width; }
 float Viewport::getHeight() const noexcept { return m_height; }
 void Viewport::setHeight(float height) { m_height = height; }
 
-void Camera::setPerspective(float fov, float ratio, float near, float far) {
-  if (!std::isnormal(fov) || !std::isnormal(ratio) || !std::isnormal(near) ||
-      !std::isnormal(far)) {
+void Camera::setPerspective(const float in_fov, const float in_ratio, const float in_near, const float in_far) {
+  const auto not_valid = !std::isnormal(in_fov) || !std::isnormal(in_ratio) ||
+                         !std::isnormal(in_near) || !std::isnormal(in_far);
+  if (not_valid) {
     throw std::domain_error("Invalid argument value");
   }
   m_projection.setToIdentity();
-  m_projection.perspective(fov / ratio, ratio, near, far);
+  m_projection.perspective(in_fov / in_ratio, in_ratio, in_near, in_far);
 }
 
 QMatrix4x4 Camera::getProjectionViewMatrix() const noexcept {

@@ -67,10 +67,10 @@ const std::vector<GLuint> modelIndices = {
 
 namespace Kononov {
 
-constexpr QVector3D INITIAL_CAMERA_POSITION(0, 1.3, 8);
-constexpr QVector3D LIGHT_POSITION(3, 2, 3);
-constexpr QVector3D LIGHT_COLOR(1, 0.7, 0.7);
-constexpr QVector4D CLEAR_COLOR(0, 0.5, 1, 1);
+constexpr QVector3D INITIAL_CAMERA_POSITION(0.F, 1.3F, 8.F);
+constexpr QVector3D LIGHT_POSITION(3.F, 2.F, 3.F);
+constexpr QVector3D LIGHT_COLOR(1.F, 0.7F, 0.7F);
+constexpr QVector4D CLEAR_COLOR(0.F, 0.5F, 1.F, 1.F);
 
 constexpr float PERSPECTIVE_FOV = 60.0F;
 constexpr float NEAR_PLANE = 0.1F;
