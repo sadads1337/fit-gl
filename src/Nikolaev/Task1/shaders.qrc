@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>Shaders/triangle.fs</file>
         <file>Shaders/triangle.vs</file>
+        <file>Shaders/vshader.glsl</file>
+        <file>Shaders/fshader.glsl</file>
     </qresource>
 </RCC>
