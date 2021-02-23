@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "geometryengine.h"
+#include "GeometryEngine.h"
 #include "Controller/InputController.h"
 
 #include <QOpenGLWidget>
@@ -21,7 +21,6 @@ Q_OBJECT
 
 public:
     using QOpenGLWidget::QOpenGLWidget;
-    ~MainWindow();
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -38,11 +37,11 @@ protected:
     void initShaders();
 
 private:
-    std::shared_ptr<InputController> m_change_colors;
+    std::unique_ptr<InputController> m_change_colors;
 
     QBasicTimer timer;
     QOpenGLShaderProgram program;
-    GeometryEngine *geometries = nullptr;
+    std::unique_ptr<GeometryEngine> geometries = nullptr;
 
     QMatrix4x4 projection;
 

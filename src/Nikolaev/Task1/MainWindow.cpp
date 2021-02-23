@@ -6,16 +6,6 @@
 
 #include <QScreen>
 
-
-MainWindow::~MainWindow()
-{
-    // Make sure the context is current when deleting the texture
-    // and the buffers.
-    makeCurrent();
-    delete geometries;
-    doneCurrent();
-}
-
 void MainWindow::mousePressEvent(QMouseEvent *e)
 {
     // Save mouse press position
@@ -86,9 +76,9 @@ void MainWindow::initializeGL()
 
     glEnable(GL_MULTISAMPLE);
 
-    m_change_colors = std::make_shared<InputController>();
+    m_change_colors = std::make_unique<InputController>();
 
-    geometries = new GeometryEngine;
+    geometries = std::make_unique<GeometryEngine>();
 
     // Use QBasicTimer because its faster than QTimer
     timer.start(12, this);
