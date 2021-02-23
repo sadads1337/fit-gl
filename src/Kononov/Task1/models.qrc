@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>models/skull.vbo-ibo</file>
+    </qresource>
+</RCC>
