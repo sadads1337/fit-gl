@@ -28,9 +28,7 @@ private:
   GLint posAttr_ = 0;
   GLint colAttr_ = 0;
   GLint matrixUniform_ = 0;
-  // QOpenGLBuffer arrayBuf;
-  // QOpenGLBuffer indexBuf;
-  // Shader program handler.
+
   std::unique_ptr<QOpenGLShaderProgram> program_ = nullptr;
 
   // Frame counter for animation.
@@ -43,7 +41,6 @@ private:
   QVector4D square_color {1.0, 1.0, 1.0, 1};
   QVector2D mousePressPosition;
   QVector3D rotationAxis = QVector3D(0.0, 1.0, 0.0).normalized();
-  // QColor QColorDialog::getColor ( const QColor & initial = Qt::white, QWidget * parent = 0 );
 };
 
 } // namespace fgl
