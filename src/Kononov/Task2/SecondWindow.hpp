@@ -15,7 +15,7 @@
 
 namespace Kononov {
 
-class MainWindow final : public fgl::GLWindow {
+class SecondWindow final : public fgl::GLWindow {
   Q_OBJECT
 public:
   void init() override;
@@ -41,6 +41,7 @@ private:
   std::shared_ptr<Camera> m_camera;
 
   std::shared_ptr<SceneObject> m_cube;
+  std::shared_ptr<SceneObject> m_skull;
 
   // Frame counter for animation.
   int m_frame = 0;

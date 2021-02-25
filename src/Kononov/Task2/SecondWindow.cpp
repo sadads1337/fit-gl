@@ -1,4 +1,4 @@
-#include "MainWindow.hpp"
+#include "SecondWindow.hpp"
 
 #include <QOpenGLFunctions>
 #include <QScreen>
@@ -84,38 +84,38 @@ constexpr float MOUSE_SENSITIVITY = 0.2F;
 constexpr float ROTATION_SPEED = 30.0F;
 constexpr float MOTION_SPEED = 0.1F;
 
-void MainWindow::onMessageLogged(const QOpenGLDebugMessage &message) {
+void SecondWindow::onMessageLogged(const QOpenGLDebugMessage &message) {
   qDebug() << message;
 }
 
-void MainWindow::mousePressEvent(QMouseEvent *event) {
+void SecondWindow::mousePressEvent(QMouseEvent *event) {
   m_direction_input_controller->mousePressEvent(event);
 }
 
-void MainWindow::mouseMoveEvent(QMouseEvent *event) {
+void SecondWindow::mouseMoveEvent(QMouseEvent *event) {
   m_direction_input_controller->mouseMoveEvent(event);
 }
 
-void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
+void SecondWindow::mouseReleaseEvent(QMouseEvent *event) {
   m_direction_input_controller->mouseReleaseEvent(event);
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *event) {
+void SecondWindow::keyPressEvent(QKeyEvent *event) {
   m_motion_input_controller->keyPressEvent(event);
 }
 
-void MainWindow::keyReleaseEvent(QKeyEvent *event) {
+void SecondWindow::keyReleaseEvent(QKeyEvent *event) {
   m_motion_input_controller->keyReleaseEvent(event);
 }
 
-void MainWindow::init() {
+void SecondWindow::init() {
   /*
    * Logger initialization
    */
   m_logger = std::make_unique<QOpenGLDebugLogger>(this);
 
   connect(m_logger.get(), &QOpenGLDebugLogger::messageLogged, this,
-          &MainWindow::onMessageLogged);
+          &SecondWindow::onMessageLogged);
 
   if (m_logger->initialize()) {
     m_logger->startLogging(QOpenGLDebugLogger::SynchronousLogging);
@@ -144,19 +144,26 @@ void MainWindow::init() {
   skull_rend->getShaderParameters().setAmbient(AMBIENT_STRENGTH);
   skull_rend->getShaderParameters().setSpecular(SPECULAR_STRENGTH,
                                                 SPECULAR_POW);
+  skull_rend->getShaderParameters().setSkewness(0.07);
 
   auto cube_rend = std::make_shared<SecondRenderable>(
       GL_TRIANGLE_STRIP, shader, ":/textures/dice-diffuse.png", modelVertices,
       modelIndices);
   cube_rend->setShaderParameters(skull_rend->getShaderParameters());
+  cube_rend->getShaderParameters().setSkewness(1.0f);
 
   /*
    * Init scene objects
    */
+  const QVector3D skull_scale(0.1F, 0.1F, 0.1F);
+  m_skull = std::make_shared<SceneObject>();
+  m_skull->setRenderable(skull_rend);
+  m_skull->setScale(skull_scale);
+  m_skull->setPosition(QVector3D(-2, 0, 0));
 
   m_cube = std::make_shared<SceneObject>();
   m_cube->setRenderable(cube_rend);
-  m_cube->setPosition(QVector3D(0, 0, 0));
+  m_cube->setPosition(QVector3D(2, 0, 0));
 
   m_camera = std::make_shared<Camera>();
   m_camera->setPosition(INITIAL_CAMERA_POSITION);
@@ -171,7 +178,7 @@ void MainWindow::init() {
   m_motion_input_controller->setMotionSpeed(MOTION_SPEED);
 }
 
-void MainWindow::render() {
+void SecondWindow::render() {
   m_motion_input_controller->update();
 
   // NOLINTNEXTLINE(hicpp-signed-bitwise)
@@ -183,11 +190,8 @@ void MainWindow::render() {
   m_camera->beginRender((GLsizei)(width() * pixel_ratio),
                         (GLsizei)(height() * pixel_ratio));
 
-  const float angle = ROTATION_SPEED * static_cast<float>(m_frame) /
-                      static_cast<float>(screen()->refreshRate());
-
-  m_cube->setRotation(QQuaternion::fromAxisAndAngle(0, 1, 0, angle));
   m_cube->render(*m_camera);
+  m_skull->render(*m_camera);
 
   m_frame++;
 }

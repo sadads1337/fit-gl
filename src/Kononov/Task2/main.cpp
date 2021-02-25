@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QSurfaceFormat>
 
-#include "MainWindow.hpp"
+#include "SecondWindow.hpp"
 
 constexpr int GL_VERSION_MAJOR = 3;
 constexpr int GL_VERSION_MINOR = 3;
@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
   format.setDepthBufferSize(Q_SURFACE_DEPTH_BUFFER_SIZE);
   format.setOption(QSurfaceFormat::DebugContext);
 
-  Kononov::MainWindow main_window;
+  Kononov::SecondWindow main_window;
   main_window.setFormat(format);
   main_window.resize(WINDOW_SIZE);
   main_window.show();

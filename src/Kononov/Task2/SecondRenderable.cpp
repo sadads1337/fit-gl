@@ -83,17 +83,17 @@ void SecondRenderable::render(Camera camera, QMatrix4x4 model_matrix) {
   m_texture->release();
 }
 
-const FirstShaderParameters &
+const SecondShaderParameters &
 SecondRenderable::getShaderParameters() const noexcept {
   return m_shader_parameters;
 }
 
-FirstShaderParameters &SecondRenderable::getShaderParameters() noexcept {
+SecondShaderParameters &SecondRenderable::getShaderParameters() noexcept {
   return m_shader_parameters;
 }
 
 void SecondRenderable::setShaderParameters(
-    const FirstShaderParameters &shader_parameters) {
+    const SecondShaderParameters &shader_parameters) {
   m_shader_parameters = shader_parameters;
 }
 

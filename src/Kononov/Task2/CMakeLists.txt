@@ -8,8 +8,8 @@ add_executable(KononovTask2
 
         main.cpp
         Vertex.hpp
-        MainWindow.cpp
-        MainWindow.hpp
+        SecondWindow.cpp
+        SecondWindow.hpp
         SecondShader.cpp
         SecondShader.hpp
         SecondRenderable.cpp

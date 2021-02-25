@@ -34,6 +34,7 @@ SecondShader::SecondShader() {
   m_light_color_uniform = shader.uniformLocation("light_color");
   m_light_pos_uniform = shader.uniformLocation("light_pos");
   m_view_pos_uniform = shader.uniformLocation("view_pos");
+  m_skewness_uniform = shader.uniformLocation("skewness");
 }
 
 void SecondShader::setupCurrentVao() {
@@ -62,7 +63,7 @@ void SecondShader::prepare(Camera camera, QMatrix4x4 model_matrix) {
   shader.setUniformValue(m_normal_matrix_uniform, model_matrix.normalMatrix());
 }
 
-void SecondShader::setParameters(FirstShaderParameters params) {
+void SecondShader::setParameters(SecondShaderParameters params) {
   QOpenGLShaderProgram &shader = getShader();
 
   shader.setUniformValue(m_diffuse_map_uniform, params.getDiffuseMap());
@@ -73,68 +74,74 @@ void SecondShader::setParameters(FirstShaderParameters params) {
   shader.setUniformValue(m_specular_pow_uniform, params.getSpecularPow());
   shader.setUniformValue(m_light_pos_uniform, params.getLightPos());
   shader.setUniformValue(m_light_color_uniform, params.getLightColor());
+  shader.setUniformValue(m_skewness_uniform, params.getSkewness());
 }
 
-void FirstShaderParameters::setAmbient(GLfloat strength) {
+void SecondShaderParameters::setAmbient(GLfloat strength) {
   setAmbientStrength(strength);
 }
 
-void FirstShaderParameters::setSpecular(GLfloat strength, GLfloat pow) {
+void SecondShaderParameters::setSpecular(GLfloat strength, GLfloat pow) {
   setSpecularStrength(strength);
   setSpecularPow(pow);
 }
 
-void FirstShaderParameters::setLightSource(QVector3D pos, QVector3D color) {
+void SecondShaderParameters::setLightSource(QVector3D pos, QVector3D color) {
   setLightPos(pos);
   setLightColor(color);
 }
 
-GLint FirstShaderParameters::getDiffuseMap() const noexcept {
+GLint SecondShaderParameters::getDiffuseMap() const noexcept {
   return m_diffuse_map;
 }
 
-void FirstShaderParameters::setDiffuseMap(GLint diffuse_map) {
+void SecondShaderParameters::setDiffuseMap(GLint diffuse_map) {
   m_diffuse_map = diffuse_map;
 }
 
-GLfloat FirstShaderParameters::getAmbientStrength() const noexcept {
+GLfloat SecondShaderParameters::getAmbientStrength() const noexcept {
   return m_ambient_strength;
 }
 
-void FirstShaderParameters::setAmbientStrength(GLfloat ambient_strength) {
+void SecondShaderParameters::setAmbientStrength(GLfloat ambient_strength) {
   m_ambient_strength = ambient_strength;
 }
 
-GLfloat FirstShaderParameters::getSpecularStrength() const noexcept {
+GLfloat SecondShaderParameters::getSpecularStrength() const noexcept {
   return m_specular_strength;
 }
 
-void FirstShaderParameters::setSpecularStrength(GLfloat specular_strength) {
+void SecondShaderParameters::setSpecularStrength(GLfloat specular_strength) {
   m_specular_strength = specular_strength;
 }
 
-GLfloat FirstShaderParameters::getSpecularPow() const noexcept {
+GLfloat SecondShaderParameters::getSpecularPow() const noexcept {
   return m_specular_pow;
 }
 
-void FirstShaderParameters::setSpecularPow(GLfloat specular_pow) {
+void SecondShaderParameters::setSpecularPow(GLfloat specular_pow) {
   m_specular_pow = specular_pow;
 }
 
-const QVector3D &FirstShaderParameters::getLightColor() const noexcept {
+const QVector3D &SecondShaderParameters::getLightColor() const noexcept {
   return m_light_color;
 }
 
-void FirstShaderParameters::setLightColor(const QVector3D &light_color) {
+void SecondShaderParameters::setLightColor(const QVector3D &light_color) {
   m_light_color = light_color;
 }
 
-const QVector3D &FirstShaderParameters::getLightPos() const noexcept {
+const QVector3D &SecondShaderParameters::getLightPos() const noexcept {
   return m_light_pos;
 }
 
-void FirstShaderParameters::setLightPos(const QVector3D &light_pos) {
+void SecondShaderParameters::setLightPos(const QVector3D &light_pos) {
   m_light_pos = light_pos;
+}
+
+GLfloat SecondShaderParameters::getSkewness() const { return m_skewness; }
+void SecondShaderParameters::setSkewness(GLfloat skewness) {
+  m_skewness = skewness;
 }
 
 } // namespace Kononov
