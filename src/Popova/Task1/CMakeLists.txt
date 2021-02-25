@@ -1,11 +1,11 @@
 set(POPOVA_TASK1_SRCS
     main.cpp
-    TriangleWindow.cpp
-    TriangleWindow.hpp
+    SquareWindow.cpp
+    SquareWindow.hpp
 
     shaders.qrc
-    Shaders/triangle.fs
-    Shaders/triangle.vs
+    Shaders/square.fs
+    Shaders/square.vs
 )
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)

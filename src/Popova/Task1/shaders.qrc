@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>Shaders/triangle.fs</file>
-        <file>Shaders/triangle.vs</file>
+        <file>Shaders/square.fs</file>
+        <file>Shaders/square.vs</file>
     </qresource>
 </RCC>
