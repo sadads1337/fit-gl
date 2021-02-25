@@ -1,16 +1,10 @@
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
 add_executable(KononovTask1
+        ${KONONOV_RESOURCES}
         shaders.qrc
         shaders/first.fs
         shaders/first.vs
-
-        textures.qrc
-        textures/dice-diffuse.png
-        textures/skull-diffuse.jpg
-
-        models.qrc
-        models/skull.vbo-ibo
 
         main.cpp
         Vertex.hpp

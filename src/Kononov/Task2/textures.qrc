@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>textures/dice-diffuse.png</file>
-    </qresource>
-</RCC>
