@@ -12,7 +12,7 @@
 
 namespace Kononov {
 
-class FirstShaderParameters;
+class SecondShaderParameters;
 
 class SecondShader : public ShaderProgram<Vertex> {
 public:
@@ -22,7 +22,7 @@ public:
 
   void prepare(Camera camera, QMatrix4x4 model_matrix) override;
 
-  void setParameters(FirstShaderParameters params);
+  void setParameters(SecondShaderParameters params);
 
 private:
   GLint m_vertex_position_attr;
@@ -40,9 +40,10 @@ private:
   GLint m_light_color_uniform;
   GLint m_light_pos_uniform;
   GLint m_view_pos_uniform;
+  GLint m_skewness_uniform;
 };
 
-class FirstShaderParameters {
+class SecondShaderParameters {
 public:
   void setAmbient(GLfloat strength);
   void setSpecular(GLfloat strength, GLfloat pow);
@@ -60,6 +61,8 @@ public:
   void setLightColor(const QVector3D &light_color);
   [[nodiscard]] const QVector3D &getLightPos() const noexcept;
   void setLightPos(const QVector3D &light_pos);
+  [[nodiscard]] GLfloat getSkewness() const;
+  void setSkewness(GLfloat skewness);
 
 private:
   GLint m_diffuse_map;
@@ -68,6 +71,7 @@ private:
   GLfloat m_specular_pow;
   QVector3D m_light_color;
   QVector3D m_light_pos;
+  GLfloat m_skewness;
 };
 
 } // namespace Kononov

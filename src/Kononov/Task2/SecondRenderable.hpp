@@ -17,7 +17,7 @@ namespace Kononov {
 
 class SecondRenderable : public Renderable {
 private:
-  FirstShaderParameters m_shader_parameters;
+  SecondShaderParameters m_shader_parameters;
   std::shared_ptr<SecondShader> m_shader;
   std::unique_ptr<QOpenGLTexture> m_texture;
   std::unique_ptr<MeshBuffers<Vertex, GLuint>> m_mesh;
@@ -35,10 +35,10 @@ public:
 
   void render(Camera camera, QMatrix4x4 model_matrix) override;
 
-  [[nodiscard]] const FirstShaderParameters &
+  [[nodiscard]] const SecondShaderParameters &
   getShaderParameters() const noexcept;
-  [[nodiscard]] FirstShaderParameters &getShaderParameters() noexcept;
-  void setShaderParameters(const FirstShaderParameters &shader_parameters);
+  [[nodiscard]] SecondShaderParameters &getShaderParameters() noexcept;
+  void setShaderParameters(const SecondShaderParameters &shader_parameters);
 };
 
 } // namespace Kononov
