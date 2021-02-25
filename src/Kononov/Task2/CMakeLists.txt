@@ -1,14 +1,10 @@
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
 add_executable(KononovTask2
+        ${KONONOV_RESOURCES}
         shaders.qrc
         shaders/second.fs
         shaders/second.vs
-
-        textures.qrc
-        textures/dice-diffuse.png
-
-        models.qrc
 
         main.cpp
         Vertex.hpp
