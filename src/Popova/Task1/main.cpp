@@ -1,22 +1,21 @@
 
 #include <QApplication>
 #include <QSurfaceFormat>
-
-#include "TriangleWindow.hpp"
-
+#include <QColorDialog>
+#include "SquareWindow.hpp"
+#include <QMainWindow>
 int main(int argc, char **argv) {
-  QGuiApplication app(argc, argv);
+  QApplication a(argc, argv);
 
   QSurfaceFormat format;
   format.setSamples(16);
   format.setVersion(2, 1);
 
-  fgl::TriangleWindow window;
+  fgl::SquareWindow window;
   window.setFormat(format);
   window.resize(640, 480);
   window.show();
 
   window.setAnimated(true);
-
-  return app.exec();
+  return a.exec();
 }
