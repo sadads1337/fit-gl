@@ -150,7 +150,7 @@ void SecondWindow::init() {
       GL_TRIANGLE_STRIP, shader, ":/textures/dice-diffuse.png", modelVertices,
       modelIndices);
   cube_rend->setShaderParameters(skull_rend->getShaderParameters());
-  cube_rend->getShaderParameters().setSkewness(1.0f);
+  cube_rend->getShaderParameters().setSkewness(0.5f);
 
   /*
    * Init scene objects

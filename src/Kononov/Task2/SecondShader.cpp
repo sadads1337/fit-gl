@@ -10,9 +10,11 @@ SecondShader::SecondShader() {
    */
   auto &shader = getShader();
 
-  const char *const vertex_shader = ":/shaders/second.vs";
-  const char *const fragment_shader = ":/shaders/second.fs";
+  const char *const vertex_shader = ":/shaders/second.vert";
+  const char *const geometry_shader = ":/shaders/second.geom";
+  const char *const fragment_shader = ":/shaders/second.frag";
   shader.addShaderFromSourceFile(QOpenGLShader::Vertex, vertex_shader);
+  shader.addShaderFromSourceFile(QOpenGLShader::Geometry, geometry_shader);
   shader.addShaderFromSourceFile(QOpenGLShader::Fragment, fragment_shader);
   shader.link();
 

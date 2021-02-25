@@ -3,8 +3,9 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 add_executable(KononovTask2
         ${KONONOV_RESOURCES}
         shaders.qrc
-        shaders/second.fs
-        shaders/second.vs
+        shaders/second.vert
+        shaders/second.geom
+        shaders/second.frag
 
         main.cpp
         Vertex.hpp

@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>shaders/second.fs</file>
-        <file>shaders/second.vs</file>
+        <file>shaders/second.frag</file>
+        <file>shaders/second.geom</file>
+        <file>shaders/second.vert</file>
     </qresource>
 </RCC>
