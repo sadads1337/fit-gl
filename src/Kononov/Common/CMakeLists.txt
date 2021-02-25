@@ -7,13 +7,14 @@ add_library(KononovCommon
         MotionInputController.hpp
         PositionedObject.cpp
         PositionedObject.hpp
+        ShaderProgram.hpp
+        ShaderProgram.cpp
         SceneObject.cpp
         SceneObject.hpp
         Camera.cpp
         Camera.hpp
         GLUtil.cpp
         GLUtil.hpp
-        ShaderProgram.hpp
         MeshBuffers.hpp
         Renderable.hpp)
 

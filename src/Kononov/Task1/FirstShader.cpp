@@ -4,37 +4,23 @@
 
 namespace Kononov {
 
-FirstShader::FirstShader() {
-  /*
-   * Shader program initialization
-   */
-  auto &shader = getShader();
+FirstShader::FirstShader()
+    : ShaderProgram<Vertex>({":/shaders/first.vs", ":/shaders/first.fs"}),
+      m_vertex_position_attr(getAttributeLocation("vertex_position")),
+      m_vertex_normal_attr(getAttributeLocation("vertex_normal")),
+      m_vertex_uv_attr(getAttributeLocation("vertex_uv")),
 
-  const char *const vertex_shader = ":/shaders/first.vs";
-  const char *const fragment_shader = ":/shaders/first.fs";
-  shader.addShaderFromSourceFile(QOpenGLShader::Vertex, vertex_shader);
-  shader.addShaderFromSourceFile(QOpenGLShader::Fragment, fragment_shader);
-  shader.link();
+      m_model_view_matrix_uniform(getUniformLocation("model_view_matrix")),
+      m_model_matrix_uniform(getUniformLocation("model_matrix")),
+      m_normal_matrix_uniform(getUniformLocation("normal_matrix")),
 
-  /*
-   * Query locations of parameters
-   */
-  m_vertex_position_attr = shader.attributeLocation("vertex_position");
-  m_vertex_normal_attr = shader.attributeLocation("vertex_normal");
-  m_vertex_uv_attr = shader.attributeLocation("vertex_uv");
-
-  m_model_view_matrix_uniform = shader.uniformLocation("model_view_matrix");
-  m_model_matrix_uniform = shader.uniformLocation("model_matrix");
-  m_normal_matrix_uniform = shader.uniformLocation("normal_matrix");
-
-  m_diffuse_map_uniform = shader.uniformLocation("diffuse_map");
-  m_ambient_strength_uniform = shader.uniformLocation("ambient_strength");
-  m_specular_strength_uniform = shader.uniformLocation("specular_strength");
-  m_specular_pow_uniform = shader.uniformLocation("specular_pow");
-  m_light_color_uniform = shader.uniformLocation("light_color");
-  m_light_pos_uniform = shader.uniformLocation("light_pos");
-  m_view_pos_uniform = shader.uniformLocation("view_pos");
-}
+      m_diffuse_map_uniform(getUniformLocation("diffuse_map")),
+      m_ambient_strength_uniform(getUniformLocation("ambient_strength")),
+      m_specular_strength_uniform(getUniformLocation("specular_strength")),
+      m_specular_pow_uniform(getUniformLocation("specular_pow")),
+      m_light_color_uniform(getUniformLocation("light_color")),
+      m_light_pos_uniform(getUniformLocation("light_pos")),
+      m_view_pos_uniform(getUniformLocation("view_pos")) {}
 
 void FirstShader::setupCurrentVao() {
   QOpenGLShaderProgram &shader = getShader();
