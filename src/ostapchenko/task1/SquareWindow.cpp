@@ -4,30 +4,25 @@
 #include <QScreen>
 
 #include <QMouseEvent>
+#include <QColorDialog>
 
 #include <array>
 #include <cassert>
 
+
 namespace {
 
-   struct VertexData
-    {
-        QVector3D position;
-        QVector3D color;
-    };
+    constexpr std::array<QVector3D ,8u> vertices = {
 
-    VertexData vertices[] = {
-
-            {QVector3D(-0.5f,  -0.5f, 0.5f), QVector3D(1.0f, 0.0f, 0.0f)},  // v0
-            {QVector3D( 0.5f, -0.5f, 0.5f), QVector3D(0.0f, 1.0f, 0.0f)}, // v1
-            {QVector3D(-0.5f,  0.5f,  0.5f), QVector3D(0.0f, 0.0f, 1.0f)},  // v2
-            {QVector3D( 0.5f, 0.5f, 0.5f), QVector3D(1.0f, 0.0f, 1.0f)}, // v3
-            {QVector3D( 0.5f,   -0.5f, -0.5f), QVector3D(0.0f, 0.0f, 1.0f)},  // v4
-            {QVector3D( 0.5f, 0.5f, -0.5f), QVector3D(0.0f, 1.0f, 0.0f)}, // v5
-            {QVector3D( -0.5f,  -0.5f, -0.5f), QVector3D(1.0f, 0.0f, 1.0f)},// v6
-            {QVector3D( -0.5f,   0.5f, -0.5f), QVector3D(1.0f, 0.0f, 0.0f)} // v7
-
-    };
+                                                             QVector3D(-0.5f, -0.5f, 0.5f),  // v0
+                                                             QVector3D(0.5f, -0.5f, 0.5f), // v1
+                                                             QVector3D(-0.5f, 0.5f, 0.5f),  // v2
+                                                             QVector3D(0.5f, 0.5f, 0.5f),  // v3
+                                                             QVector3D(0.5f, -0.5f, -0.5f),   // v4
+                                                             QVector3D(0.5f, 0.5f, -0.5f),  // v5
+                                                             QVector3D(-0.5f, -0.5f, -0.5f), // v6
+                                                             QVector3D(-0.5f, 0.5f, -0.5f) // v7
+                                                     };
 
     constexpr std::array<GLuint ,34u> v_indicies = {
           0,  1,  2,  3,  3,
@@ -52,21 +47,19 @@ namespace fgl {
         program_->link();
         posAttr_ = program_->attributeLocation("posAttr");
         assert(posAttr_ != -1);
-        colAttr_ = program_->attributeLocation("colAttr");
-        assert(colAttr_ != -1);
         matrixUniform_ = program_->uniformLocation("matrix");
         assert(matrixUniform_ != -1);
 
+
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
-
     }
 
     void SquareWindow::render() {
         const auto retinaScale = devicePixelRatio();
         glViewport(0, 0, width() * retinaScale, height() * retinaScale);
 
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         program_->bind();
 
@@ -77,18 +70,15 @@ namespace fgl {
         matrix.rotate(100.0 * frame_ / screen()->refreshRate(), rotationAxis);
 
         program_->setUniformValue(matrixUniform_, matrix);
+        program_->setUniformValue("col", square_color );
 
         unsigned int vbo;
         glGenBuffers(1, &vbo);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(VertexData), vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(QVector3D), vertices.data(), GL_STATIC_DRAW);
 
-
-        glVertexAttribPointer(posAttr_, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
-        glVertexAttribPointer(colAttr_, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), reinterpret_cast<char *>(sizeof(QVector3D) ));
-
+        glVertexAttribPointer(posAttr_, 3, GL_FLOAT, GL_FALSE, sizeof(QVector3D), 0);
         glEnableVertexAttribArray(posAttr_);
-        glEnableVertexAttribArray(colAttr_);
 
         unsigned int v_ibo;
         glGenBuffers(1, &v_ibo);
@@ -96,7 +86,7 @@ namespace fgl {
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, 34 * sizeof(unsigned int), v_indicies.data(), GL_STATIC_DRAW);
 
         glDrawElements(GL_TRIANGLE_STRIP, 34, GL_UNSIGNED_INT, nullptr);
-        glDisableVertexAttribArray(colAttr_);
+       // glDisableVertexAttribArray(colAttr_);
         glDisableVertexAttribArray(posAttr_);
 
         program_->release();
@@ -120,8 +110,13 @@ namespace fgl {
         rotationAxis = QVector3D(diff.y(), diff.x(), 0.0).normalized();
     }
 
-    SquareWindow::~SquareWindow(){
-        program_->removeAllShaders();
+    void SquareWindow::keyPressEvent(QKeyEvent *event){
+        if (event->key() == Qt::Key_Space){
+            QColor color = QColorDialog::getColor();
+            square_color = QVector4D(color.red() / 255.0, color.green()/255.0, color.blue()/255.0, 1);
+
+        }
     }
+
 
 } // namespace fgl
