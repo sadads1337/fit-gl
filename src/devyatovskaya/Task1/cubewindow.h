@@ -1,40 +1,57 @@
 #pragma once
 
-#include <QOpenGLShaderProgram>
+#include <Base/GLWindow.hpp>
 #include <QColorDialog>
+#include <QSlider>
+#include "cubeedges.h"
+#include "cubegeometry.h"
+#include "cubepainter.h"
+
 #include <memory>
 
-#include "Base/GLWindow.hpp"
-#include "cube.h"
-#include "cubeedges.h"
+#include <QOpenGLShaderProgram>
 
-class CubeWindow : public fgl::GLWindow
-{
+namespace fgl {
+
+class CubeWindow : public GLWindow {
 public:
-    using GLWindow::GLWindow;
+    explicit CubeWindow(QWindow* parent = nullptr)
+            : GLWindow{ parent }
+        {
+            cube_geometry_.InitGeometry();
+            edges_geometry_.InitGeometry();
+        }
+    void mousePressEvent(QMouseEvent* e) override;
+    void mouseReleaseEvent(QMouseEvent* e) override;
 
-    void mousePressEvent(QMouseEvent *e) override;
-    void mouseReleaseEvent(QMouseEvent *e) override;
-
-    void init() override;
-    void render() override;
+  void init() override;
+  void render() override;
 
 private:
-    GLint m_posAttr = 0;
-    GLint m_colAttr = 0;
-    GLint m_matrixUniform = 0;
+  QColorDialog color_dialog_;
+     QMatrix4x4 projection_{};
 
-    std::shared_ptr<QOpenGLShaderProgram> m_program;
+      QSlider slider_x_;
+      QSlider slider_y_;
+      QSlider slider_z_;
 
-    Cube cube {1.0f};
-    CubeEdges edges {1.0f};
+      CubeGeometry cube_geometry_{ 1.0f };
+      CubeEdges edges_geometry_{ 1.0f };
+      CubePainter painter_{ cube_geometry_ };
 
-    QColorDialog c_dialog;
+      QVector2D mouse_press_position_;
+        QVector3D rotation_axis_;
+        qreal angular_speed_ = 0;
+        QQuaternion rotation_;
 
-    QVector2D mousePressPosition;
-    QVector3D rotationAxis;
-    qreal angularSpeed = 0;
-    QQuaternion rotation;
+        void setRotation();
+           void initColorDialog();
+            void initSlidersDialog();
+            void resizeGL();
 
-    void setRotation();
+    //std::unique_ptr<QOpenGLShaderProgram> program_ = nullptr;
+    QOpenGLShaderProgram program_{ this };
+     int frame_ = 0;
 };
+
+} // namespace fgl

@@ -1,12 +1,12 @@
 #pragma once
 #include "CubicGeometry.h"
 
-class CubeEdges : public CubicGeometry
+class CubeGeometry : public CubicGeometry
 {
 
 public:
-    CubeEdges() = delete;
-    explicit CubeEdges(const GLfloat edge_len) : CubicGeometry(edge_len, 16) {}
+    CubeGeometry() = delete;
+    explicit CubeGeometry(const GLfloat edge_len) : CubicGeometry(edge_len, 18) {}
 
     void DrawGeometry(QOpenGLShaderProgram* program) override;
     void InitGeometry() override;

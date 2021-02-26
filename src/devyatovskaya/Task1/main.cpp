@@ -1,20 +1,20 @@
 #include "cubewindow.h"
+
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    QSurfaceFormat format;
-    format.setSamples(16);
+        QSurfaceFormat format;
+        format.setSamples(32);
 
-    CubeWindow window;
-    window.setFormat(format);
-    window.resize(640, 480);
+        fgl::CubeWindow window;
+        window.setFormat(format);
+        window.resize(800, 600);
+        window.show();
 
-    window.show();
+        window.setAnimated(true);
 
-    window.setAnimated(true);
-
-    return app.exec();
+        return app.exec();
 }
