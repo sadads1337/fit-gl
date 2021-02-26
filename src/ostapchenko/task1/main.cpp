@@ -3,9 +3,8 @@
 
 #include "SquareWindow.h"
 
-
 int main(int argc, char **argv) {
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QSurfaceFormat format;
     format.setSamples(16);
@@ -14,6 +13,7 @@ int main(int argc, char **argv) {
     fgl::SquareWindow window;
     window.setFormat(format);
     window.resize(640, 480);
+
     window.show();
 
     window.setAnimated(true);
