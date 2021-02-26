@@ -4,6 +4,7 @@
 #include <QScreen>
 
 #include <array>
+#include <cassert>
 
 namespace {
 
