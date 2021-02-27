@@ -1,7 +1,7 @@
 set(LESSON1_SRCS
     main.cpp
-    TriangleWindow.cpp
-    TriangleWindow.hpp
+    CubeWindow.cpp
+    CubeWindow.h
 
     shaders.qrc
     Shaders/triangle.fs
