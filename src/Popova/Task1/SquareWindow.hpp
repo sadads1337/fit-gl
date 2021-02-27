@@ -15,6 +15,9 @@ namespace fgl {
 
 class SquareWindow final : public GLWindow {
 public:
+  virtual ~SquareWindow() override = default;
+
+public:
   void init() override;
   void render() override;
 
