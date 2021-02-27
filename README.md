@@ -1,4 +1,4 @@
-# FIT OpenGL demo project 2021
+# OpenGL demo project 2021
 
 Qt based demo project to demonstrate how to use and implement basic 3D graphics features.
 No optimizations exists. Use only for educational purposes.
