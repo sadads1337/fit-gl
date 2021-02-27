@@ -17,20 +17,29 @@ namespace {
     QVector3D texCoord;
   };
 
-VertexData vertices[] = {
-        {QVector3D(0.5f, 0.5f,  0.5f),QVector3D(1.0f, 0.0f, 1.0f)},
-        {QVector3D(-0.5f, 0.5f,  0.5f),QVector3D(1.0f, 0.0f, 1.0f)},
-        {QVector3D(0.5f, -0.5f,  0.5f),QVector3D(1.0f, 0.0f, 1.0f)},
-        {QVector3D(-0.5f, -0.5f,  0.5f),QVector3D(1.0f, 0.0f, 1.0f)},
-        {QVector3D(0.5f, 0.5f,  -0.5f),QVector3D(1.0f, 0.0f, 1.0f)},
-        {QVector3D(-0.5f, 0.5f,  -0.5f),QVector3D(1.0f, 0.0f, 1.0f)},
-        {QVector3D(-0.5f, -0.5f,  -0.5f),QVector3D(1.0f, 0.0f, 1.0f)},
-        {QVector3D(0.5f, -0.5f,  -0.5f),QVector3D(1.0f, 0.0f, 1.0f)},
-      };
-GLushort indices[] = {
-     5,4,6,7,2,4,0,5,1,6,3,2,1,0
-    };
+std::array<VertexData, 8u> vertices{
+    VertexData{{0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}},
+    VertexData{{-0.5f, 0.5f,  0.5f}, {1.0f, 0.0f, 1.0f}},
+    VertexData{{0.5f, -0.5f,  0.5f}, {1.0f, 0.0f, 1.0f}},
+    VertexData{{-0.5f, -0.5f,  0.5f}, {1.0f, 0.0f, 1.0f}},
+    VertexData{{0.5f, 0.5f,  -0.5f}, {1.0f, 0.0f, 1.0f}},
+    VertexData{{-0.5f, 0.5f,  -0.5f}, {1.0f, 0.0f, 1.0f}},
+    VertexData{{-0.5f, -0.5f,  -0.5f}, {1.0f, 0.0f, 1.0f}},
+    VertexData{{0.5f, -0.5f,  -0.5f}, {1.0f, 0.0f, 1.0f}},
+};
+std::array<GLushort, 14u> indices{
+    5,4,6,7,2,4,0,5,1,6,3,2,1,0
+};
+
+template <typename C, typename M>
+inline ptrdiff_t memberOffset(M C::* member) noexcept {
+  constexpr const std::byte *null_ptr = nullptr;
+  return reinterpret_cast<const std::byte *>(
+             &(static_cast<const C *>(nullptr)->*member)) -
+         null_ptr;
 }
+
+} // namespace
 
 namespace fgl {
 
@@ -40,10 +49,13 @@ void SquareWindow::init() {
   indexBuf_.create();
 
   arrayBuf_.bind();
-  arrayBuf_.allocate(vertices, 8 * sizeof(VertexData));
+  arrayBuf_.allocate(
+      vertices.data(),
+      static_cast<std::int32_t>(vertices.size() *
+                                sizeof(decltype(vertices)::value_type)));
 
   indexBuf_.bind();
-  indexBuf_.allocate(indices, 14 * sizeof(GLushort));
+  indexBuf_.allocate(indices.data(), static_cast<std::int32_t>(indices.size() * sizeof(decltype(indices)::value_type)));
 
   program_ = std::make_unique<QOpenGLShaderProgram>(this);
   program_->addShaderFromSourceFile(QOpenGLShader::Vertex,
@@ -55,8 +67,12 @@ void SquareWindow::init() {
   colAttr_ = program_->attributeLocation("colAttr");
   matrixUniform_ = program_->uniformLocation("matrix");
 
-  program_->setAttributeBuffer(posAttr_, GL_FLOAT, 0*sizeof(GLfloat), 3, 6*sizeof(GLfloat));
-  program_->setAttributeBuffer(colAttr_, GL_FLOAT, 3*sizeof(GLfloat), 3, 6*sizeof(GLfloat));
+  program_->setAttributeBuffer(posAttr_, GL_FLOAT,
+                               memberOffset(&VertexData::position), 3,
+                               sizeof(VertexData::position));
+  program_->setAttributeBuffer(colAttr_, GL_FLOAT,
+                               memberOffset(&VertexData::texCoord), 3,
+                               sizeof(VertexData::texCoord));
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
 
@@ -93,7 +109,7 @@ void SquareWindow::render() {
 }
 void SquareWindow::keyPressEvent(QKeyEvent *event){
     if (event->key() == Qt::Key_Space){
-      QColor color = QColorDialog::getColor();
+      const auto color = QColorDialog::getColor();
       square_color = QVector4D(color.red() / 255.0, color.green()/255.0, color.blue()/255.0, 1);
     }
 }
