@@ -1,14 +1,13 @@
 #pragma once
 #include "Geometry.h"
 
-class GeometryPainter
-{
+class GeometryPainter {
 public:
-    GeometryPainter(Geometry& geometry) : geometry_{ geometry } {}
-    virtual ~GeometryPainter() = default;
+  GeometryPainter(Geometry &geometry) : geometry_{geometry} {}
+  virtual ~GeometryPainter() = default;
 
-    virtual void setUniformColor(const QColor& color) = 0;
+  virtual void setUniformColor(const QColor &color) = 0;
 
 protected:
-    Geometry& geometry_;
+  Geometry &geometry_;
 };

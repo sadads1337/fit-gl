@@ -1,10 +1,9 @@
 #pragma once
 #include "GeometryPainter.h"
 
-class CubePainter : public GeometryPainter
-{
+class CubePainter : public GeometryPainter {
 public:
-    CubePainter(Geometry& geometry) : GeometryPainter{ geometry } {}
+  CubePainter(Geometry &geometry) : GeometryPainter{geometry} {}
 
-    void setUniformColor(const QColor& color) override;
+  void setUniformColor(const QColor &color) override;
 };
