@@ -79,7 +79,7 @@ void GeometryEngine::initCubeGeometry()
 
     // Transfer vertex data to VBO 0
     arrayBuf.bind();
-    arrayBuf.allocate(vertices.data(), vertices.size() * sizeof(GLfloat));
+    arrayBuf.allocate(vertices.data(), static_cast<std::int32_t>(vertices.size() * sizeof(GLfloat)));
 
     // Transfer index data to VBO 1
     indexBuf.bind();
@@ -127,7 +127,7 @@ void GeometryEngine::setColor(QVector3D RGBcolors)
     };
 
     arrayBuf.bind();
-    arrayBuf.allocate(vertices.data(), vertices.size() * sizeof(GLfloat));
+    arrayBuf.allocate(vertices.data(), static_cast<std::int32_t>(vertices.size() * sizeof(GLfloat)));
 }
 
 void GeometryEngine::drawCubeGeometry(QOpenGLShaderProgram *program)
@@ -136,7 +136,7 @@ void GeometryEngine::drawCubeGeometry(QOpenGLShaderProgram *program)
     arrayBuf.bind();
     indexBuf.bind();
 
-    size_t stride = sizeof(GLfloat) * 9;
+    const std::int32_t stride = sizeof(GLfloat) * 9;
 
     // Tell OpenGL programmable pipeline how to locate vertex position data
     int vertexLocation = program->attributeLocation("a_position");
