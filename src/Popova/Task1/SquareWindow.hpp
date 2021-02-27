@@ -39,7 +39,7 @@ private:
   };
   QOpenGLBuffer arrayBuf_;
   QVector4D square_color {1.0, 1.0, 1.0, 1};
-  QVector2D mousePressPosition;
+  QVector2D mousePressPosition{0.0, 0.0};
   QVector3D rotationAxis = QVector3D(0.0, 1.0, 0.0).normalized();
 };
 

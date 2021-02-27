@@ -7,10 +7,10 @@
 
 namespace {
 
-constexpr std::array<GLfloat, 6u> gVertices = {{0.0f,  0.707f, -0.5f,
-                                               -0.5f, 0.5f,   -0.5f}};
-constexpr std::array<GLfloat, 9u> gColors = {{1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-                                             0.0f, 0.0f, 0.0f, 1.0f}};
+constexpr std::array<GLfloat, 6u> gVertices = {0.0f,  0.707f, -0.5f,
+                                               -0.5f, 0.5f,   -0.5f};
+constexpr std::array<GLfloat, 9u> gColors = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+                                             0.0f, 0.0f, 0.0f, 1.0f};
 
 } // namespace
 
