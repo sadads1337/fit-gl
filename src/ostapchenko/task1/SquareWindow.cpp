@@ -7,7 +7,6 @@
 #include <QMouseEvent>
 
 #include <array>
-#include <cassert>
 
 namespace {
 
@@ -39,9 +38,9 @@ void SquareWindow::init() {
                                     ":/Shaders/square.fs");
   program_->link();
   posAttr_ = program_->attributeLocation("posAttr");
-  assert(posAttr_ != -1);
+  Q_ASSERT(posAttr_ != -1);
   matrixUniform_ = program_->uniformLocation("matrix");
-  assert(matrixUniform_ != -1);
+  Q_ASSERT(matrixUniform_ != -1);
 
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
@@ -80,7 +79,6 @@ void SquareWindow::render() {
                v_indicies.data(), GL_STATIC_DRAW);
 
   glDrawElements(GL_TRIANGLE_STRIP, 34, GL_UNSIGNED_INT, nullptr);
-  // glDisableVertexAttribArray(colAttr_);
   glDisableVertexAttribArray(posAttr_);
 
   program_->release();
