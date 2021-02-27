@@ -57,6 +57,8 @@ void SquareWindow::init() {
 
   program_->setAttributeBuffer(posAttr_, GL_FLOAT, 0*sizeof(GLfloat), 3, 6*sizeof(GLfloat));
   program_->setAttributeBuffer(colAttr_, GL_FLOAT, 3*sizeof(GLfloat), 3, 6*sizeof(GLfloat));
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_CULL_FACE);
 
 }
 
@@ -65,6 +67,7 @@ void SquareWindow::render() {
   glViewport(0, 0, width() * retinaScale, height() * retinaScale);
 
   glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_DEPTH_BUFFER_BIT);
 
   program_->bind();
   QMatrix4x4 matrix;
@@ -99,8 +102,8 @@ void SquareWindow::mousePressEvent(QMouseEvent *e){
         mousePressPosition = QVector2D(e->localPos());
     }
 
-    void SquareWindow::mouseReleaseEvent(QMouseEvent *event){
-        QVector2D diff = QVector2D(event->localPos()) - mousePressPosition;
+void SquareWindow::mouseReleaseEvent(QMouseEvent *event){
+        const auto diff = QVector2D(event->localPos()) - mousePressPosition;
         rotationAxis = QVector3D(diff.y(), diff.x(), 0.0).normalized();
     }
 } 

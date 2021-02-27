@@ -4,7 +4,6 @@ project(fit-gl VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_PREFIX_PATH "/Users/alinapopova/Qt/5.9.9/clang_64")
 
 if (MSVC)
     # warning level 4 and all warnings as errors

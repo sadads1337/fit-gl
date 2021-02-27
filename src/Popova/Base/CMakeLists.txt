@@ -1,4 +1,4 @@
-set(BASE_SRCS
+set(
     GLWindow.cpp
     GLWindow.hpp
 )
