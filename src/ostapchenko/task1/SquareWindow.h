@@ -39,8 +39,8 @@ private:
   int frame_ = 0;
 
   // animation
-  QVector2D mousePressPosition;
-  QVector3D rotationAxis;
+  QVector2D mousePressPosition{0., 0.};
+  QVector3D rotationAxis{0., 0., 1.};
 };
 
 } // namespace fgl
