@@ -13,7 +13,7 @@ namespace {
 
 struct VertexData {
   QVector3D position;
-  QVector3D texCoord;
+  QVector3D color;
 };
 
 std::array<VertexData, 8u> vertices{
@@ -71,8 +71,8 @@ void SquareWindow::init() {
                                memberOffset(&VertexData::position), 3,
                                sizeof(VertexData::position));
   program_->setAttributeBuffer(colAttr_, GL_FLOAT,
-                               memberOffset(&VertexData::texCoord), 3,
-                               sizeof(VertexData::texCoord));
+                               memberOffset(&VertexData::color), 3,
+                               sizeof(VertexData::color));
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
 }
