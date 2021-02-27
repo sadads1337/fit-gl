@@ -95,7 +95,7 @@ void SquareWindow::mousePressEvent(QMouseEvent *e) {
 
 void SquareWindow::mouseReleaseEvent(QMouseEvent *e) {
   // Mouse release position - mouse press position
-  QVector2D diff = QVector2D(e->localPos()) - mousePressPosition;
+  const auto diff = QVector2D(e->localPos()) - mousePressPosition;
 
   // Rotation axis is perpendicular to the mouse position difference
   // vector
@@ -104,7 +104,7 @@ void SquareWindow::mouseReleaseEvent(QMouseEvent *e) {
 
 void SquareWindow::keyPressEvent(QKeyEvent *event) {
   if (event->key() == Qt::Key_Space) {
-    QColor color = QColorDialog::getColor();
+    const auto color = QColorDialog::getColor();
     square_color = QVector4D(color.red() / 255.0, color.green() / 255.0,
                              color.blue() / 255.0, 1);
   }
