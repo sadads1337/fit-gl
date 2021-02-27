@@ -1,9 +1,9 @@
 
-#include <QApplication>
-#include <QSurfaceFormat>
-#include <QColorDialog>
 #include "SquareWindow.hpp"
+#include <QApplication>
+#include <QColorDialog>
 #include <QMainWindow>
+#include <QSurfaceFormat>
 int main(int argc, char **argv) {
   QApplication a(argc, argv);
 
