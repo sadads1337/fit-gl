@@ -1,38 +1,35 @@
 #include "SquareWindow.hpp"
 
+#include <QColorDialog>
+#include <QMouseEvent>
+#include <QOpenGLBuffer>
 #include <QOpenGLFunctions>
+#include <QRgb>
 #include <QScreen>
 #include <QVector2D>
 #include <QVector3D>
 #include <array>
-#include <QOpenGLBuffer>
-#include <QColorDialog>
-#include <QMouseEvent>
-#include <QRgb>
 namespace {
 
-  struct VertexData
-  {
-    QVector3D position;
-    QVector3D texCoord;
-  };
+struct VertexData {
+  QVector3D position;
+  QVector3D texCoord;
+};
 
 std::array<VertexData, 8u> vertices{
     VertexData{{0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}},
-    VertexData{{-0.5f, 0.5f,  0.5f}, {1.0f, 0.0f, 1.0f}},
-    VertexData{{0.5f, -0.5f,  0.5f}, {1.0f, 0.0f, 1.0f}},
-    VertexData{{-0.5f, -0.5f,  0.5f}, {1.0f, 0.0f, 1.0f}},
-    VertexData{{0.5f, 0.5f,  -0.5f}, {1.0f, 0.0f, 1.0f}},
-    VertexData{{-0.5f, 0.5f,  -0.5f}, {1.0f, 0.0f, 1.0f}},
-    VertexData{{-0.5f, -0.5f,  -0.5f}, {1.0f, 0.0f, 1.0f}},
-    VertexData{{0.5f, -0.5f,  -0.5f}, {1.0f, 0.0f, 1.0f}},
+    VertexData{{-0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}},
+    VertexData{{0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}},
+    VertexData{{-0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}},
+    VertexData{{0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}},
+    VertexData{{-0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}},
+    VertexData{{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}},
+    VertexData{{0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}},
 };
-std::array<GLushort, 14u> indices{
-    5,4,6,7,2,4,0,5,1,6,3,2,1,0
-};
+std::array<GLushort, 14u> indices{5, 4, 6, 7, 2, 4, 0, 5, 1, 6, 3, 2, 1, 0};
 
 template <typename C, typename M>
-inline ptrdiff_t memberOffset(M C::* member) noexcept {
+inline ptrdiff_t memberOffset(M C::*member) noexcept {
   constexpr const std::byte *null_ptr = nullptr;
   return reinterpret_cast<const std::byte *>(
              &(static_cast<const C *>(nullptr)->*member)) -
@@ -55,7 +52,10 @@ void SquareWindow::init() {
                                 sizeof(decltype(vertices)::value_type)));
 
   indexBuf_.bind();
-  indexBuf_.allocate(indices.data(), static_cast<std::int32_t>(indices.size() * sizeof(decltype(indices)::value_type)));
+  indexBuf_.allocate(
+      indices.data(),
+      static_cast<std::int32_t>(indices.size() *
+                                sizeof(decltype(indices)::value_type)));
 
   program_ = std::make_unique<QOpenGLShaderProgram>(this);
   program_->addShaderFromSourceFile(QOpenGLShader::Vertex,
@@ -75,7 +75,6 @@ void SquareWindow::init() {
                                sizeof(VertexData::texCoord));
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
-
 }
 
 void SquareWindow::render() {
@@ -91,10 +90,11 @@ void SquareWindow::render() {
   matrix.rotate(100.0 * frame_ / screen()->refreshRate(), rotationAxis);
   matrix.scale(0.5, 0.5, 0.5);
   program_->setUniformValue(matrixUniform_, matrix);
-  program_->setUniformValue("col", square_color );
+  program_->setUniformValue("col", square_color);
 
   glVertexAttribPointer(posAttr_, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
-  glVertexAttribPointer(colAttr_, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), reinterpret_cast<char *>(sizeof(QVector3D) ));
+  glVertexAttribPointer(colAttr_, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),
+                        reinterpret_cast<char *>(sizeof(QVector3D)));
 
   glEnableVertexAttribArray(posAttr_);
   glEnableVertexAttribArray(colAttr_);
@@ -107,18 +107,19 @@ void SquareWindow::render() {
 
   ++frame_;
 }
-void SquareWindow::keyPressEvent(QKeyEvent *event){
-    if (event->key() == Qt::Key_Space){
-      const auto color = QColorDialog::getColor();
-      square_color = QVector4D(color.red() / 255.0, color.green()/255.0, color.blue()/255.0, 1);
-    }
+void SquareWindow::keyPressEvent(QKeyEvent *event) {
+  if (event->key() == Qt::Key_Space) {
+    const auto color = QColorDialog::getColor();
+    square_color = QVector4D(color.red() / 255.0, color.green() / 255.0,
+                             color.blue() / 255.0, 1);
+  }
 }
-void SquareWindow::mousePressEvent(QMouseEvent *e){
-        mousePressPosition = QVector2D(e->localPos());
-    }
+void SquareWindow::mousePressEvent(QMouseEvent *e) {
+  mousePressPosition = QVector2D(e->localPos());
+}
 
-void SquareWindow::mouseReleaseEvent(QMouseEvent *event){
-        const auto diff = QVector2D(event->localPos()) - mousePressPosition;
-        rotationAxis = QVector3D(diff.y(), diff.x(), 0.0).normalized();
-    }
-} 
+void SquareWindow::mouseReleaseEvent(QMouseEvent *event) {
+  const auto diff = QVector2D(event->localPos()) - mousePressPosition;
+  rotationAxis = QVector3D(diff.y(), diff.x(), 0.0).normalized();
+}
+} // namespace fgl
