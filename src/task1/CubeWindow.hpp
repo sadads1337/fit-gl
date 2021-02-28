@@ -39,7 +39,7 @@ namespace fgl {
         int frame_ = 0;
 
 
-        QVector4D square_color ={1.0, 1.0, 1.0, 1};
+        QVector4D square_color;
 
         QVector2D mousePressPosition;
         QVector3D rotationAxis;
