@@ -13,11 +13,11 @@ void MainWindow::mousePressEvent(QMouseEvent *e) {
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *e) {
   // Mouse release position - mouse press position
-  QVector2D diff = QVector2D(e->localPos()) - mousePressPosition;
+  const auto diff = QVector2D(e->localPos()) - mousePressPosition;
 
   // Rotation axis is perpendicular to the mouse position difference
   // vector
-  QVector3D n = QVector3D(diff.y(), diff.x(), 0.0).normalized();
+  const auto n = QVector3D(diff.y(), diff.x(), 0.0).normalized();
 
   // Accelerate angular speed relative to the length of the mouse sweep
   qreal acc = diff.length() / 100.0;

@@ -2,8 +2,7 @@
 // Created by andre on 21.02.2021.
 //
 
-#ifndef FIT_GL_GEOMETRYENGINE_H_H
-#define FIT_GL_GEOMETRYENGINE_H_H
+#pragma once
 
 #include <QOpenGLBuffer>
 #include <QOpenGLFunctions>
@@ -25,5 +24,3 @@ private:
   QOpenGLBuffer arrayBuf;
   QOpenGLBuffer indexBuf;
 };
-
-#endif // FIT_GL_GEOMETRYENGINE_H_H

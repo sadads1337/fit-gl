@@ -12,16 +12,9 @@ set(Task1_SRCS
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-<<<<<<< HEAD
-add_executable(Task1 ${Task1_SRCS})
-
-target_link_libraries(Task1
-=======
 add_executable(NikolaevTask1 ${Task1_SRCS})
 
 target_link_libraries(NikolaevTask1
->>>>>>> remotes/origin/feature-nikolaev-task1
     PRIVATE
         Qt5::Widgets
 )
-

@@ -154,14 +154,14 @@ void GeometryEngine::drawCubeGeometry(QOpenGLShaderProgram *program) {
   arrayBuf.bind();
   indexBuf.bind();
 
-  const std::int32_t stride = sizeof(GLfloat) * 9;
+  const auto stride = sizeof(GLfloat) * 9;
 
   // Tell OpenGL programmable pipeline how to locate vertex position data
-  int vertexLocation = program->attributeLocation("a_position");
+  const auto vertexLocation = program->attributeLocation("a_position");
   program->enableAttributeArray(vertexLocation);
   program->setAttributeBuffer(vertexLocation, GL_FLOAT, 0, 3, stride);
 
-  int vertexColor = program->attributeLocation("vertex_color");
+  const auto vertexColor = program->attributeLocation("vertex_color");
   program->enableAttributeArray(vertexColor);
   program->setAttributeBuffer(vertexColor, GL_FLOAT, sizeof(GLfloat) * 6, 3,
                               stride);

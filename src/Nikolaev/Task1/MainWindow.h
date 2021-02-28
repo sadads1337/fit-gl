@@ -1,5 +1,4 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include "Controller/InputController.h"
 #include "GeometryEngine.h"
@@ -51,5 +50,3 @@ private:
 
   int frame_ = 0;
 };
-
-#endif // MainWindow_H
