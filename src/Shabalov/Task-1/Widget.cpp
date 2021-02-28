@@ -63,9 +63,9 @@ void Widget::paintGL()
 
 void Widget::initShaders()
 {
-    if(!m_program.addShaderFromSourceFile(QOpenGLShader::Vertex, "/home/nikita/CLionProjects/untitled/vshader.vsh"))
+    if(!m_program.addShaderFromSourceFile(QOpenGLShader::Vertex, "/home/nikita/CLionProjects/Task-1/vshader.vsh"))
         close();
-    if(!m_program.addShaderFromSourceFile(QOpenGLShader::Fragment, "/home/nikita/CLionProjects/untitled/fshader.fsh"))
+    if(!m_program.addShaderFromSourceFile(QOpenGLShader::Fragment, "/home/nikita/CLionProjects/Task-1/fshader.fsh"))
         close();
     if(!m_program.link())
         close();
@@ -157,12 +157,8 @@ void Widget::timerEvent(QTimerEvent *event)
     for(int i = 0; i < m_objects.size(); i++){
         if(i % 2 == 0){
             m_objects[i]->rotate(QQuaternion::fromAxisAndAngle(x_rot, y_rot, z_rot, angleObject));
-            //m_objects[i]->rotate(QQuaternion::fromAxisAndAngle(1.0f, 0.0f, 0.0f, qSin(angleObject)));
-            //m_objects[i]->rotate(QQuaternion::fromAxisAndAngle(0.0f, 1.0f, 0.0f, qCos(angleObject)));
         }else{
             m_objects[i]->rotate(QQuaternion::fromAxisAndAngle(x_rot, y_rot, z_rot, -angleObject));
-            //m_objects[i]->rotate(QQuaternion::fromAxisAndAngle(1.0f, 0.0f, 0.0f, qCos(angleObject)));
-            //m_objects[i]->rotate(QQuaternion::fromAxisAndAngle(0.0f, 1.0f, 0.0f, qSin(angleObject)));
         }
     }
     angleObject = M_PI / 1.0f;
