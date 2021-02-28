@@ -104,7 +104,9 @@ namespace fgl {
 
     void CubeWindow::keyPressEvent(QKeyEvent *event){
         if (event->key() == Qt:: Key_Tab){
-            QColor color = QColorDialog::getColor();
+
+            const auto color = QColorDialog::getColor();
+
             square_color = QVector4D(color.red() / 255.0, color.green()/255.0, color.blue()/255.0, 1);
         }
     }
@@ -118,9 +120,9 @@ namespace fgl {
     void CubeWindow::mouseReleaseEvent(QMouseEvent *e)
     {
 
-        QVector2D diff = QVector2D(e->localPos()) - mousePressPosition;
+        const auto diff = QVector2D(e->localPos()) - mousePressPosition;
 
-        QVector3D n = QVector3D(diff.y(), diff.x(), 0.0).normalized();
+        const auto n = QVector3D(diff.y(), diff.x(), 0.0).normalized();
 
 
         qreal acc = diff.length() / 100.0;
