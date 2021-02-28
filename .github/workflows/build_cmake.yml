@@ -22,6 +22,22 @@ jobs:
             os: ubuntu-latest,
             cc: "gcc", cxx: "g++"
           }
+          - {
+            name: "macOS Latest Clang", artifact: "macOS.tar.xz",
+            os: macos-latest,
+            build_type: "Release", cc: "clang", cxx: "clang++"
+          }
+          - {
+            name: "Windows Latest MSVC", artifact: "Windows-MSVC.tar.xz",
+            os: windows-latest,
+            build_type: "Release", cc: "cl", cxx: "cl",
+            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+          }
+          - {
+            name: "Windows Latest MinGW", artifact: "Windows-MinGW.tar.xz",
+            os: windows-latest,
+            build_type: "Release", cc: "gcc", cxx: "g++"
+          }
     steps:
       - uses: actions/checkout@v1
 
@@ -85,7 +101,15 @@ jobs:
           restore-keys: |
             ${{ matrix.config.name }}-ccache-
 
+      - name: Install Qt MinGW
+        if: "contains(matrix.config.name, 'MinGW')"
+        uses: jurplel/install-qt-action@v2
+        with:
+          cached: ${{ steps.cache.outputs.cache-hit }}
+          arch: 'win64_mingw81'
+
       - name: Install Qt
+        if: "!contains(matrix.config.name, 'MinGW')"
         uses: jurplel/install-qt-action@v2
         with:
           cached: ${{ steps.cache.outputs.cache-hit }}
