@@ -24,11 +24,11 @@ void TriangleWindow::init() {
                                     ":/Shaders/triangle.fs");
   program_->link();
   posAttr_ = program_->attributeLocation("posAttr");
-  assert(posAttr_ != -1);
+  Q_ASSERT(posAttr_ != -1);
   colAttr_ = program_->attributeLocation("colAttr");
-  assert(colAttr_ != -1);
+  Q_ASSERT(colAttr_ != -1);
   matrixUniform_ = program_->uniformLocation("matrix");
-  assert(matrixUniform_ != -1);
+  Q_ASSERT(matrixUniform_ != -1);
 }
 
 void TriangleWindow::render() {

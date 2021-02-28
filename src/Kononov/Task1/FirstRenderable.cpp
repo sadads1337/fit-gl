@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QFile>
 
+#include <stdexcept>
+
 #include <GLUtil.hpp>
 
 namespace {

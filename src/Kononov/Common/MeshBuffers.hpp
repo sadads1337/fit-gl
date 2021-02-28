@@ -26,7 +26,7 @@ private:
     buffer->create();
     buffer->bind();
     buffer->allocate(reinterpret_cast<std::byte *>(items.data()),
-                     items.size() * sizeof(T));
+                     static_cast<std::int32_t>(items.size() * sizeof(T)));
     buffer->release();
     return buffer;
   }
@@ -37,7 +37,8 @@ public:
       : m_vbo(makeBuffer(vertices, QOpenGLBuffer::VertexBuffer)),
         m_ibo(makeBuffer(indices, QOpenGLBuffer::IndexBuffer)),
         m_vao(std::make_unique<QOpenGLVertexArrayObject>()),
-        m_primitive(primitive), m_count(indices.size()) {
+        m_primitive(primitive),
+        m_count(static_cast<std::int32_t>(indices.size())) {
     m_vao->create();
   }
 

@@ -1,5 +1,7 @@
 #include "GLUtil.hpp"
 
+#include <stdexcept>
+
 namespace Kononov::GL {
 
 QOpenGLContext *requireContext() {

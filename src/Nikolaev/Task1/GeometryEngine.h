@@ -5,26 +5,25 @@
 #ifndef FIT_GL_GEOMETRYENGINE_H_H
 #define FIT_GL_GEOMETRYENGINE_H_H
 
+#include <QOpenGLBuffer>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
-#include <QOpenGLBuffer>
 #include <QVector3D>
 
-class GeometryEngine : protected QOpenGLFunctions
-{
+class GeometryEngine : protected QOpenGLFunctions {
 public:
-    GeometryEngine();
-    virtual ~GeometryEngine();
+  GeometryEngine();
+  virtual ~GeometryEngine();
 
-    void drawCubeGeometry(QOpenGLShaderProgram *program);
+  void drawCubeGeometry(QOpenGLShaderProgram *program);
 
-    void setColor(QVector3D RGBcolors);
+  void setColor(QVector3D RGBcolors);
 
 private:
-    void initCubeGeometry();
+  void initCubeGeometry();
 
-    QOpenGLBuffer arrayBuf;
-    QOpenGLBuffer indexBuf;
+  QOpenGLBuffer arrayBuf;
+  QOpenGLBuffer indexBuf;
 };
 
-#endif //FIT_GL_GEOMETRYENGINE_H_H
+#endif // FIT_GL_GEOMETRYENGINE_H_H

@@ -1,7 +1,5 @@
 #include "GLWindow.hpp"
 
-#include <cassert>
-
 #include <QPainter>
 
 namespace fgl {
@@ -80,7 +78,7 @@ void GLWindow::renderNow() {
 }
 
 bool GLWindow::event(QEvent *event) {
-  assert(event);
+  Q_ASSERT(event);
   switch (event->type()) {
   case QEvent::UpdateRequest:
     // In case someone requested update we render inplace.
