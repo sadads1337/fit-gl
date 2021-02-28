@@ -83,7 +83,7 @@ namespace fgl {
 
 
         glVertexAttribPointer(posAttr_, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
-        glVertexAttribPointer(colAttr_, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), reinterpret_cast<char *>(sizeof(QVector3D) ));
+        glVertexAttribPointer(colAttr_, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), reinterpret_cast<void *>(sizeof(QVector3D) ));
 
         glEnableVertexAttribArray(posAttr_);
         glEnableVertexAttribArray(colAttr_);
