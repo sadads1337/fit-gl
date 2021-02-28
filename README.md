@@ -1,3 +1,5 @@
+![build_cmake_status](https://github.com/sadads1337/fit-gl/actions/workflows/build_cmake.yml/badge.svg)
+
 # OpenGL demo project 2021
 
 Qt based demo project to demonstrate how to use and implement basic 3D graphics features.
