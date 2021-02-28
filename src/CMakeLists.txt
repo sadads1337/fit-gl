@@ -5,6 +5,7 @@ set(CMAKE_AUTOUIC ON)
 
 add_subdirectory(Base)
 add_subdirectory(Lesson1)
+add_subdirectory(Moseykov/task1)
 
 add_subdirectory(Kononov)
 
