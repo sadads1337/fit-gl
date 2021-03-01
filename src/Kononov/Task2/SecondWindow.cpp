@@ -1,5 +1,6 @@
 #include "SecondWindow.hpp"
 
+#include <cmath>
 #include <vector>
 
 #include <QOpenGLFunctions>
@@ -84,6 +85,9 @@ constexpr float SPECULAR_STRENGTH = 0.5F;
 constexpr int SPECULAR_POW = 32;
 
 constexpr float MOUSE_SENSITIVITY = 0.2F;
+constexpr float ROTATION_SPEED = 0.03F;
+constexpr float ROTATION_AMPLITUDE_CUBE = 0.7F;
+constexpr float ROTATION_AMPLITUDE_SKULL = 0.1F;
 constexpr float MOTION_SPEED = 0.1F;
 
 void SecondWindow::onMessageLogged(const QOpenGLDebugMessage &message) {
@@ -153,26 +157,24 @@ void SecondWindow::init() {
       modelVertices, modelIndices, GL_TRIANGLE_STRIP);
 
   SecondShader factory(program);
-  auto skull_shader = factory.createShared();
-  skull_shader->getParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
-  skull_shader->getParameters().setDiffuseTexture(skull_texture);
-  skull_shader->getParameters().setAmbientStrength(AMBIENT_STRENGTH);
-  skull_shader->getParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
-  skull_shader->getParameters().setSkewness(0.07F);
+  m_skull_shader = factory.createShared();
+  m_skull_shader->getParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
+  m_skull_shader->getParameters().setDiffuseTexture(skull_texture);
+  m_skull_shader->getParameters().setAmbientStrength(AMBIENT_STRENGTH);
+  m_skull_shader->getParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
 
-  auto cube_shader = factory.createShared();
-  cube_shader->setParameters(skull_shader->getParameters());
-  cube_shader->getParameters().setDiffuseTexture(cube_texture);
-  cube_shader->getParameters().setSkewness(0.1F);
+  m_cube_shader = factory.createShared();
+  m_cube_shader->setParameters(m_skull_shader->getParameters());
+  m_cube_shader->getParameters().setDiffuseTexture(cube_texture);
 
   auto skull_rend = std::make_shared<GenericRenderable>(
       std::dynamic_pointer_cast<TypedShader<RegularVertex::Interface>>(
-          skull_shader),
+          m_skull_shader),
       std::dynamic_pointer_cast<TypedMesh<RegularVertex>>(skull_mesh));
 
   auto cube_rend = std::make_shared<GenericRenderable>(
       std::dynamic_pointer_cast<TypedShader<RegularVertex::Interface>>(
-          cube_shader),
+          m_cube_shader),
       std::dynamic_pointer_cast<TypedMesh<RegularVertex>>(cube_mesh));
 
   /*
@@ -213,7 +215,14 @@ void SecondWindow::render() {
   m_camera->beginRender((GLsizei)(width() * pixel_ratio),
                         (GLsizei)(height() * pixel_ratio));
 
+  m_cube_shader->getParameters().setSkewness(
+      ROTATION_AMPLITUDE_CUBE *
+      std::sin(static_cast<float>(m_frame) * ROTATION_SPEED));
   m_cube->render(*m_camera);
+
+  m_skull_shader->getParameters().setSkewness(
+      ROTATION_AMPLITUDE_SKULL *
+      std::cos(static_cast<float>(m_frame) * ROTATION_SPEED));
   m_skull->render(*m_camera);
 
   m_frame++;
