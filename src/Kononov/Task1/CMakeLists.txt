@@ -7,13 +7,9 @@ add_executable(KononovTask1
         shaders/first.vs
 
         main.cpp
-        Vertex.hpp
         MainWindow.cpp
         MainWindow.hpp
-        FirstShader.cpp
-        FirstShader.hpp
-        FirstRenderable.cpp
-        FirstRenderable.hpp)
+        )
 
 target_link_libraries(KononovTask1
         PRIVATE Qt5::Widgets
