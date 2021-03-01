@@ -7,12 +7,11 @@ add_library(KononovCommon
         MotionInputController.hpp
         PositionedObject.cpp
         PositionedObject.hpp
-        TextureLoader.cpp
-        TextureLoader.hpp
         SceneObject.cpp
         SceneObject.hpp
         Renderable.hpp
-        MeshLoader.hpp
+        Resources.cpp
+        Resources.hpp
         Camera.cpp
         Camera.hpp
         GLUtil.cpp

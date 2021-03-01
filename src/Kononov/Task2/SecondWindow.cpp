@@ -5,10 +5,8 @@
 #include <QOpenGLFunctions>
 #include <QScreen>
 
-#include <GLUtil.hpp>
-#include <MeshLoader.hpp>
+#include <Resources.hpp>
 #include <Shader.hpp>
-#include <TextureLoader.hpp>
 #include <Vertex.hpp>
 
 namespace {
@@ -137,18 +135,18 @@ void SecondWindow::init() {
   /*
    * Load and configure shaders and renderable objects
    */
-  auto program = std::shared_ptr(
-      GL::loadShaderProgram({":/shaders/second.vert", ":/shaders/second.geom",
-                             ":/shaders/second.frag"}));
+  auto program = Resources::loadShaderProgramShared({":/shaders/second.vert",
+                                                     ":/shaders/second.geom",
+                                                     ":/shaders/second.frag"});
 
   auto skull_texture =
-      std::shared_ptr(TextureLoader::load(":/textures/skull-diffuse.jpg"));
+      Resources::loadTextureShared(":/textures/skull-diffuse.jpg");
 
   auto cube_texture =
-      std::shared_ptr(TextureLoader::load(":/textures/dice-diffuse.png"));
+      Resources::loadTextureShared(":/textures/dice-diffuse.png");
 
-  auto skull_mesh = std::shared_ptr(MeshLoader::load<RegularVertex, GLuint>(
-      ":/models/skull.vbo-ibo", GL_TRIANGLES));
+  auto skull_mesh = Resources::loadMeshShared<RegularVertex, GLuint>(
+      ":/models/skull.vbo-ibo", GL_TRIANGLES);
 
   auto cube_mesh = std::make_shared<GenericMesh<RegularVertex, GLuint>>(
       modelVertices, modelIndices, GL_TRIANGLE_STRIP);
