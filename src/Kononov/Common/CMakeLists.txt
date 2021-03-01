@@ -16,7 +16,15 @@ add_library(KononovCommon
         GLUtil.cpp
         GLUtil.hpp
         MeshBuffers.hpp
-        Renderable.hpp)
+        Renderable.hpp
+        Vertex.hpp
+        Shader.cpp
+        Shader.hpp
+        Mesh.cpp
+        Mesh.hpp
+        MeshLoader.hpp
+        TextureLoader.cpp
+        TextureLoader.hpp)
 
 target_include_directories(KononovCommon
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
