@@ -3,6 +3,8 @@
 #include <QMouseEvent>
 #include <array>
 #include <cassert>
+#include <QColor>
+#include <QColorDialog>
 
 namespace {
 
@@ -57,6 +59,14 @@ namespace fgl {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
 
+        glGenBuffers(1, &v_ibo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, v_ibo);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, 34 * sizeof(unsigned int), v_indicies.data(), GL_STATIC_DRAW);
+
+
+        glGenBuffers(1, &vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(VertexData), gvertices, GL_STATIC_DRAW);
     }
 
     void CubeWindow::render() {
@@ -76,10 +86,7 @@ namespace fgl {
 
         program_->setUniformValue(matrixUniform_, matrix);
         program_->setUniformValue("col", square_color );
-        unsigned int vbo;
-        glGenBuffers(1, &vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(VertexData), gvertices, GL_STATIC_DRAW);
+
 
 
         glVertexAttribPointer(posAttr_, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
@@ -88,11 +95,9 @@ namespace fgl {
         glEnableVertexAttribArray(posAttr_);
         glEnableVertexAttribArray(colAttr_);
 
-        unsigned int v_ibo;
-        glGenBuffers(1, &v_ibo);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, v_ibo);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, 34 * sizeof(unsigned int), v_indicies.data(), GL_STATIC_DRAW);
 
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, v_ibo);
         glDrawElements(GL_TRIANGLE_STRIP, 34, GL_UNSIGNED_INT, nullptr);
         glDisableVertexAttribArray(colAttr_);
         glDisableVertexAttribArray(posAttr_);
