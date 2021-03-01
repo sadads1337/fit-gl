@@ -1,16 +1,19 @@
 #include "MainWindow.hpp"
 
+#include <vector>
+
 #include <QOpenGLFunctions>
 #include <QScreen>
 
-#include <vector>
-
-#include "FirstRenderable.hpp"
-#include "ShaderProgram.hpp"
+#include <GLUtil.hpp>
+#include <MeshLoader.hpp>
+#include <Shader.hpp>
+#include <TextureLoader.hpp>
+#include <Vertex.hpp>
 
 namespace {
 
-const std::vector<Kononov::Vertex> modelVertices = {
+const std::vector<Kononov::RegularVertex> modelVertices = {
     {{-1.0F, -1.0F, 1.0F}, {0, 0, 1}, {0.0F, 0.0F}},  // v0
     {{1.0F, -1.0F, 1.0F}, {0, 0, 1}, {0.333F, 0.0F}}, // v1
     {{-1.0F, 1.0F, 1.0F}, {0, 0, 1}, {0.0F, 0.5F}},   // v2
@@ -134,21 +137,41 @@ void MainWindow::init() {
   /*
    * Load and configure shaders and renderable objects
    */
-  auto shader = std::make_shared<FirstShader>();
+  auto program = std::shared_ptr(
+      GL::loadShaderProgram({":/shaders/first.vs", ":/shaders/first.fs"}));
 
-  auto skull_rend = std::make_shared<FirstRenderable>(
-      GL_TRIANGLES, shader, ":/textures/skull-diffuse.jpg",
-      ":/models/skull.vbo-ibo");
-  skull_rend->getShaderParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
-  skull_rend->getShaderParameters().setDiffuseMap(0);
-  skull_rend->getShaderParameters().setAmbient(AMBIENT_STRENGTH);
-  skull_rend->getShaderParameters().setSpecular(SPECULAR_STRENGTH,
-                                                SPECULAR_POW);
+  auto skull_texture =
+      std::shared_ptr(TextureLoader::load(":/textures/skull-diffuse.jpg"));
 
-  auto cube_rend = std::make_shared<FirstRenderable>(
-      GL_TRIANGLE_STRIP, shader, ":/textures/dice-diffuse.png", modelVertices,
-      modelIndices);
-  cube_rend->setShaderParameters(skull_rend->getShaderParameters());
+  auto cube_texture =
+      std::shared_ptr(TextureLoader::load(":/textures/dice-diffuse.png"));
+
+  auto skull_mesh = std::shared_ptr(MeshLoader::load<RegularVertex, GLuint>(
+      ":/models/skull.vbo-ibo", GL_TRIANGLES));
+
+  auto cube_mesh = std::make_shared<GenericMesh<RegularVertex, GLuint>>(
+      modelVertices, modelIndices, GL_TRIANGLE_STRIP);
+
+  FirstShaderNew factory(program);
+  auto skull_shader = std::shared_ptr(factory.create());
+  skull_shader->getParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
+  skull_shader->getParameters().setDiffuseTexture(skull_texture);
+  skull_shader->getParameters().setAmbientStrength(AMBIENT_STRENGTH);
+  skull_shader->getParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
+
+  auto cube_shader = std::shared_ptr(factory.create());
+  cube_shader->setParameters(skull_shader->getParameters());
+  cube_shader->getParameters().setDiffuseTexture(cube_texture);
+
+  auto skull_rend = std::make_shared<GenericRenderable>(
+      std::dynamic_pointer_cast<TypedShader<RegularVertex::Interface>>(
+          skull_shader),
+      std::dynamic_pointer_cast<TypedMesh<RegularVertex>>(skull_mesh));
+
+  auto cube_rend = std::make_shared<GenericRenderable>(
+      std::dynamic_pointer_cast<TypedShader<RegularVertex::Interface>>(
+          cube_shader),
+      std::dynamic_pointer_cast<TypedMesh<RegularVertex>>(cube_mesh));
 
   /*
    * Init scene objects
