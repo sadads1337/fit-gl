@@ -70,10 +70,10 @@ const std::vector<GLuint> modelIndices = {
 
 namespace Kononov {
 
-constexpr QVector3D INITIAL_CAMERA_POSITION(0, 1.3, 8);
-constexpr QVector3D LIGHT_POSITION(3, 2, 3);
-constexpr QVector3D LIGHT_COLOR(1, 0.7, 0.7);
-constexpr QVector4D CLEAR_COLOR(0, 0.5, 1, 1);
+constexpr QVector3D INITIAL_CAMERA_POSITION(0.0F, 1.3F, 8.0F);
+constexpr QVector3D LIGHT_POSITION(3.0F, 2.0F, 3.0F);
+constexpr QVector3D LIGHT_COLOR(1.0F, 0.7F, 0.7F);
+constexpr QVector4D CLEAR_COLOR(0.0F, 0.5F, 1.0F, 1.0F);
 
 constexpr float PERSPECTIVE_FOV = 60.0F;
 constexpr float NEAR_PLANE = 0.1F;
@@ -159,12 +159,12 @@ void SecondWindow::init() {
   skull_shader->getParameters().setDiffuseTexture(skull_texture);
   skull_shader->getParameters().setAmbientStrength(AMBIENT_STRENGTH);
   skull_shader->getParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
-  skull_shader->getParameters().setSkewness(0.07f);
+  skull_shader->getParameters().setSkewness(0.07F);
 
   auto cube_shader = factory.createShared();
   cube_shader->setParameters(skull_shader->getParameters());
   cube_shader->getParameters().setDiffuseTexture(cube_texture);
-  cube_shader->getParameters().setSkewness(0.1f);
+  cube_shader->getParameters().setSkewness(0.1F);
 
   auto skull_rend = std::make_shared<GenericRenderable>(
       std::dynamic_pointer_cast<TypedShader<RegularVertex::Interface>>(
