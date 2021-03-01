@@ -8,13 +8,9 @@ add_executable(KononovTask2
         shaders/second.frag
 
         main.cpp
-        Vertex.hpp
         SecondWindow.cpp
         SecondWindow.hpp
-        SecondShader.cpp
-        SecondShader.hpp
-        SecondRenderable.cpp
-        SecondRenderable.hpp)
+        )
 
 target_link_libraries(KononovTask2
         PRIVATE Qt5::Widgets
