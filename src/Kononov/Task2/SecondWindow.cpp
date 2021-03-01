@@ -1,17 +1,15 @@
 #include "SecondWindow.hpp"
 
-#include <QOpenGLFunctions>
-#include <QScreen>
-
 #include <vector>
 
-#include "SecondRenderable.hpp"
-#include "ShaderProgram.hpp"
+#include <QOpenGLFunctions>
+#include <QScreen>
 
 #include <GLUtil.hpp>
 #include <MeshLoader.hpp>
 #include <Shader.hpp>
 #include <TextureLoader.hpp>
+#include <Vertex.hpp>
 
 namespace {
 
@@ -165,6 +163,7 @@ void SecondWindow::init() {
 
   auto cube_shader = std::shared_ptr(factory.create());
   cube_shader->setParameters(skull_shader->getParameters());
+  cube_shader->getParameters().setDiffuseTexture(cube_texture);
   cube_shader->getParameters().setSkewness(0.1f);
 
   auto skull_rend = std::make_shared<GenericRenderable>(

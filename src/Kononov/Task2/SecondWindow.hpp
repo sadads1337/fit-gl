@@ -11,7 +11,6 @@
 #include <SceneObject.hpp>
 
 #include "Base/GLWindow.hpp"
-#include "SecondShader.hpp"
 
 namespace Kononov {
 
