@@ -12,7 +12,7 @@
 
 namespace Kononov {
 
-class Resources {
+class Resources final {
 private:
   template <typename T> static std::vector<T> readVector(QDataStream &stream) {
     std::vector<T> res;

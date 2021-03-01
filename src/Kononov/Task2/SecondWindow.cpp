@@ -84,7 +84,6 @@ constexpr float SPECULAR_STRENGTH = 0.5F;
 constexpr int SPECULAR_POW = 32;
 
 constexpr float MOUSE_SENSITIVITY = 0.2F;
-constexpr float ROTATION_SPEED = 30.0F;
 constexpr float MOTION_SPEED = 0.1F;
 
 void SecondWindow::onMessageLogged(const QOpenGLDebugMessage &message) {

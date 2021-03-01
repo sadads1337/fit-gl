@@ -9,12 +9,19 @@
 namespace Kononov {
 
 class Mesh {
-public:
-  virtual void drawElements() = 0;
-
 protected:
   virtual void bindVertexBuffer() = 0;
   virtual void releaseVertexBuffer() = 0;
+
+public:
+  virtual void drawElements() = 0;
+
+  Mesh() = default;
+  Mesh(const Mesh &) = default;
+  Mesh(Mesh &&) noexcept = default;
+  virtual ~Mesh() = default;
+  Mesh &operator=(const Mesh &) = default;
+  Mesh &operator=(Mesh &&) noexcept = default;
 };
 
 template <typename VertexType> class TypedMesh : public Mesh {
