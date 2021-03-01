@@ -10,8 +10,9 @@ add_executable(KononovTask2
         main.cpp
         SecondWindow.cpp
         SecondWindow.hpp
-        )
+        SecondShader.hpp)
 
 target_link_libraries(KononovTask2
         PRIVATE Qt5::Widgets
-        PUBLIC Kononov::Common)
+        PUBLIC Kononov::Common
+        PUBLIC Kononov::Task1::export)
