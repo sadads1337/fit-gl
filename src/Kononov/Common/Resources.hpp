@@ -1,19 +1,17 @@
 #pragma once
 
-#include <cstdint>
 #include <memory>
-#include <stdexcept>
-#include <vector>
 
 #include <QDataStream>
 #include <QFile>
+#include <QOpenGLTexture>
 #include <QString>
 
 #include "Mesh.hpp"
 
 namespace Kononov {
 
-class MeshLoader {
+class Resources {
 private:
   template <typename T> static std::vector<T> readVector(QDataStream &stream) {
     std::vector<T> res;
@@ -36,9 +34,13 @@ private:
   }
 
 public:
+  static std::unique_ptr<QOpenGLTexture> loadTexture(const QString &filename);
+  static std::shared_ptr<QOpenGLTexture>
+  loadTextureShared(const QString &filename);
+
   template <typename TVertex, typename TIndex>
   static std::unique_ptr<GenericMesh<TVertex, TIndex>>
-  load(const QString &filename, GLenum primitive) {
+  loadMesh(const QString &filename, GLenum primitive) {
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly)) {
       qDebug() << "Unable to open file " << filename;
@@ -50,6 +52,18 @@ public:
     return std::make_unique<GenericMesh<TVertex, TIndex>>(vbo_data, ibo_data,
                                                           primitive);
   }
+
+  template <typename TVertex, typename TIndex>
+  static std::shared_ptr<GenericMesh<TVertex, TIndex>>
+  loadMeshShared(const QString &filename, GLenum primitive) {
+    return loadMesh<TVertex, TIndex>(filename, primitive);
+  }
+
+  static std::unique_ptr<QOpenGLShaderProgram>
+  loadShaderProgram(const std::vector<QString> &files);
+
+  static std::shared_ptr<QOpenGLShaderProgram>
+  loadShaderProgramShared(const std::vector<QString> &files);
 };
 
 } // namespace Kononov
