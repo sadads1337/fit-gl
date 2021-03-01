@@ -152,6 +152,8 @@ public:
   std::unique_ptr<Shader> create() {
     return std::make_unique<Shader>(m_program, m_data);
   }
+
+  std::shared_ptr<Shader> createShared() { return create(); }
 };
 
 } // namespace Kononov

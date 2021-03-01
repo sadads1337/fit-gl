@@ -154,14 +154,14 @@ void SecondWindow::init() {
       modelVertices, modelIndices, GL_TRIANGLE_STRIP);
 
   SecondShader factory(program);
-  auto skull_shader = std::shared_ptr(factory.create());
+  auto skull_shader = factory.createShared();
   skull_shader->getParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
   skull_shader->getParameters().setDiffuseTexture(skull_texture);
   skull_shader->getParameters().setAmbientStrength(AMBIENT_STRENGTH);
   skull_shader->getParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
   skull_shader->getParameters().setSkewness(0.07f);
 
-  auto cube_shader = std::shared_ptr(factory.create());
+  auto cube_shader = factory.createShared();
   cube_shader->setParameters(skull_shader->getParameters());
   cube_shader->getParameters().setDiffuseTexture(cube_texture);
   cube_shader->getParameters().setSkewness(0.1f);
