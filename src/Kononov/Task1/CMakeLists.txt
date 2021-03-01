@@ -1,5 +1,7 @@
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
+add_subdirectory(export)
+
 add_executable(KononovTask1
         ${KONONOV_RESOURCES}
         shaders.qrc
@@ -8,9 +10,9 @@ add_executable(KononovTask1
 
         main.cpp
         MainWindow.cpp
-        MainWindow.hpp
-        )
+        MainWindow.hpp)
 
 target_link_libraries(KononovTask1
         PRIVATE Qt5::Widgets
-        PUBLIC Kononov::Common)
+        PUBLIC Kononov::Common
+        PRIVATE Kononov::Task1::export)

@@ -17,9 +17,7 @@ add_library(KononovCommon
         GLUtil.cpp
         GLUtil.hpp
         Vertex.hpp
-        Shader.cpp
         Shader.hpp
-        Mesh.cpp
         Mesh.hpp)
 
 target_include_directories(KononovCommon

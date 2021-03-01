@@ -9,6 +9,8 @@
 #include <Shader.hpp>
 #include <Vertex.hpp>
 
+#include "SecondShader.hpp"
+
 namespace {
 
 const std::vector<Kononov::RegularVertex> modelVertices = {
@@ -151,7 +153,7 @@ void SecondWindow::init() {
   auto cube_mesh = std::make_shared<GenericMesh<RegularVertex, GLuint>>(
       modelVertices, modelIndices, GL_TRIANGLE_STRIP);
 
-  SecondShaderNew factory(program);
+  SecondShader factory(program);
   auto skull_shader = std::shared_ptr(factory.create());
   skull_shader->getParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
   skull_shader->getParameters().setDiffuseTexture(skull_texture);

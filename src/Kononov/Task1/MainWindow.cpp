@@ -9,6 +9,8 @@
 #include <Shader.hpp>
 #include <Vertex.hpp>
 
+#include "FirstShader.hpp"
+
 namespace {
 
 const std::vector<Kononov::RegularVertex> modelVertices = {
@@ -150,7 +152,7 @@ void MainWindow::init() {
   auto cube_mesh = std::make_shared<GenericMesh<RegularVertex, GLuint>>(
       modelVertices, modelIndices, GL_TRIANGLE_STRIP);
 
-  FirstShaderNew factory(program);
+  FirstShader factory(program);
   auto skull_shader = std::shared_ptr(factory.create());
   skull_shader->getParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
   skull_shader->getParameters().setDiffuseTexture(skull_texture);
