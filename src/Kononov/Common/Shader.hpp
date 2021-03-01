@@ -12,6 +12,13 @@ namespace Kononov {
 
 class Shader {
 public:
+  Shader() = default;
+  Shader(const Shader &shader) = default;
+  Shader(Shader &&shader) noexcept = default;
+  virtual ~Shader() = default;
+  Shader &operator=(const Shader &shader) = default;
+  Shader &operator=(Shader &&shader) noexcept = default;
+
   virtual void bind() = 0;
   virtual void release() = 0;
   virtual void prepare(const Camera &camera, QMatrix4x4 model_matrix) = 0;
