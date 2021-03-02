@@ -1,7 +1,12 @@
 #ifndef BAZHENOV_TASK1_MAINWINDOW_HPP
 #define BAZHENOV_TASK1_MAINWINDOW_HPP
 
+#include <QOpenGLBuffer>
+#include <QOpenGLShaderProgram>
+
 #include "Base/GLWindow.hpp"
+
+#include "InputController/InputController.hpp"
 
 namespace Bazhenov {
 
@@ -20,7 +25,16 @@ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
-  int frame_ = 0;
+  std::unique_ptr<QOpenGLShaderProgram> program_;
+
+  GLint posAttr_ = 0;
+  GLint colAttr_ = 0;
+  GLint matrixUniform_ = 0;
+
+  QOpenGLBuffer arrayBuf_;
+  QOpenGLBuffer indexBuf_{QOpenGLBuffer::IndexBuffer};
+
+  std::shared_ptr<InputController> inputController_;
 };
 
 }
