@@ -23,7 +23,6 @@ private:
 
   // Attributes and uniforms handlers.
   GLint posAttr_ = 0;
-  GLint colAttr_ = 0;
   GLint matrixUniform_ = 0;
 
   // Shader program handler.
