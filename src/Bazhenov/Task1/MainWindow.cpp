@@ -146,7 +146,7 @@ void MainWindow::render() {
   glEnableVertexAttribArray(posAttr_);
   glEnableVertexAttribArray(colAttr_);
 
-  glDrawElements(GL_TRIANGLE_STRIP, indices.size(), GL_UNSIGNED_INT, nullptr);
+  glDrawElements(GL_TRIANGLE_STRIP, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, nullptr);
 
   glDisableVertexAttribArray(colAttr_);
   glDisableVertexAttribArray(posAttr_);
