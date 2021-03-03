@@ -1,5 +1,7 @@
 #include "MainWindow.hpp"
 
+#include <array>
+
 #include <QOpenGLShader>
 #include <QVector4D>
 
@@ -9,7 +11,7 @@ constexpr std::uint32_t STRIDE = 9;
 constexpr std::uint32_t VERTEX_POSITION_OFFSET = 0;
 constexpr std::uint32_t VERTEX_COLOR_OFFSET = 6;
 
-std::array<GLfloat, 6 * 4 *STRIDE> vertices = {
+std::array<GLfloat, 6 * 4 * STRIDE> vertices = {
     // Vertex data for face 0
     -1.0F, -1.0F, 1.0F, 0, 0, 1, 0.0F, 0.0F, 0.0F,  // v0
     1.0F, -1.0F, 1.0F, 0, 0, 1, 0.333F, 0.0F, 0.0F, // v1
