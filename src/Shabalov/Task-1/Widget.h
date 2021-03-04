@@ -25,7 +25,7 @@ Q_OBJECT
 
 public:
     Widget(QWidget *parent = nullptr);
-    ~Widget();
+    ~Widget() override;
     void setXRotation(float angle);
     void setYRotation(float angle);
     void setZRotation(float angle);
