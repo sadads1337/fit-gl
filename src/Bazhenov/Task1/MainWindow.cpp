@@ -114,15 +114,22 @@ void MainWindow::render() {
   if (newColorSelected) {
     QColor newColor = inputController_->getColor();
     for (auto i = 0U; i < vertices.size() / STRIDE; ++i) {
-      vertices[STRIDE*i + VERTEX_COLOR_OFFSET]     = 0.5F * (vertices[STRIDE*i + VERTEX_COLOR_OFFSET]     + (i%2==0 ? newColor.redF() : 1.F - newColor.redF()));
-      vertices[STRIDE*i + VERTEX_COLOR_OFFSET + 1] = 0.5F * (vertices[STRIDE*i + VERTEX_COLOR_OFFSET + 1] + (i%2==0 ? newColor.greenF() : 1.F - newColor.greenF()));
-      vertices[STRIDE*i + VERTEX_COLOR_OFFSET + 2] = 0.5F * (vertices[STRIDE*i + VERTEX_COLOR_OFFSET + 2] + (i%2==0 ? newColor.blueF() : 1.F - newColor.blueF()));
-    }
+      const auto redI = STRIDE*i + VERTEX_COLOR_OFFSET;
+      const auto greenI = STRIDE*i + VERTEX_COLOR_OFFSET + 1;
+      const auto blueI = STRIDE*i + VERTEX_COLOR_OFFSET + 2;
 
-    arrayBuf_.release();
-    arrayBuf_.bind();
-    arrayBuf_.allocate(vertices.data(), static_cast<std::int32_t>(vertices.size() * sizeof(GLfloat)));
+      vertices[redI] = 0.5F * (vertices[redI] + (i%2==0 ? newColor.redF() : 1.F - newColor.redF()));
+      vertices[greenI] = 0.5F * (vertices[greenI] + (i%2==0 ? newColor.greenF() : 1.F - newColor.greenF()));
+      vertices[blueI] = 0.5F * (vertices[blueI] + (i%2==0 ? newColor.blueF() : 1.F - newColor.blueF()));
+    }
   }
+
+  // Refresh buffers regardless of color change
+  arrayBuf_.bind();
+  arrayBuf_.allocate(vertices.data(), static_cast<std::int32_t>(vertices.size() * sizeof(GLfloat)));
+
+  indexBuf_.bind();
+  indexBuf_.allocate(indices.data(), static_cast<std::int32_t>(indices.size() * sizeof(GLuint)));
 
   // Configure viewport
   const auto retinaScale = devicePixelRatio();
@@ -140,16 +147,16 @@ void MainWindow::render() {
 
   program_->setUniformValue(matrixUniform_, mvp_matrix);
 
-  glVertexAttribPointer(posAttr_, 3, GL_FLOAT, GL_FALSE, STRIDE * sizeof(GLfloat), reinterpret_cast<void *>(VERTEX_POSITION_OFFSET * sizeof(GLfloat)));
-  glVertexAttribPointer(colAttr_, 3, GL_FLOAT, GL_FALSE, STRIDE * sizeof(GLfloat), reinterpret_cast<void *>(VERTEX_COLOR_OFFSET * sizeof(GLfloat)));
+  program_->setAttributeArray(posAttr_, GL_FLOAT, reinterpret_cast<void *>(VERTEX_POSITION_OFFSET * sizeof(GLfloat)), 3, STRIDE * sizeof(GLfloat));
+  program_->setAttributeArray(colAttr_, GL_FLOAT, reinterpret_cast<void *>(VERTEX_COLOR_OFFSET * sizeof(GLfloat)), 3, STRIDE * sizeof(GLfloat));
 
-  glEnableVertexAttribArray(posAttr_);
-  glEnableVertexAttribArray(colAttr_);
+  program_->enableAttributeArray(posAttr_);
+  program_->enableAttributeArray(colAttr_);
 
   glDrawElements(GL_TRIANGLE_STRIP, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, nullptr);
 
-  glDisableVertexAttribArray(colAttr_);
-  glDisableVertexAttribArray(posAttr_);
+  program_->disableAttributeArray(colAttr_);
+  program_->disableAttributeArray(posAttr_);
 
   program_->release();
 }
