@@ -1,6 +1,19 @@
 
-add_executable(Task_1 main.cpp Widget.cpp Widget.h Object3D.cpp Object3D.h Window.cpp Window.h MainWindow.cpp MainWindow.h shaders.qrc textures.qrc shaders/fshader.fsh shaders/vshader.vsh)
+add_executable(ShabalovTask1
+        main.cpp
+        Widget.cpp
+        Widget.h
+        Object3D.cpp
+        Object3D.h
+        Window.cpp
+        Window.h
+        MainWindow.cpp
+        MainWindow.h
+        shaders.qrc
+        textures.qrc
+        shaders/fshader.fsh
+        shaders/vshader.vsh)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-target_link_libraries(Task_1 Qt5::Widgets)
+target_link_libraries(ShabalovTask1 Qt5::Widgets)
