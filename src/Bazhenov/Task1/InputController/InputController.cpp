@@ -63,10 +63,10 @@ bool InputController::destructiveCheckNewColorSelected() {
 }
 
 void InputController::handleMove(QPoint newPosition) {
-  QVector2D diff(newPosition - mousePosition_);
+  const auto diff = QVector2D{newPosition - mousePosition_};
 
-  QVector3D axis(QVector3D(diff.y(), diff.x(), 0.0F).normalized());
-  float angle = diff.length() * sensitivity_;
+  const auto axis = QVector3D{diff.y(), diff.x(), 0.0F}.normalized();
+  const auto angle = diff.length() * sensitivity_;
 
   rotation_ = QQuaternion::fromAxisAndAngle(axis, angle) * rotation_;
 
