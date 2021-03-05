@@ -9,6 +9,7 @@
 #include "GLCubeMeshRenderer.h"
 #include <random>
 #include <QRandomGenerator>
+#define UNUSED(ev) (void)(ev)
 
 constexpr std::size_t initial_grid_step = 10;
 
@@ -152,6 +153,7 @@ protected:
     }
     void timerEvent(QTimerEvent* ev) override
     {
+    	UNUSED(ev);
         angularSpeed *= 0.99;
         if (angularSpeed < 0.01) {
             angularSpeed = 0.0;
