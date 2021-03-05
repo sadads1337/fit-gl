@@ -4,43 +4,40 @@
 
 #include "Widget.h"
 #include "Window.h"
-#include <QSlider>
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QColorDialog>
+
 
 Window::Window()
 {
-    widget = new Widget;
+    widget = std::make_unique<Widget>();
 
     xSlider = createSlider();
     ySlider = createSlider();
     zSlider = createSlider();
-    auto *xlabel = new QLabel("X", this);
-    auto *ylabel = new QLabel("Y", this);
-    auto *zlabel = new QLabel("Z", this);
-    auto *color = new QColorDialog(this);
+    xlabel = std::make_unique<QLabel>("X");
+    ylabel = std::make_unique<QLabel>("Y");
+    zlabel = std::make_unique<QLabel>("Z");
+    color = std::make_unique<QColorDialog>();
 
-    connect(xSlider, &QSlider::valueChanged, widget, &Widget::setXRotation);
-    connect(ySlider, &QSlider::valueChanged, widget, &Widget::setYRotation);
-    connect(zSlider, &QSlider::valueChanged, widget, &Widget::setZRotation);
-    connect(color, &QColorDialog::currentColorChanged, widget, &Widget::setColor);
+    connect(xSlider.get(), &QSlider::valueChanged, widget.get(), &Widget::setXRotation);
+    connect(ySlider.get(), &QSlider::valueChanged, widget.get(), &Widget::setYRotation);
+    connect(zSlider.get(), &QSlider::valueChanged, widget.get(), &Widget::setZRotation);
+    connect(color.get(), &QColorDialog::currentColorChanged, widget.get(), &Widget::setColor);
 
-    auto *mainLayout = new QVBoxLayout;
-    auto *container = new QGridLayout;
-    container->addWidget(widget,0, 0, 2, 1);
-    container->addWidget(xSlider,1, 1, 1, 1);
-    container->addWidget(ySlider,1, 2, 1, 1);
-    container->addWidget(zSlider,1, 3, 1, 1);
-    container->addWidget(xlabel,0, 1, 1, 1);
-    container->addWidget(ylabel,0, 2, 1, 1);
-    container->addWidget(zlabel,0, 3, 1, 1);
-    container->addWidget(color,2, 0, 1, 3);
+    mainLayout = std::make_unique<QVBoxLayout>();
+    container = std::make_unique<QGridLayout>();
+    container->addWidget(widget.get(),0, 0, 2, 1);
+    container->addWidget(xSlider.get(),1, 1, 1, 1);
+    container->addWidget(ySlider.get(),1, 2, 1, 1);
+    container->addWidget(zSlider.get(),1, 3, 1, 1);
+    container->addWidget(xlabel.get(),0, 1, 1, 1);
+    container->addWidget(ylabel.get(),0, 2, 1, 1);
+    container->addWidget(zlabel.get(),0, 3, 1, 1);
+    container->addWidget(color.get(),2, 0, 1, 3);
 
-    auto *w = new QWidget;
-    w->setLayout(container);
-    mainLayout->addWidget(w);
-    setLayout(mainLayout);
+    w = std::make_unique<QWidget>();
+    w->setLayout(container.get());
+    mainLayout->addWidget(w.get());
+    setLayout(mainLayout.get());
 
     xSlider->setValue(50);
     ySlider->setValue(50);
@@ -48,9 +45,9 @@ Window::Window()
     color->setCurrentColor(QColor(Qt::gray));
 }
 
-QSlider *Window::createSlider()
+std::unique_ptr<QSlider> Window::createSlider()
 {
-    auto *slider = new QSlider(Qt::Vertical);
+    auto slider = std::make_unique<QSlider>(Qt::Vertical);
     slider->setRange(0, 100);
     slider->setSingleStep(10);
     slider->setTickPosition(QSlider::TicksRight);
