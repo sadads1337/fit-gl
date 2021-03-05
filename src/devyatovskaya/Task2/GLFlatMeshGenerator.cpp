@@ -42,7 +42,7 @@ void GLFlatMeshGenerator::init_vertices(std::vector<GLVertex>& vertices, const s
     }
 }
 
-void GLFlatMeshGenerator::init_indices(std::vector<unsigned>& indices, const std::size_t mesh_steps) const
+void GLFlatMeshGenerator::init_indices(std::vector<unsigned>& indices, unsigned mesh_steps)
 {
     for (std::size_t j = 0; j < mesh_steps; ++j) {
     	
