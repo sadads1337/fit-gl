@@ -1,9 +1,0 @@
-# ninja log v5
-0	4	1614934689598965123	ui_cubemorphing.h	49052aec04ea2dfa
-0	5	1614934689598965123	ui_morphingwidget.h	8dbc09f17649303f
-6	3030	1614934692618959350	CMakeFiles/DevyatovskayaTask2.dir/GLMesh.o	79d9872b6f8903ae
-6	3262	1614934692854958900	CMakeFiles/DevyatovskayaTask2.dir/GLMeshGenerator.o	a1a98d971e6bef8e
-5	3431	1614934693022958578	CMakeFiles/DevyatovskayaTask2.dir/GLCubeMeshGenerator.o	b5019d4a0e2ccc10
-5	3432	1614934693022958578	CMakeFiles/DevyatovskayaTask2.dir/GLFlatMeshGenerator.o	3a9a70d4b976f829
-5	3507	1614934693098958433	CMakeFiles/DevyatovskayaTask2.dir/GLCubeMeshRenderer.o	22c53f9b4b25aca3
-9	3528	1614934693122958387	CMakeFiles/DevyatovskayaTask2.dir/GLMeshRenderer.o	7ed4c51d31638923
