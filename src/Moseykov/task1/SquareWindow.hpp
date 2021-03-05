@@ -1,12 +1,12 @@
 #pragma once
 
 #include <Base/GLWindow.hpp>
-#include <memory>
-#include <QOpenGLShaderProgram>
-#include <QOpenGLBuffer>
-#include <QKeyEvent>
 #include <QColor>
 #include <QColorDialog>
+#include <QKeyEvent>
+#include <QOpenGLBuffer>
+#include <QOpenGLShaderProgram>
+#include <memory>
 
 namespace fgl {
 
@@ -16,7 +16,6 @@ public:
   void render() override;
 
 private:
-
   void mousePressEvent(QMouseEvent *e) override;
   void mouseReleaseEvent(QMouseEvent *e) override;
   void keyPressEvent(QKeyEvent *e) override;
@@ -37,9 +36,6 @@ private:
   QVector4D square_color{1.0, 1.0, 1.0, 1};
   QVector2D mousePressPosition{0., 0.};
   QVector3D rotationAxis{0., 0., 1.};
-
-
-
 };
 
 } // namespace fgl

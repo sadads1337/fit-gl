@@ -9,24 +9,14 @@
 namespace {
 
 constexpr std::array<QVector3D, 8u> vertices = {
-    QVector3D(-0.7f, -0.7f, 0.7f),
-    QVector3D(0.7f, -0.7f, 0.7f),
-    QVector3D(-0.7f, 0.7f, 0.7f),
-    QVector3D(0.7f, 0.7f, 0.7f),
-    QVector3D(0.7f, -0.7f, -0.7f),
-    QVector3D(0.7f, 0.7f, -0.7f),
-    QVector3D(-0.7f, -0.7f, -0.7f),
-    QVector3D(-0.7f, 0.7f, -0.7f)
-};
+    QVector3D(-0.7f, -0.7f, 0.7f),  QVector3D(0.7f, -0.7f, 0.7f),
+    QVector3D(-0.7f, 0.7f, 0.7f),   QVector3D(0.7f, 0.7f, 0.7f),
+    QVector3D(0.7f, -0.7f, -0.7f),  QVector3D(0.7f, 0.7f, -0.7f),
+    QVector3D(-0.7f, -0.7f, -0.7f), QVector3D(-0.7f, 0.7f, -0.7f)};
 
 constexpr std::array<GLuint, 34u> indicies = {
-    0,1,2,3,3,
-    1,1,4,3,5,5,
-    4,4,6,5,7,7,
-    6,6,0,7,2,2,
-    6,6,4,0,1,1,
-    2,2,3,7,5
-};
+    0, 1, 2, 3, 3, 1, 1, 4, 3, 5, 5, 4, 4, 6, 5, 7, 7,
+    6, 6, 0, 7, 2, 2, 6, 6, 4, 0, 1, 1, 2, 2, 3, 7, 5};
 
 } // namespace
 
@@ -35,11 +25,15 @@ namespace fgl {
 void SquareWindow::init() {
   array_buffer_.create();
   array_buffer_.bind();
-  array_buffer_.allocate(vertices.data(),static_cast<std::int32_t>(vertices.size()*sizeof(QVector3D)));
+  array_buffer_.allocate(
+      vertices.data(),
+      static_cast<std::int32_t>(vertices.size() * sizeof(QVector3D)));
 
   index_buffer_.create();
   index_buffer_.bind();
-  index_buffer_.allocate(indicies.data(),static_cast<std::int32_t>(indicies.size()*sizeof(GLuint)));
+  index_buffer_.allocate(
+      indicies.data(),
+      static_cast<std::int32_t>(indicies.size() * sizeof(GLuint)));
   program_ = std::make_unique<QOpenGLShaderProgram>(this);
   program_->addShaderFromSourceFile(QOpenGLShader::Vertex,
                                     ":/Shaders/square.vs");
@@ -74,9 +68,13 @@ void SquareWindow::render() {
   glEnableVertexAttribArray(posAttr_);
 
   array_buffer_.bind();
-  array_buffer_.allocate(vertices.data(),static_cast<std::int32_t>(vertices.size()*sizeof(QVector3D)));
+  array_buffer_.allocate(
+      vertices.data(),
+      static_cast<std::int32_t>(vertices.size() * sizeof(QVector3D)));
   index_buffer_.bind();
-  index_buffer_.allocate(indicies.data(),static_cast<std::int32_t>(indicies.size()*sizeof(GLuint)));
+  index_buffer_.allocate(
+      indicies.data(),
+      static_cast<std::int32_t>(indicies.size() * sizeof(GLuint)));
   glDrawElements(GL_TRIANGLE_STRIP, 34, GL_UNSIGNED_INT, nullptr);
   glDisableVertexAttribArray(posAttr_);
 
