@@ -8,6 +8,9 @@
 
 #include <QWidget>
 #include <QSlider>
+#include <QLabel>
+#include <QColorDialog>
+#include <QVBoxLayout>
 #include "Widget.h"
 
 class Window : public QWidget
@@ -18,12 +21,19 @@ public:
     Window();
 
 private:
-    QSlider *createSlider();
+    static std::unique_ptr<QSlider> createSlider();
 
-    Widget *widget;
-    QSlider *xSlider;
-    QSlider *ySlider;
-    QSlider *zSlider;
+    std::unique_ptr<Widget> widget;
+    std::unique_ptr<QSlider> xSlider;
+    std::unique_ptr<QSlider> ySlider;
+    std::unique_ptr<QSlider> zSlider;
+    std::unique_ptr<QLabel> xlabel;
+    std::unique_ptr<QLabel> ylabel;
+    std::unique_ptr<QLabel> zlabel;
+    std::unique_ptr<QColorDialog> color;
+    std::unique_ptr<QVBoxLayout> mainLayout;
+    std::unique_ptr<QGridLayout> container;
+    std::unique_ptr<QWidget> w;
 };
 
 
