@@ -14,7 +14,7 @@ Widget::Widget(QWidget *parent)
     x_rot = 0.5;
     y_rot = 0.5;
     z_rot = 0.5;
-    angleObject = M_PI / 1.0f;
+    angleObject = M_PI / 1.0;
 }
 
 Widget::~Widget()
