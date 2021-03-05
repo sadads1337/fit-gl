@@ -112,7 +112,7 @@ void MainWindow::render() {
   bool newColorSelected = inputController_->destructiveCheckNewColorSelected();
 
   if (newColorSelected) {
-    QColor newColor = inputController_->getColor();
+    const auto newColor = inputController_->getColor();
     for (auto i = 0U; i < vertices.size() / STRIDE; ++i) {
       const auto redI = STRIDE*i + VERTEX_COLOR_OFFSET;
       const auto greenI = STRIDE*i + VERTEX_COLOR_OFFSET + 1;
