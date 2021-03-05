@@ -12,7 +12,7 @@ public:
 private:
 	float edge_len_;
 	void init_vertices(std::vector<GLVertex>& vertices, std::size_t mesh_steps) const;
-	void init_indices(std::vector<unsigned>& indices, unsigned mesh_steps);
+	void init_indices(std::vector<unsigned>& indices, unsigned mesh_steps) const;
 
 	GLMesh generate() const override;
 };
