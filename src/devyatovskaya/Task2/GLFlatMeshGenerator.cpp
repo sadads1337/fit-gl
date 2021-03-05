@@ -13,7 +13,8 @@ GLMesh GLFlatMeshGenerator::generate(const std::size_t mesh_steps) const
     mesh.indices.reserve(6 * mesh_steps * mesh_steps);
 
     init_vertices(mesh.vertices, mesh_steps);
-    init_indices(mesh.indices, mesh_steps);
+    unsigned_mesh_steps = static_cast<unsigned>(mesh_steps);
+    init_indices(mesh.indices, unsigned_mesh_steps);
 
     return mesh;
 }
@@ -44,9 +45,9 @@ void GLFlatMeshGenerator::init_vertices(std::vector<GLVertex>& vertices, const s
 
 void GLFlatMeshGenerator::init_indices(std::vector<unsigned>& indices, unsigned mesh_steps) const
 {
-    for (std::size_t j = 0; j < mesh_steps; ++j) {
+    for (unsigned j = 0; j < mesh_steps; ++j) {
     	
-        for (std::size_t i = 0; i < mesh_steps; ++i) {
+        for (unsigned i = 0; i < mesh_steps; ++i) {
         	
             auto k = i + (j + 1) * (mesh_steps + 1);
             auto p = i + j * (mesh_steps + 1);
