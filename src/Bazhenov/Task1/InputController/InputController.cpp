@@ -1,7 +1,7 @@
 #include "InputController.hpp"
 
 template <typename T>
-bool contains(std::unordered_set<T> set, T value) {
+bool contains(const std::unordered_set<T> &set, T value) {
   return set.find(value) != set.end();
 }
 
@@ -45,7 +45,7 @@ void InputController::keyReleaseEvent(QKeyEvent *event){
 
 void InputController::update() {
   if (contains(pressedKeys_, Qt::Key::Key_Space)) {
-    const QColor color = QColorDialog::getColor(Qt::black, nullptr, "Select color");
+    const auto color = QColorDialog::getColor(Qt::black, nullptr, "Select color");
 
     if (color.isValid()) {
       color_ = color;
