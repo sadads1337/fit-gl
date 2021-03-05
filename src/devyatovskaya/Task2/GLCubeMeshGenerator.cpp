@@ -25,8 +25,8 @@ GLMesh GLCubeMeshGenerator::generate(const std::size_t mesh_steps) const
 		
 		std::for_each(cube_indices.begin() + i * front_face.indices.size(), cube_indices.end(), [&](unsigned& index)
 		{
-			index += i * front_face.vertices.size();
-                        index = static_cast<unsigned>(index);
+                        //index += i * front_face.vertices.size();
+                        index += static_cast<unsigned>(i * front_face.vertices.size());
 		});
 	}
 	
