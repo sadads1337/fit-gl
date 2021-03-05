@@ -24,7 +24,7 @@ void GLMeshRenderer::init_renderer(GLMesh* mesh, const std::string& vertex, cons
     init_shaders(vertex, fragment);
 
 	init_vbo();
-        static_cast init_ibo();
+        init_ibo();
 }
 
 void GLMeshRenderer::enable_attributes()
