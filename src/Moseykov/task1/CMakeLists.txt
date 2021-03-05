@@ -1,18 +1,14 @@
-set(TASK1_SRCS
-    main.cpp
-    SquareWindow.cpp
-    SquareWindow.hpp
-
-    shaders.qrc
-    Shaders/square.fs
-    Shaders/square.vs
-)
-
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-add_executable(task1 ${TASK1_SRCS})
+add_executable(MoseykovTask1
+        main.cpp
+        SquareWindow.hpp
+        SquareWindow.cpp
+        Shaders/square.fs
+        Shaders/square.vs
+        shaders.qrc)
 
-target_link_libraries(task1
+target_link_libraries(MoseykovTask1
     PRIVATE
         Qt5::Widgets
         FGL::Base

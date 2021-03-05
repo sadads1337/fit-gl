@@ -19,7 +19,7 @@ private:
 
   void mousePressEvent(QMouseEvent *e) override;
   void mouseReleaseEvent(QMouseEvent *e) override;
-  void keyPressEvent(QKeyEvent *event) override;
+  void keyPressEvent(QKeyEvent *e) override;
 
   // Attributes and uniforms handlers.
   GLint posAttr_ = 0;
