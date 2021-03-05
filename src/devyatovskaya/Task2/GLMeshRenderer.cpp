@@ -1,4 +1,4 @@
-#pragma warning(disable : C4267)
+#pragma warning(disable : 4267)
 #include <utility>
 #include "GLMeshRenderer.h"
 
