@@ -148,9 +148,9 @@ void Widget::mouseMoveEvent(QMouseEvent *event)
 
 void Widget::wheelEvent(QWheelEvent *event)
 {
-    if(event->delta() > 0){
+    if(event->angleDelta().x() > 0){
         m_z += 0.25f;
-    } else if(event->delta() < 0){
+    } else if(event->angleDelta().x() < 0){
         m_z -=0.25f;
     }
     update();
