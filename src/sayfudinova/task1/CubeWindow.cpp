@@ -7,8 +7,7 @@
 #include <array>
 
 namespace {
-constexpr std::array<QVector3D, 8u> vertices = {
-
+constexpr std::array<QVector3D, 8> vertices = {
     QVector3D(-0.5f, -0.5f, 0.5f),  // v0
     QVector3D(0.5f, -0.5f, 0.5f),   // v1
     QVector3D(-0.5f, 0.5f, 0.5f),   // v2
@@ -16,7 +15,7 @@ constexpr std::array<QVector3D, 8u> vertices = {
     QVector3D(0.5f, -0.5f, -0.5f),  // v4
     QVector3D(0.5f, 0.5f, -0.5f),   // v5
     QVector3D(-0.5f, -0.5f, -0.5f), // v6
-    QVector3D(-0.5f, 0.5f, -0.5f)   // v7
+    QVector3D(-0.5f, 0.5f, -0.5f),  // v7
 };
 
 constexpr std::array<GLuint, 34u> indices = {0, 1, 2, 3, 3, 1, 1, 4, 3, 5, 5, 4,
@@ -25,59 +24,71 @@ constexpr std::array<GLuint, 34u> indices = {0, 1, 2, 3, 3, 1, 1, 4, 3, 5, 5, 4,
 } // namespace
 
 void CubeWindow::init() {
+  // Enable depth test and face culling
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_CULL_FACE);
+
+  // Clear all buffers
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  // Create VBO and IBO
+  vbo.create();
+  ibo.create();
+
+  // Fill VBO
+  vbo.bind();
+  vbo.allocate(vertices.data(),
+               static_cast<std::int32_t>(vertices.size() * sizeof(QVector3D)));
+
+  // Fill IBO
+  ibo.bind();
+  ibo.allocate(indices.data(),
+               static_cast<std::int32_t>(indices.size() * sizeof(GLuint)));
+
+  // Configure shaders
   program_ = std::make_unique<QOpenGLShaderProgram>(this);
-  program_->addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                    ":/Shaders/quad.vs");
+  program_->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/Shaders/quad.vs");
   program_->addShaderFromSourceFile(QOpenGLShader::Fragment,
                                     ":/Shaders/quad.fs");
   program_->link();
-  posAttr_ = program_->attributeLocation("posAttr");
-  assert(posAttr_ != -1);
-  matrixUniform_ = program_->uniformLocation("matrix");
-  assert(matrixUniform_ != -1);
 
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_CULL_FACE);
+  // Configure attributes and uniforms
+  posAttr_ = program_->attributeLocation("posAttr");
+  matrixUniform_ = program_->uniformLocation("matrix");
 }
 
 void CubeWindow::render() {
+  // Configure viewport
   const auto retinaScale = devicePixelRatio();
   glViewport(0, 0, width() * retinaScale, height() * retinaScale);
 
+  // Clear buffers
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  program_->bind();
-
+  // Calculate MVP
   QMatrix4x4 matrix;
   matrix.perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
   matrix.translate(0, 0, -2);
   matrix.rotate(100.0 * frame_ / screen()->refreshRate(), rotationAxis);
 
+  // Bind shader and set attrs and unis
+  program_->bind();
   program_->setUniformValue(matrixUniform_, matrix);
   program_->setUniformValue("col", changeColor);
+  program_->setAttributeBuffer(posAttr_, GL_FLOAT, 0, 3, 3 * sizeof(GLfloat));
+  program_->enableAttributeArray(posAttr_);
 
-  unsigned int VBO;
-  glGenBuffers(1, &VBO);
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(QVector3D), vertices.data(),
-               GL_STATIC_DRAW);
+  // Bind buffers
+  vbo.bind();
+  ibo.bind();
 
-  glVertexAttribPointer(posAttr_, 3, GL_FLOAT, GL_FALSE, sizeof(QVector3D), 0);
+  // Draw
+  glDrawElements(GL_TRIANGLE_STRIP, static_cast<GLsizei>(indices.size()),
+                 GL_UNSIGNED_INT, nullptr);
 
-  glEnableVertexAttribArray(posAttr_);
-
-  unsigned int EBO;
-  glGenBuffers(1, &EBO);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, 34 * sizeof(uint), indices.data(),
-               GL_STATIC_DRAW);
-
-  glDrawElements(GL_TRIANGLE_STRIP, 34, GL_UNSIGNED_INT, 0);
-
-  glDisableVertexAttribArray(posAttr_);
-
+  // Release all and increase counter
+  program_->disableAttributeArray(posAttr_);
   program_->release();
-
   ++frame_;
 }
 
@@ -96,7 +107,7 @@ void CubeWindow::mousePressEvent(QMouseEvent *e) {
 
 void CubeWindow::mouseReleaseEvent(QMouseEvent *e) {
   // Mouse release position - mouse press position
-  QVector2D diff = QVector2D(e->localPos()) - mousePressPosition;
+  const auto diff = QVector2D(e->localPos()) - mousePressPosition;
 
   rotationAxis = QVector3D(diff.y(), diff.x(), 0.0).normalized();
 }

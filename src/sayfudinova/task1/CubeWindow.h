@@ -5,6 +5,7 @@
 #include <QColorDialog>
 #include <QKeyEvent>
 #include <QMatrix4x4>
+#include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
 #include <QQuaternion>
 #include <QVector2D>
@@ -25,6 +26,9 @@ protected:
 private:
   GLint posAttr_ = 0;
   GLint matrixUniform_ = 0;
+
+  QOpenGLBuffer vbo;
+  QOpenGLBuffer ibo{QOpenGLBuffer::Type::IndexBuffer};
 
   std::unique_ptr<QOpenGLShaderProgram> program_ = nullptr;
 
