@@ -1,20 +1,10 @@
-//
-// Created by nikita on 22.02.2021.
-//
-
-#ifndef TASK_1_MAINWINDOW_H
-#define TASK_1_MAINWINDOW_H
-
+#pragma once
 
 #include <QMainWindow>
 
-class MainWindow : public QMainWindow
-{
-Q_OBJECT
+class MainWindow : public QMainWindow {
+  Q_OBJECT
 
 public:
-    MainWindow();
+  MainWindow();
 };
-
-
-#endif //TASK_1_MAINWINDOW_H
