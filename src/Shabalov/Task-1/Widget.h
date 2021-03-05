@@ -63,7 +63,7 @@ private:
 
     float m_z;
     QBasicTimer m_timer;
-    float angleObject;
+    double angleObject;
 };
 
 
