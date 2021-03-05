@@ -64,18 +64,12 @@ void SquareWindow::render() {
   program_->setUniformValue(matrixUniform_, matrix);
   program_->setUniformValue("col", square_color);
 
-  glVertexAttribPointer(posAttr_, 3, GL_FLOAT, GL_FALSE, sizeof(QVector3D), 0);
+  glVertexAttribPointer(posAttr_, 3, GL_FLOAT, GL_FALSE, sizeof(QVector3D), nullptr);
   glEnableVertexAttribArray(posAttr_);
 
   array_buffer_.bind();
-  array_buffer_.allocate(
-      vertices.data(),
-      static_cast<std::int32_t>(vertices.size() * sizeof(QVector3D)));
   index_buffer_.bind();
-  index_buffer_.allocate(
-      indicies.data(),
-      static_cast<std::int32_t>(indicies.size() * sizeof(GLuint)));
-  glDrawElements(GL_TRIANGLE_STRIP, 34, GL_UNSIGNED_INT, nullptr);
+  glDrawElements(GL_TRIANGLE_STRIP, indicies.size(), GL_UNSIGNED_INT, nullptr);
   glDisableVertexAttribArray(posAttr_);
 
   program_->release();
