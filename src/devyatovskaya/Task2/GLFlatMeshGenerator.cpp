@@ -13,7 +13,7 @@ GLMesh GLFlatMeshGenerator::generate(const std::size_t mesh_steps) const
     mesh.indices.reserve(6 * mesh_steps * mesh_steps);
 
     init_vertices(mesh.vertices, mesh_steps);
-    unsigned_mesh_steps = static_cast<unsigned>(mesh_steps);
+    unsigned unsigned_mesh_steps = static_cast<unsigned>(mesh_steps);
     init_indices(mesh.indices, unsigned_mesh_steps);
 
     return mesh;
