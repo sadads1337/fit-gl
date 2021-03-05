@@ -11,6 +11,7 @@
 #include <QLabel>
 #include <QColorDialog>
 #include <QVBoxLayout>
+#include <memory>
 #include "Widget.h"
 
 class Window : public QWidget
