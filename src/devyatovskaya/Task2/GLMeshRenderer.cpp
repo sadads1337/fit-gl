@@ -46,15 +46,14 @@ void GLMeshRenderer::init_vbo()
 {
 	vertex_buf_.create();
 	vertex_buf_.bind();
-
-	vertex_buf_.allocate(mesh_->vertices.data(), mesh_->vertices.size() * sizeof(GLVertex));
+        int intvertsize = static_cast<int>(mesh_->vertices.size() * sizeof(GLVertex));
+        vertex_buf_.allocate(mesh_->vertices.data(), intvertsize);
 }
 
 void GLMeshRenderer::init_ibo()
 {
 	index_buf_.create();
 	index_buf_.bind();
-
-
-	index_buf_.allocate(mesh_->indices.data(),mesh_->indices.size() * sizeof(unsigned));
+        int intindsize = static_cast<int>(mesh_->indices.size() * sizeof(unsigned));
+        index_buf_.allocate(mesh_->indices.data(),intindsize);
 }
