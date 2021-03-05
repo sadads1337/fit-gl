@@ -37,6 +37,6 @@ private:
   std::shared_ptr<InputController> inputController_;
 };
 
-}
+} // namespace Bazhenov
 
 #endif // BAZHENOV_TASK1_MAINWINDOW_HPP

@@ -11,7 +11,7 @@ constexpr std::uint32_t STRIDE = 9;
 constexpr std::uint32_t VERTEX_POSITION_OFFSET = 0;
 constexpr std::uint32_t VERTEX_COLOR_OFFSET = 6;
 
-std::array<GLfloat, 6 * 4 * STRIDE> vertices = {
+std::array<GLfloat, 6 * 4 *STRIDE> vertices = {
     // Vertex data for face 0
     -1.0F, -1.0F, 1.0F, 0, 0, 1, 0.0F, 0.0F, 0.0F,  // v0
     1.0F, -1.0F, 1.0F, 0, 0, 1, 0.333F, 0.0F, 0.0F, // v1
@@ -64,7 +64,7 @@ constexpr GLfloat FAR_PLANE = 100.0F;
 
 constexpr QVector4D CLEAR_COLOR(0.25F, 0.25F, 0.375F, 1.0F);
 
-}
+} // namespace Bazhenov
 
 namespace Bazhenov {
 
@@ -74,23 +74,28 @@ void MainWindow::init() {
   glEnable(GL_CULL_FACE);
   glEnable(GL_MULTISAMPLE);
 
-  glClearColor(CLEAR_COLOR.x(), CLEAR_COLOR.y(), CLEAR_COLOR.z(), CLEAR_COLOR.w());
+  glClearColor(CLEAR_COLOR.x(), CLEAR_COLOR.y(), CLEAR_COLOR.z(),
+               CLEAR_COLOR.w());
 
   // Configure VBOs
   arrayBuf_.create();
   indexBuf_.create();
 
   arrayBuf_.bind();
-  arrayBuf_.allocate(vertices.data(), static_cast<std::int32_t>(vertices.size() * sizeof(GLfloat)));
+  arrayBuf_.allocate(vertices.data(), static_cast<std::int32_t>(
+                                          vertices.size() * sizeof(GLfloat)));
 
   indexBuf_.bind();
-  indexBuf_.allocate(indices.data(), static_cast<std::int32_t>(indices.size() * sizeof(GLuint)));
+  indexBuf_.allocate(indices.data(), static_cast<std::int32_t>(indices.size() *
+                                                               sizeof(GLuint)));
 
   // Configure shaders
   program_ = std::make_unique<QOpenGLShaderProgram>(this);
 
-  program_->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/Shaders/vertex.glsl");
-  program_->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/Shaders/fragment.glsl");
+  program_->addShaderFromSourceFile(QOpenGLShader::Vertex,
+                                    ":/Shaders/vertex.glsl");
+  program_->addShaderFromSourceFile(QOpenGLShader::Fragment,
+                                    ":/Shaders/fragment.glsl");
 
   program_->link();
 
@@ -99,8 +104,10 @@ void MainWindow::init() {
   colAttr_ = program_->attributeLocation("vertex_color");
   matrixUniform_ = program_->uniformLocation("mvp_matrix");
 
-  program_->setAttributeBuffer(posAttr_, GL_FLOAT, VERTEX_POSITION_OFFSET, 3, STRIDE * sizeof(GLfloat));
-  program_->setAttributeBuffer(colAttr_, GL_FLOAT, VERTEX_COLOR_OFFSET, 3, STRIDE * sizeof(GLfloat));
+  program_->setAttributeBuffer(posAttr_, GL_FLOAT, VERTEX_POSITION_OFFSET, 3,
+                               STRIDE * sizeof(GLfloat));
+  program_->setAttributeBuffer(colAttr_, GL_FLOAT, VERTEX_COLOR_OFFSET, 3,
+                               STRIDE * sizeof(GLfloat));
 
   // Configure program engines
   inputController_ = std::make_shared<InputController>();
@@ -116,16 +123,23 @@ void MainWindow::render() {
   if (newColorSelected) {
     const auto newColor = inputController_->getColor();
     for (auto i = 0U; i < vertices.size() / STRIDE; ++i) {
-      const auto redI = STRIDE*i + VERTEX_COLOR_OFFSET;
-      const auto greenI = STRIDE*i + VERTEX_COLOR_OFFSET + 1;
-      const auto blueI = STRIDE*i + VERTEX_COLOR_OFFSET + 2;
+      const auto redI = STRIDE * i + VERTEX_COLOR_OFFSET;
+      const auto greenI = STRIDE * i + VERTEX_COLOR_OFFSET + 1;
+      const auto blueI = STRIDE * i + VERTEX_COLOR_OFFSET + 2;
 
-      vertices[redI] = 0.5F * (vertices[redI] + (i%2==0 ? newColor.redF() : 1.F - newColor.redF()));
-      vertices[greenI] = 0.5F * (vertices[greenI] + (i%2==0 ? newColor.greenF() : 1.F - newColor.greenF()));
-      vertices[blueI] = 0.5F * (vertices[blueI] + (i%2==0 ? newColor.blueF() : 1.F - newColor.blueF()));
+      vertices[redI] =
+          0.5F * (vertices[redI] +
+                  (i % 2 == 0 ? newColor.redF() : 1.F - newColor.redF()));
+      vertices[greenI] =
+          0.5F * (vertices[greenI] +
+                  (i % 2 == 0 ? newColor.greenF() : 1.F - newColor.greenF()));
+      vertices[blueI] =
+          0.5F * (vertices[blueI] +
+                  (i % 2 == 0 ? newColor.blueF() : 1.F - newColor.blueF()));
     }
 
-    arrayBuf_.allocate(vertices.data(), static_cast<std::int32_t>(vertices.size() * sizeof(GLfloat)));
+    arrayBuf_.allocate(vertices.data(), static_cast<std::int32_t>(
+                                            vertices.size() * sizeof(GLfloat)));
   }
 
   indexBuf_.bind();
@@ -140,19 +154,27 @@ void MainWindow::render() {
   program_->bind();
 
   QMatrix4x4 mvp_matrix;
-  mvp_matrix.perspective(VERTICAL_ANGLE, (GLfloat)width() / height(), NEAR_PLANE, FAR_PLANE);
+  mvp_matrix.perspective(VERTICAL_ANGLE, (GLfloat)width() / height(),
+                         NEAR_PLANE, FAR_PLANE);
   mvp_matrix.translate(0.0F, 0.0F, -5.0F);
   mvp_matrix.rotate(inputController_->getRotation());
 
   program_->setUniformValue(matrixUniform_, mvp_matrix);
 
-  program_->setAttributeArray(posAttr_, GL_FLOAT, reinterpret_cast<void *>(VERTEX_POSITION_OFFSET * sizeof(GLfloat)), 3, STRIDE * sizeof(GLfloat));
-  program_->setAttributeArray(colAttr_, GL_FLOAT, reinterpret_cast<void *>(VERTEX_COLOR_OFFSET * sizeof(GLfloat)), 3, STRIDE * sizeof(GLfloat));
+  program_->setAttributeArray(
+      posAttr_, GL_FLOAT,
+      reinterpret_cast<void *>(VERTEX_POSITION_OFFSET * sizeof(GLfloat)), 3,
+      STRIDE * sizeof(GLfloat));
+  program_->setAttributeArray(
+      colAttr_, GL_FLOAT,
+      reinterpret_cast<void *>(VERTEX_COLOR_OFFSET * sizeof(GLfloat)), 3,
+      STRIDE * sizeof(GLfloat));
 
   program_->enableAttributeArray(posAttr_);
   program_->enableAttributeArray(colAttr_);
 
-  glDrawElements(GL_TRIANGLE_STRIP, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, nullptr);
+  glDrawElements(GL_TRIANGLE_STRIP, static_cast<GLsizei>(indices.size()),
+                 GL_UNSIGNED_INT, nullptr);
 
   program_->disableAttributeArray(colAttr_);
   program_->disableAttributeArray(posAttr_);
@@ -180,4 +202,4 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
   inputController_->keyReleaseEvent(event);
 }
 
-}
+} // namespace Bazhenov
