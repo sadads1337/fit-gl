@@ -8,22 +8,6 @@
 
 namespace {
 
-//struct VertexData {
-//  QVector3D position;
-//  QVector3D color;
-//};
-//
-//std::array<VertexData, 8u> vertices{
-//    VertexData{{-0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}},
-//    VertexData{{0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}},
-//    VertexData{{-0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}},
-//    VertexData{{0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}},
-//    VertexData{{0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}},
-//    VertexData{{0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}},
-//    VertexData{{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}},
-//    VertexData{{-0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}},
-//};
-
 constexpr std::array<QVector3D, 8u> vertices = {
     QVector3D(-0.7f, -0.7f, 0.7f),
     QVector3D(0.7f, -0.7f, 0.7f),
@@ -89,6 +73,10 @@ void SquareWindow::render() {
   glVertexAttribPointer(posAttr_, 3, GL_FLOAT, GL_FALSE, sizeof(QVector3D), 0);
   glEnableVertexAttribArray(posAttr_);
 
+  array_buffer_.bind();
+  array_buffer_.allocate(vertices.data(),static_cast<std::int32_t>(vertices.size()*sizeof(QVector3D)));
+  index_buffer_.bind();
+  index_buffer_.allocate(indicies.data(),static_cast<std::int32_t>(indicies.size()*sizeof(GLuint)));
   glDrawElements(GL_TRIANGLE_STRIP, 34, GL_UNSIGNED_INT, nullptr);
   glDisableVertexAttribArray(posAttr_);
 
