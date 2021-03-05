@@ -111,6 +111,8 @@ void MainWindow::render() {
   inputController_->update();
   bool newColorSelected = inputController_->destructiveCheckNewColorSelected();
 
+  arrayBuf_.bind();
+
   if (newColorSelected) {
     const auto newColor = inputController_->getColor();
     for (auto i = 0U; i < vertices.size() / STRIDE; ++i) {
@@ -122,14 +124,11 @@ void MainWindow::render() {
       vertices[greenI] = 0.5F * (vertices[greenI] + (i%2==0 ? newColor.greenF() : 1.F - newColor.greenF()));
       vertices[blueI] = 0.5F * (vertices[blueI] + (i%2==0 ? newColor.blueF() : 1.F - newColor.blueF()));
     }
+
+    arrayBuf_.allocate(vertices.data(), static_cast<std::int32_t>(vertices.size() * sizeof(GLfloat)));
   }
 
-  // Refresh buffers regardless of color change
-  arrayBuf_.bind();
-  arrayBuf_.allocate(vertices.data(), static_cast<std::int32_t>(vertices.size() * sizeof(GLfloat)));
-
   indexBuf_.bind();
-  indexBuf_.allocate(indices.data(), static_cast<std::int32_t>(indices.size() * sizeof(GLuint)));
 
   // Configure viewport
   const auto retinaScale = devicePixelRatio();
