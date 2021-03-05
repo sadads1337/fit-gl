@@ -69,7 +69,7 @@ void SquareWindow::render() {
 
   array_buffer_.bind();
   index_buffer_.bind();
-  glDrawElements(GL_TRIANGLE_STRIP, indicies.size(), GL_UNSIGNED_INT, nullptr);
+  glDrawElements(GL_TRIANGLE_STRIP, static_cast<GLsizei>(indicies.size()), GL_UNSIGNED_INT, nullptr);
   glDisableVertexAttribArray(posAttr_);
 
   program_->release();
