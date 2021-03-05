@@ -38,7 +38,7 @@ void Widget::initializeGL()
 
 void Widget::resizeGL(int w, int h)
 {
-    auto aspect = w / (float)h;
+    auto aspect = w / (double)h;
     m_projectionMatrix.setToIdentity();
     m_projectionMatrix.perspective(45,aspect, 0.01f, 100.0f);
 }
