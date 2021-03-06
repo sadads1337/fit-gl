@@ -10,9 +10,9 @@ set(LESSON1_SRCS
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-add_executable(lesson1 ${LESSON1_SRCS})
+add_executable(BondarchukTask1 ${LESSON1_SRCS})
 
-target_link_libraries(lesson1
+target_link_libraries(BondarchukTask1
     PRIVATE
         Qt5::Widgets
         FGL::Base
