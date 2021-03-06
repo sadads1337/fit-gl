@@ -32,15 +32,15 @@ protected:
 private:
   // Attributes and uniforms handlers.
   GLint posAttr_ = 0;
-  GLint colAttr_ = 0;
   GLint matrixUniform_ = 0;
 
   // Shader program handler.
   std::unique_ptr<QOpenGLShaderProgram> program_ = nullptr;
 
   // Buffer
-  QOpenGLBuffer indexBuf{QOpenGLBuffer::IndexBuffer};
-  QOpenGLBuffer arrayBuf;
+  QOpenGLBuffer vbo;
+  QOpenGLBuffer ibo{QOpenGLBuffer::IndexBuffer};
+
 
   // Color
   QVector4D cube_color{1.0, 1.0, 1.0, 1};
