@@ -17,19 +17,15 @@
 namespace fgl {
 
 class CubeWindow final : public GLWindow {
-
 public:
   void init() override;
   void render() override;
 
-
-protected:
-  // Event handlers.
-  virtual void mousePressEvent(QMouseEvent *event) override;
-  virtual void mouseReleaseEvent(QMouseEvent *event) override;
-  virtual void keyPressEvent(QKeyEvent *event) override;
-
 private:
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
+  void keyPressEvent(QKeyEvent *event) override;
+
   // Attributes and uniforms handlers.
   GLint posAttr_ = 0;
   GLint matrixUniform_ = 0;
@@ -37,20 +33,15 @@ private:
   // Shader program handler.
   std::unique_ptr<QOpenGLShaderProgram> program_ = nullptr;
 
-  // Buffer
+  // Frame counter for animation.
+  int frame_ = 0;
+
   QOpenGLBuffer vbo;
   QOpenGLBuffer ibo{QOpenGLBuffer::IndexBuffer};
 
-
-  // Color
   QVector4D cube_color{1.0, 1.0, 1.0, 1};
-  
-  // animation
-  QVector2D mousePressPosition{0.0, 0.0};
-  QVector3D rotationAxis = QVector3D(0.0, 1.0, 0.0).normalized();
-
-  // Frame counter for animation.
-  int frame_ = 0;
+  QVector2D mousePressPosition{0., 0.};
+  QVector3D rotationAxis{0., 0., 1.};
 };
 
 } // namespace fgl
