@@ -24,7 +24,7 @@ constexpr std::array<QVector3D, 8u> vertices = {
     QVector3D(-0.5f, -0.5f, -0.5f), // v6
     QVector3D(-0.5f, 0.5f, -0.5f)   // v7
 };
-/*0, 1, 2, 3, 3, 1, 1, 4, 3, 5, 5, 4, 4, 6, 5, 7, 7, 6, 6, 0, 7, 2, 2, 0*/
+// 0, 1, 2, 3, 3, 1, 1, 4, 3, 5, 5, 4, 4, 6, 5, 7, 7, 6, 6, 0, 7, 2, 2, 0
 constexpr std::array<GLuint, 34u> indexes = {0, 1, 2, 3, 3, 1, 1, 4, 3, 5, 5, 4,
                                              4, 6, 5, 7, 7, 6, 6, 0, 7, 2, 2, 6,
                                              6, 4, 0, 1, 1, 2, 2, 3, 7, 5};
@@ -60,16 +60,12 @@ void CubeWindow::init() {
 
   posAttr_ = program_->attributeLocation("posAttr");
   matrixUniform_ = program_->uniformLocation("matrix");
-
-
 }
 
 void CubeWindow::render() {
   const auto retinaScale = devicePixelRatio();
   glViewport(0, 0, width() * retinaScale, height() * retinaScale);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
- 
 
   QMatrix4x4 matrix;
   matrix.perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
@@ -88,11 +84,8 @@ void CubeWindow::render() {
   glDrawElements(GL_TRIANGLE_STRIP, static_cast<GLsizei>(indexes.size()),
                  GL_UNSIGNED_INT, nullptr);
 
-  
-
   program_->disableAttributeArray(posAttr_);
   program_->release();
-
   ++frame_;
 }
 
