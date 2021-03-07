@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
   QApplication app(argc, argv);
 
   QSurfaceFormat format;
-  format.setSamples(16);//сглаживание 
+  format.setSamples(16);//СЃРіР»Р°Р¶РёРІР°РЅРёРµ 
   format.setVersion(2, 1);
 
   fgl::CubeWindow window;
