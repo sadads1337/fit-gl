@@ -20,8 +20,12 @@ void main(void)
     float phi = atan2(y, x);
     vec4 morphed = vec4(x*u_t + (1.0-u_t)*sin(theta)*cos(phi), y*u_t + (1.0-u_t)*sin(theta)*sin(phi), z*u_t + (1.0-u_t)*cos(theta), 1.0);
     //vec4 morphed = vec4(x*sqrt(1-(y*y/2)-(z*z/2) + (y*y*z*z/3)), y*sqrt(1-(x*x/2)-(z*z/2) + (x*x*z*z/3)), z*sqrt(1-(y*y/2)-(x*x/2) + (y*y*x*x/3)), 1);
+    float x_n = a_normal.x;
+    float y_n = a_normal.y;
+    float z_n = a_normal.z;
+    vec3 morphed_normal = vec3(x_n*u_t + (1.0-u_t)*sin(theta)*cos(phi), y_n*u_t + (1.0-u_t)*sin(theta)*sin(phi), z_n*u_t + (1.0-u_t)*cos(theta));
     gl_Position = u_projectionMatrix * mv_matrix * morphed;
     v_texcoord = a_texcoord;
-    v_normal = normalize(vec3(mv_matrix * vec4(a_normal, 0.0)));
+    v_normal = normalize(vec3(mv_matrix * vec4(morphed_normal, 0.0)));
     v_position = mv_matrix * morphed;
 }
