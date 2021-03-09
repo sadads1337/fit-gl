@@ -14,6 +14,7 @@ int main(int argc, char **argv) {
     fgl::CubeWindow window;
     window.setFormat(format);
     window.resize(640, 480);
+
     window.show();
 
     window.setAnimated(true);

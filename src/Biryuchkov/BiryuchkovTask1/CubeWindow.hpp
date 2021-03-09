@@ -1,16 +1,12 @@
 #pragma once
 
 #include <Base/GLWindow.hpp>
-
-#include <QOpenGLShaderProgram>
-
-#include <QMatrix4x4>
-#include <QQuaternion>
-#include <QVector2D>
-#include <QVector3D>
-#include <vector>
 #include <QColor>
-
+#include <QColorDialog>
+#include <QKeyEvent>
+#include <QOpenGLBuffer>
+#include <QOpenGLShaderProgram>
+#include <memory>
 
 namespace fgl {
 
@@ -19,28 +15,25 @@ namespace fgl {
         void init() override;
         void render() override;
 
-    protected:
+    private:
         void mousePressEvent(QMouseEvent *e) override;
         void mouseReleaseEvent(QMouseEvent *e) override;
-        void keyPressEvent(QKeyEvent *event) override;
+        void keyPressEvent(QKeyEvent *e) override;
 
-    private:
-
+        // Attributes and uniforms handlers.
         GLint posAttr_ = 0;
-        GLint colAttr_ = 0;
         GLint matrixUniform_ = 0;
-        qreal angularSpeed = 0;
 
-
+        // Shader program handler.
         std::unique_ptr<QOpenGLShaderProgram> program_ = nullptr;
-
 
         // Frame counter for animation.
         int frame_ = 0;
 
+        QOpenGLBuffer array_buffer_;
+        QOpenGLBuffer index_buffer_{QOpenGLBuffer::IndexBuffer};
 
         QVector4D square_color;
-
         QVector2D mousePressPosition;
         QVector3D rotationAxis;
     };
