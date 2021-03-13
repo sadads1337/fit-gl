@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Shaders/quad.fs</file>
+        <file>Shaders/quad.vs</file>
+    </qresource>
+</RCC>
