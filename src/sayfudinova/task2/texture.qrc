@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>texture/cubemaps_skybox.png</file>
+    </qresource>
+</RCC>
