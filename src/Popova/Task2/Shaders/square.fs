@@ -5,7 +5,8 @@ uniform int flag = 0;
 void main() {
    if (flag == 1){
       gl_FragColor = col;
-   } else{
+   } else
+   {
       gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
    }
    
