@@ -296,7 +296,7 @@ void SquareWindow::render() {
   glEnableVertexAttribArray(colAttr_);
   
   program_->setUniformValue("flag", 1);
-  // glPolygonMode(GL_FRONT, GL_LINES);
+
   glDrawElements(GL_QUADS, 768, GL_UNSIGNED_SHORT, nullptr);
   program_->setUniformValue("flag", 0);
   glDrawElements(GL_LINES, 768, GL_UNSIGNED_SHORT, nullptr);
