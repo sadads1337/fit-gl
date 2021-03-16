@@ -29,12 +29,16 @@ private:
 
   GLint posAttr_ = 0;
   GLint colAttr_ = 0;
+  GLint colFactorUniform_ = 0;
   GLint matrixUniform_ = 0;
+  GLint morphParamUniform_ = 0;
 
   QOpenGLBuffer arrayBuf_;
   QOpenGLBuffer indexBuf_{QOpenGLBuffer::IndexBuffer};
 
   std::shared_ptr<InputController> inputController_;
+
+  std::uint32_t frame_ = 0;
 };
 
 } // namespace Bazhenov

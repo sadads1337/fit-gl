@@ -1,6 +1,7 @@
 #include "MainWindow.hpp"
 
-#include <array>
+#include <vector>
+#include <algorithm>
 
 #include <QOpenGLShader>
 #include <QVector4D>
@@ -11,58 +12,70 @@ constexpr std::uint32_t STRIDE = 9;
 constexpr std::uint32_t VERTEX_POSITION_OFFSET = 0;
 constexpr std::uint32_t VERTEX_COLOR_OFFSET = 6;
 
-std::array<GLfloat, 6 * 4 *STRIDE> vertices = {
-    // Vertex data for face 0
-    -1.0F, -1.0F, 1.0F, 0, 0, 1, 0.0F, 0.0F, 0.0F,  // v0
-    1.0F, -1.0F, 1.0F, 0, 0, 1, 0.333F, 0.0F, 0.0F, // v1
-    -1.0F, 1.0F, 1.0F, 0, 0, 1, 0.0F, 0.5F, 0.0F,   // v2
-    1.0F, 1.0F, 1.0F, 0, 0, 1, 0.333F, 0.5F, 0.0F,  // v3
+constexpr std::uint32_t VERTEX_MULTIPLICATION_FACTOR = 15;
 
-    // Vertex data for face 1
-    1.0F, -1.0F, 1.0F, 1, 0, 0, 0.0F, 0.5F, 0.0F,    // v4
-    1.0F, -1.0F, -1.0F, 1, 0, 0, 0.333F, 0.5F, 0.0F, // v5
-    1.0F, 1.0F, 1.0F, 1, 0, 0, 0.0F, 1.0F, 0.0F,     // v6
-    1.0F, 1.0F, -1.0F, 1, 0, 0, 0.333F, 1.0F, 0.0F,  // v7
-
-    // Vertex data for face 2
-    1.0F, -1.0F, -1.0F, 0, 0, -1, 0.666F, 0.5F, 0.0F, // v8
-    -1.0F, -1.0F, -1.0F, 0, 0, -1, 1.0F, 0.5F, 0.0F,  // v9
-    1.0F, 1.0F, -1.0F, 0, 0, -1, 0.666F, 1.0F, 0.0F,  // v10
-    -1.0F, 1.0F, -1.0F, 0, 0, -1, 1.0F, 1.0F, 0.0F,   // v11
-
-    // Vertex data for face 3
-    -1.0F, -1.0F, -1.0F, -1, 0, 0, 0.666F, 0.0F, 0.0F, // v12
-    -1.0F, -1.0F, 1.0F, -1, 0, 0, 1.0F, 0.0F, 0.0F,    // v13
-    -1.0F, 1.0F, -1.0F, -1, 0, 0, 0.666F, 0.5F, 0.0F,  // v14
-    -1.0F, 1.0F, 1.0F, -1, 0, 0, 1.0F, 0.5F, 0.0F,     // v15
-
-    // Vertex data for face 4
-    -1.0F, -1.0F, -1.0F, 0, -1, 0, 0.333F, 0.0F, 0.0F, // v16
-    1.0F, -1.0F, -1.0F, 0, -1, 0, 0.666F, 0.0F, 0.0F,  // v17
-    -1.0F, -1.0F, 1.0F, 0, -1, 0, 0.333F, 0.5F, 0.0F,  // v18
-    1.0F, -1.0F, 1.0F, 0, -1, 0, 0.666F, 0.5F, 0.0F,   // v19
-
-    // Vertex data for face 5
-    -1.0F, 1.0F, 1.0F, 0, 1, 0, 0.333F, 0.5F, 0.0F,  // v20
-    1.0F, 1.0F, 1.0F, 0, 1, 0, 0.666F, 0.5F, 0.0F,   // v21
-    -1.0F, 1.0F, -1.0F, 0, 1, 0, 0.333F, 1.0F, 0.0F, // v22
-    1.0F, 1.0F, -1.0F, 0, 1, 0, 0.666F, 0.0F, 1.0F   // v23
-};
-
-constexpr std::array<GLuint, 34U> indices = {
-    0,  1,  2,  3,  3,      // Face 0 - triangle strip ( v0,  v1,  v2,  v3)
-    4,  4,  5,  6,  7,  7,  // Face 1 - triangle strip ( v4,  v5,  v6,  v7)
-    8,  8,  9,  10, 11, 11, // Face 2 - triangle strip ( v8,  v9, v10, v11)
-    12, 12, 13, 14, 15, 15, // Face 3 - triangle strip (v12, v13, v14, v15)
-    16, 16, 17, 18, 19, 19, // Face 4 - triangle strip (v16, v17, v18, v19)
-    20, 20, 21, 22, 23      // Face 5 - triangle strip (v20, v21, v22, v23)
-};
+std::vector<GLfloat> vertices;
+std::vector<GLuint> indices;
 
 constexpr GLfloat VERTICAL_ANGLE = 60.0F;
 constexpr GLfloat NEAR_PLANE = 0.1F;
 constexpr GLfloat FAR_PLANE = 100.0F;
 
 constexpr QVector4D CLEAR_COLOR(0.25F, 0.25F, 0.375F, 1.0F);
+
+void initCube(GLfloat halfWidth, std::uint32_t factor = 1U) {
+  halfWidth = std::abs(halfWidth);
+  factor = std::max(1U, factor);
+
+  for (auto face = 0U; face < 6; ++face) {
+    // Add vertices
+    const auto constCoord = face % 3;
+    const auto coord1 = (face + 1) % 3;
+    const auto coord2 = (face + 2) % 3;
+
+    for (auto y = 0U; y < factor + 1; ++y) {
+      for (auto x = 0U; x < factor + 1; ++x) {
+        auto position = QVector3D{0, 0, 0};
+        auto normal = QVector3D{0, 0, 0};
+
+        // int division is meant to be here!
+        normal[constCoord] = int(face / 3 * 2) - 1;
+
+        position[constCoord] = normal[constCoord] * halfWidth;
+        position[coord1] = (x * 2.0F / factor - 1.0F) * halfWidth;
+        position[coord2] = (y * 2.0F / factor - 1.0F) * halfWidth * normal[constCoord];
+
+        auto color = QColor{};
+        color.setRedF((x % 5 + y % 5 + face) % 4 / 3.0F);
+        color.setGreenF((x % 5 + y % 5 + face + 3) % 4 / 3.0F);
+        color.setBlueF((x % 5 + y % 5 + face + 6) % 4 / 3.0F);
+
+        vertices.push_back(position.x());
+        vertices.push_back(position.y());
+        vertices.push_back(position.z());
+        vertices.push_back(normal.x());
+        vertices.push_back(normal.y());
+        vertices.push_back(normal.z());
+        vertices.push_back(color.redF());
+        vertices.push_back(color.greenF());
+        vertices.push_back(color.blueF());
+      }
+    }
+
+    // Add indices
+    const auto faceIndexOffset = face*(factor+1)*(factor+1);
+    for (auto y = 0U; y < factor; ++y) {
+      const auto rowIndexOffset = (factor+1) * y;
+
+      indices.push_back(faceIndexOffset + rowIndexOffset);
+      for (auto x = 0U; x < factor+1; ++x) {
+        indices.push_back(faceIndexOffset + rowIndexOffset + x);
+        indices.push_back(faceIndexOffset + rowIndexOffset + x + (factor+1));
+      }
+      indices.push_back(faceIndexOffset + rowIndexOffset + factor + (factor+1));
+    }
+  }
+}
 
 } // namespace Bazhenov
 
@@ -78,6 +91,8 @@ void MainWindow::init() {
                CLEAR_COLOR.w());
 
   // Configure VBOs
+  initCube(1.0F, VERTEX_MULTIPLICATION_FACTOR);
+
   arrayBuf_.create();
   indexBuf_.create();
 
@@ -103,6 +118,8 @@ void MainWindow::init() {
   posAttr_ = program_->attributeLocation("vertex_position");
   colAttr_ = program_->attributeLocation("vertex_color");
   matrixUniform_ = program_->uniformLocation("mvp_matrix");
+  colFactorUniform_ = program_->uniformLocation("fragment_color_factor");
+  morphParamUniform_ = program_->uniformLocation("t");
 
   program_->setAttributeBuffer(posAttr_, GL_FLOAT, VERTEX_POSITION_OFFSET, 3,
                                STRIDE * sizeof(GLfloat));
@@ -127,15 +144,9 @@ void MainWindow::render() {
       const auto greenI = STRIDE * i + VERTEX_COLOR_OFFSET + 1;
       const auto blueI = STRIDE * i + VERTEX_COLOR_OFFSET + 2;
 
-      vertices[redI] =
-          0.5F * (vertices[redI] +
-                  (i % 2 == 0 ? newColor.redF() : 1.F - newColor.redF()));
-      vertices[greenI] =
-          0.5F * (vertices[greenI] +
-                  (i % 2 == 0 ? newColor.greenF() : 1.F - newColor.greenF()));
-      vertices[blueI] =
-          0.5F * (vertices[blueI] +
-                  (i % 2 == 0 ? newColor.blueF() : 1.F - newColor.blueF()));
+      vertices[redI] = 0.5F * (vertices[redI] + newColor.redF());
+      vertices[greenI] = 0.5F * (vertices[greenI] + newColor.greenF());
+      vertices[blueI] = 0.5F * (vertices[blueI] + newColor.blueF());
     }
 
     arrayBuf_.allocate(vertices.data(), static_cast<std::int32_t>(
@@ -160,6 +171,8 @@ void MainWindow::render() {
   mvp_matrix.rotate(inputController_->getRotation());
 
   program_->setUniformValue(matrixUniform_, mvp_matrix);
+  program_->setUniformValue(colFactorUniform_, QMatrix4x4{});
+  program_->setUniformValue(morphParamUniform_, static_cast<GLfloat>(frame_));
 
   program_->setAttributeArray(
       posAttr_, GL_FLOAT,
@@ -173,13 +186,25 @@ void MainWindow::render() {
   program_->enableAttributeArray(posAttr_);
   program_->enableAttributeArray(colAttr_);
 
-  glDrawElements(GL_TRIANGLE_STRIP, static_cast<GLsizei>(indices.size()),
+  glDrawElements(GL_QUAD_STRIP, static_cast<GLsizei>(indices.size()),
+                 GL_UNSIGNED_INT, nullptr);
+
+  // Draw black lines
+
+  arrayBuf_.bind();
+  indexBuf_.bind();
+
+  program_->setUniformValue(colFactorUniform_, QMatrix4x4{} * 0);
+
+  glDrawElements(GL_LINE_STRIP, static_cast<GLsizei>(indices.size()),
                  GL_UNSIGNED_INT, nullptr);
 
   program_->disableAttributeArray(colAttr_);
   program_->disableAttributeArray(posAttr_);
 
   program_->release();
+
+  frame_++;
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event) {
