@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>Shaders/square.fs</file>
-        <file>Shaders/square.vs</file>
-    </qresource>
-</RCC>

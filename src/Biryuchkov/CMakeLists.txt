@@ -1,2 +1,2 @@
 
-add_subdirectory(BiryuchkovTask1)
+add_subdirectory(BiryuchkovTask3)
