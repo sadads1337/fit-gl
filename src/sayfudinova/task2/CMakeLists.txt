@@ -3,7 +3,6 @@ set(SRCS
         CubeWindow.cpp
         CubeWindow.h
 
-        texture.qrc
         shaders.qrc
         Shaders/quad.fs
         Shaders/quad.vs

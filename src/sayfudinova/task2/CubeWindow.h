@@ -11,6 +11,8 @@
 #include <QVector2D>
 #include <QVector3D>
 #include <memory>
+#include <chrono>
+#include <ctime>
 
 class CubeWindow final : public fgl::GLWindow {
 
@@ -32,10 +34,13 @@ private:
 
   std::unique_ptr<QOpenGLShaderProgram> program_ = nullptr;
 
-  QVector4D changeColor{0.0, 1.0, 1.0, 1};
+  QVector4D changeColor{0.5, 0.0, 1.0, 1};
 
   int frame_ = 0;
 
+  std::chrono::duration<float> time_;
+  std::chrono::time_point<std::chrono::system_clock> start;
+
   QVector2D mousePressPosition{0., 0.};
-  QVector3D rotationAxis{0., 0., 1.};
+  QVector3D rotationAxis = QVector3D(0.0, 1.0, 0.0).normalized();
 };

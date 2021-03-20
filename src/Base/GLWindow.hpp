@@ -1,9 +1,7 @@
 #pragma once
 
 #include <memory>
-
 #include <QWindow>
-
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 #include <QOpenGLPaintDevice>

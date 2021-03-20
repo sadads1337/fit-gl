@@ -1,42 +1,22 @@
 #version 120
 
 attribute highp vec4 posAttr;
-varying highp vec4 posV;
+uniform highp vec4 coord;
+uniform highp mat4 matrix;
+uniform float time;
 
-attribute highp vec3 normAttr;
-varying highp vec3 normV;
-
-attribute highp vec2 tcAttr;
-varying highp vec2 tcV;
-
-uniform highp mat4 modelM;
-uniform highp mat4 projM;
-uniform highp mat4 viewM;
-
-uniform highp float val;
-
-const float pi = 3.1415926538;
+float sinus(float time){
+    return (sin(time)+1.0)/2.0;
+}
 
 void main() {
-    //posAttr.xyz *= 4.0/length(posAttr.xyz);
     float x = posAttr.x;
     float y = posAttr.y;
     float z = posAttr.z;
-
-    float radius = sqrt(x*x + y*y + z*z);
-    float phi = atan2(y/x);
-    float theta = acos(z/radius);
-
-    vec4 convert = vec4(x*val + (1.0-val)*sin(theta)*cos(phi), y*val + (1.0-val)*sin(theta)*sin(phi), z*val + (1.0-val)*cos(theta), 1.0);
-
-    float nx = normAttr.x;
-    float ny = normAttr.y;
-    float nz = normAttr.z;
-
-    vec4 normConvert = vec4(nx*val + (1.0-val)*sin(theta)*cos(phi), ny*val + (1.0-val)*sin(theta)*sin(phi), nz*val + (1.0-val)*cos(theta), 1.0);
-    gl_Position = projM * modelM * viewM * convert;
-    tcV = tcAttr;
-    normV = normalize(vec3(modelM * viewM * vec4(normConvert, 0.0)));
-    posV = modelM * viewM * convert;
+    float nx = sqrt(1-y*y/2-z*z/2+y*y*z*z/3);
+    float ny = sqrt(1-z*z/2-x*x/2+x*x*z*z/3);
+    float nz = sqrt(1-x*x/2-y*y/2+x*x*y*y/3);
+    vec4 morphing = vec4(x+(x*nx-x)*sinus(time), y+(y*ny-y)*sinus(time), z+(z*nz-z)*sinus(time), 1.0);
+    gl_Position = matrix * morphing;
 }
 
