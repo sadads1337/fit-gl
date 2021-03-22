@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>shaders/phong_vshader.vsh</file>
+        <file>shaders/phong_fshader.fsh</file>
+        <file>shaders/gouraud_vshader.vsh</file>
+        <file>shaders/gouraud_fshader.fsh</file>
+    </qresource>
+</RCC>
