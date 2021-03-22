@@ -19,9 +19,9 @@ struct VertexData {
 class Object3D {
 
 public:
-    Object3D(const QVector<VertexData> &vertData, const QVector<GLuint> &indexes,
+    Object3D(const std::vector<VertexData> &vertData, const std::vector<GLuint> &indexes,
              const QImage &texture);
-    void init(const QVector<VertexData> &vertData, const QVector<GLuint> &indexes,
+    void init(const std::vector<VertexData> &vertData, const std::vector<GLuint> &indexes,
               const QImage &texture);
     void draw(QOpenGLShaderProgram *program, QOpenGLFunctions *functions);
     void rotate(const QQuaternion &r);
