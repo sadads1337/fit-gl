@@ -27,10 +27,10 @@ public:
 
 protected:
     void initializeGL() override;
-    void resizeGL(int w, int h) override;
+    void resizeGL(const int w, const int h) override;
     void paintGL() override;
     void initShaders();
-    void initCube(float width, int N);
+    void initCube(const float width, const int N);
 
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
