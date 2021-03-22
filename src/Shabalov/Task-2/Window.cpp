@@ -4,6 +4,7 @@
 
 #include "Widget.h"
 #include "Window.h"
+#include<type_traits>
 
 namespace {
 
