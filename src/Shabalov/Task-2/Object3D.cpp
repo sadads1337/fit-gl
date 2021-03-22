@@ -3,15 +3,15 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLTexture>
 
-Object3D::Object3D(const QVector<VertexData> &vertData,
-                   const QVector<GLuint> &indexes, const QImage &texture)
+Object3D::Object3D(const std::vector<VertexData> &vertData,
+                   const std::vector<GLuint> &indexes, const QImage &texture)
         : m_indexBuffer(QOpenGLBuffer::IndexBuffer), m_texture(nullptr) {
     m_scale = 1.0f;
     init(vertData, indexes, texture);
 }
 
-void Object3D::init(const QVector<VertexData> &vertData,
-                    const QVector<GLuint> &indexes, const QImage &texture) {
+void Object3D::init(const std::vector<VertexData> &vertData,
+                    const std::vector<GLuint> &indexes, const QImage &texture) {
     if (m_vertexBuffer.isCreated())
         m_vertexBuffer.destroy();
     if (m_indexBuffer.isCreated())
