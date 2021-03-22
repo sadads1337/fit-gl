@@ -11,6 +11,7 @@
 #include <Vertex.hpp>
 
 #include "SecondShader.hpp"
+#include "TesselatedRenderable.hpp"
 
 namespace {
 
@@ -59,12 +60,8 @@ const std::vector<Kononov::RegularVertex> modelVertices = {
 // connecting strips have same vertex order then only last
 // index of the first strip needs to be duplicated.
 const std::vector<GLuint> modelIndices = {
-    0,  1,  2,  3,  3,      // Face 0 - triangle strip ( v0,  v1,  v2,  v3)
-    4,  4,  5,  6,  7,  7,  // Face 1 - triangle strip ( v4,  v5,  v6,  v7)
-    8,  8,  9,  10, 11, 11, // Face 2 - triangle strip ( v8,  v9, v10, v11)
-    12, 12, 13, 14, 15, 15, // Face 3 - triangle strip (v12, v13, v14, v15)
-    16, 16, 17, 18, 19, 19, // Face 4 - triangle strip (v16, v17, v18, v19)
-    20, 20, 21, 22, 23      // Face 5 - triangle strip (v20, v21, v22, v23)
+    0,  1,  2,  2,  1,  3,  4,  5,  6,  6,  5,  7,  8,  9,  10, 10, 9,  11,
+    12, 13, 14, 14, 13, 15, 16, 17, 18, 18, 17, 19, 20, 21, 22, 22, 21, 23,
 };
 
 } // namespace
@@ -144,6 +141,11 @@ void SecondWindow::init() {
                                                      ":/shaders/second.geom",
                                                      ":/shaders/second.frag"});
 
+  auto cube_program = Resources::loadShaderProgramShared(
+      {":/shaders/second-cube.vert", ":/shaders/second-cube.tesc",
+       ":/shaders/second-cube.tese", ":/shaders/second-cube.geom",
+       ":/shaders/second.frag"});
+
   auto skull_texture =
       Resources::loadTextureShared(":/textures/skull-diffuse.jpg");
 
@@ -154,7 +156,7 @@ void SecondWindow::init() {
       ":/models/skull.vbo-ibo", GL_TRIANGLES);
 
   auto cube_mesh = std::make_shared<GenericMesh<RegularVertex, GLuint>>(
-      modelVertices, modelIndices, GL_TRIANGLE_STRIP);
+      modelVertices, modelIndices, GL_PATCHES);
 
   SecondShader factory(program);
   m_skull_shader = factory.createShared();
@@ -163,7 +165,8 @@ void SecondWindow::init() {
   m_skull_shader->getParameters().setAmbientStrength(AMBIENT_STRENGTH);
   m_skull_shader->getParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
 
-  m_cube_shader = factory.createShared();
+  SecondShader cube_factory(cube_program);
+  m_cube_shader = cube_factory.createShared();
   m_cube_shader->setParameters(m_skull_shader->getParameters());
   m_cube_shader->getParameters().setDiffuseTexture(cube_texture);
 
@@ -172,10 +175,10 @@ void SecondWindow::init() {
           m_skull_shader),
       std::dynamic_pointer_cast<TypedMesh<RegularVertex>>(skull_mesh));
 
-  auto cube_rend = std::make_shared<GenericRenderable>(
+  auto cube_rend = std::make_shared<TesselatedRenderable>(
       std::dynamic_pointer_cast<TypedShader<RegularVertex::Interface>>(
           m_cube_shader),
-      std::dynamic_pointer_cast<TypedMesh<RegularVertex>>(cube_mesh));
+      std::dynamic_pointer_cast<TypedMesh<RegularVertex>>(cube_mesh), 3);
 
   /*
    * Init scene objects

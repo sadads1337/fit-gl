@@ -14,4 +14,8 @@ QOpenGLContext *requireContext() {
 
 QOpenGLFunctions *requireFunctions() { return requireContext()->functions(); }
 
+QOpenGLFunctions_4_0_Core *requireFunctions40core() {
+  return requireContext()->versionFunctions<QOpenGLFunctions_4_0_Core>();
+}
+
 } // namespace Kononov::GL

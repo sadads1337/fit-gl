@@ -6,11 +6,17 @@ add_executable(KononovTask2
         shaders/second.vert
         shaders/second.geom
         shaders/second.frag
+        shaders/second-cube.geom
+        shaders/second-cube.tese
+        shaders/second-cube.tesc
+        shaders/second-cube.vert
 
         main.cpp
         SecondWindow.cpp
         SecondWindow.hpp
-        SecondShader.hpp)
+        SecondShader.hpp
+        TesselatedRenderable.cpp
+        TesselatedRenderable.hpp)
 
 target_link_libraries(KononovTask2
         PRIVATE Qt5::Widgets
