@@ -32,6 +32,7 @@ Window::Window()
     auto * const zSlider = createSlider();
     auto * const tSlider = createSlider();
     auto * const color = owner<QColorDialog *>(new QColorDialog);
+    color->setOptions(QColorDialog::DontUseNativeDialog|QColorDialog::NoButtons);
     auto * const container = owner<QGridLayout *>(new QGridLayout);
 
 
