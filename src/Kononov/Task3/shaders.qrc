@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>shaders/third-phong.frag</file>
+        <file>shaders/third-phong.vert</file>
+        <file>shaders/third-gouraud.frag</file>
+        <file>shaders/third-gouraud.vert</file>
+        <file alias="shaders/third-common.frag">shaders/third-common.glsl</file>
+        <file alias="shaders/third-common.vert">shaders/third-common.glsl</file>
+    </qresource>
+</RCC>
