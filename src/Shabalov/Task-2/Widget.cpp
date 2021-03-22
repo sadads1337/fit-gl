@@ -2,6 +2,7 @@
 #include "Object3D.h"
 #include <QOpenGLContext>
 #include <QtMath>
+#include <stdexcept>
 
 Widget::Widget(QWidget *parent)
         :QOpenGLWidget(parent)
