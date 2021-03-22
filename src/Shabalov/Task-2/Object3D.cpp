@@ -19,13 +19,13 @@ void Object3D::init(const std::vector<VertexData> &vertData,
 
     m_vertexBuffer.create();
     m_vertexBuffer.bind();
-    m_vertexBuffer.allocate(vertData.constData(),
+    m_vertexBuffer.allocate(vertData.data(),
                             vertData.size() * sizeof(VertexData));
     m_vertexBuffer.release();
 
     m_indexBuffer.create();
     m_indexBuffer.bind();
-    m_indexBuffer.allocate(indexes.constData(), indexes.size() * sizeof(GLuint));
+    m_indexBuffer.allocate(indexes.data(), indexes.size() * sizeof(GLuint));
     m_indexBuffer.release();
 
     m_texture = std::make_unique<QOpenGLTexture>(texture.mirrored());
