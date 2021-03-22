@@ -3,8 +3,8 @@
 
 #include "SecondWindow.hpp"
 
-constexpr int GL_VERSION_MAJOR = 3;
-constexpr int GL_VERSION_MINOR = 3;
+constexpr int GL_VERSION_MAJOR = 4;
+constexpr int GL_VERSION_MINOR = 1;
 
 constexpr int Q_SURFACE_NUM_SAMPLES = 16;
 constexpr int Q_SURFACE_DEPTH_BUFFER_SIZE = 24;
