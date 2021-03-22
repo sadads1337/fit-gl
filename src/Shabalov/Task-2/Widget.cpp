@@ -64,15 +64,18 @@ void Widget::initShaders(){
     if (!m_program.link())
         close();
 }
-
-void Widget::initCube(float width, int N) {
+void Widget::initCube(const float width, const int N) {
+    if(N < 2) {
+        throw std::invalid_argument("The number of partitions must be greater than 1");
+    }
     auto half_width = width / 2.0f;
     auto part_width = width / float(N - 1);
-    QVector<VertexData> vertexes;
+    std::vector<VertexData> vertexes;
+    vertexes.reserve(6 * pow(N, 2));
     for (auto z = -1; z <= 1; z += 2) {
         for (auto y = 0; y < N; y++) {
             for (auto x = 0; x < N; x++) {
-                vertexes.append(VertexData(
+                vertexes.emplace_back(VertexData(
                         QVector3D(z*(-half_width +  x * part_width), -half_width + y * part_width, z * half_width),
                         QVector2D(0, 0), QVector3D(0.0, 0.0, z)));
             }
@@ -81,7 +84,7 @@ void Widget::initCube(float width, int N) {
     for (auto x = -1; x <= 1; x += 2) {
         for (auto z = 0; z < N; z++) {
             for (auto y = 0; y < N; y++) {
-                vertexes.append(VertexData(
+                vertexes.emplace_back(VertexData(
                         QVector3D(x * half_width, -half_width + y * part_width, x*(-half_width + z * part_width)),
                         QVector2D(0, 0), QVector3D(x, 0.0, 0.0)));
             }
@@ -90,23 +93,24 @@ void Widget::initCube(float width, int N) {
     for (auto y = -1; y <= 1; y += 2) {
         for (auto x = 0; x < N; x++) {
             for (auto z = 0; z < N; z++) {
-                vertexes.append(VertexData(
+                vertexes.emplace_back(VertexData(
                         QVector3D(-half_width + x * part_width, y * half_width, y*(-half_width + z * part_width)),
                         QVector2D(0, 0), QVector3D(0.0, y, 0.0)));
             }
         }
     }
 
-    QVector<GLuint> indexes;
+    std::vector<GLuint> indexes;
+    indexes.reserve(36 * pow (N-1, 2));
     for (int i = 0; i < 6 * N * N; i += N * N) {
         for (int j = 0; j < (N-1) * (N-1); j += N) {
             for (int k = 0; k < (N - 1); k++) {
-                indexes.append(i + j + k + N);
-                indexes.append(i + j + k + 0);
-                indexes.append(i + j + k + N + 1);
-                indexes.append(i + j + k + N + 1);
-                indexes.append(i + j + k + 0);
-                indexes.append(i + j + k + 1);
+                indexes.emplace_back(i + j + k + N);
+                indexes.emplace_back(i + j + k + 0);
+                indexes.emplace_back(i + j + k + N + 1);
+                indexes.emplace_back(i + j + k + N + 1);
+                indexes.emplace_back(i + j + k + 0);
+                indexes.emplace_back(i + j + k + 1);
             }
         }
     }
