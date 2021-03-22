@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Shaders/v_cube_morphing.glsl</file>
+        <file>Shaders/f_cube_morphing.glsl</file>
+        <file>Shaders/Lighting/f_guro_lighting.glsl</file>
+        <file>Shaders/Lighting/f_light_source.glsl</file>
+        <file>Shaders/Lighting/f_phong_lighting.glsl</file>
+        <file>Shaders/Lighting/v_guro_lighting.glsl</file>
+        <file>Shaders/Lighting/v_light_source.glsl</file>
+        <file>Shaders/Lighting/v_phong_lighting.glsl</file>
+    </qresource>
+</RCC>
