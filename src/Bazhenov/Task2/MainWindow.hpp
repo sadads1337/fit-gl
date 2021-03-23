@@ -28,8 +28,10 @@ private:
   std::unique_ptr<QOpenGLShaderProgram> program_;
 
   GLint posAttr_ = 0;
+  GLint normalAttr_ = 0;
   GLint colAttr_ = 0;
   GLint colFactorUniform_ = 0;
+  GLint offsetFromFaceUniform_ = 0;
   GLint matrixUniform_ = 0;
   GLint morphParamUniform_ = 0;
 
