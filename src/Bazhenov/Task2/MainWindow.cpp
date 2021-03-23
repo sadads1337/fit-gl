@@ -10,6 +10,7 @@ namespace Bazhenov {
 
 constexpr std::uint32_t STRIDE = 9;
 constexpr std::uint32_t VERTEX_POSITION_OFFSET = 0;
+constexpr std::uint32_t VERTEX_NORMAL_OFFSET = 3;
 constexpr std::uint32_t VERTEX_COLOR_OFFSET = 6;
 
 constexpr std::uint32_t VERTEX_MULTIPLICATION_FACTOR = 15;
@@ -116,12 +117,17 @@ void MainWindow::init() {
 
   // Configure attributes and uniforms
   posAttr_ = program_->attributeLocation("vertex_position");
+  normalAttr_ = program_->attributeLocation("vertex_normal");
   colAttr_ = program_->attributeLocation("vertex_color");
+
   matrixUniform_ = program_->uniformLocation("mvp_matrix");
   colFactorUniform_ = program_->uniformLocation("fragment_color_factor");
+  offsetFromFaceUniform_ = program_->uniformLocation("offset_from_face");
   morphParamUniform_ = program_->uniformLocation("t");
 
   program_->setAttributeBuffer(posAttr_, GL_FLOAT, VERTEX_POSITION_OFFSET, 3,
+                               STRIDE * sizeof(GLfloat));
+  program_->setAttributeBuffer(normalAttr_, GL_FLOAT, VERTEX_NORMAL_OFFSET, 3,
                                STRIDE * sizeof(GLfloat));
   program_->setAttributeBuffer(colAttr_, GL_FLOAT, VERTEX_COLOR_OFFSET, 3,
                                STRIDE * sizeof(GLfloat));
@@ -171,6 +177,7 @@ void MainWindow::render() {
   mvp_matrix.rotate(inputController_->getRotation());
 
   program_->setUniformValue(matrixUniform_, mvp_matrix);
+  program_->setUniformValue(offsetFromFaceUniform_, 0.0F);
   program_->setUniformValue(colFactorUniform_, QMatrix4x4{});
   program_->setUniformValue(morphParamUniform_, static_cast<GLfloat>(frame_));
 
@@ -179,11 +186,16 @@ void MainWindow::render() {
       reinterpret_cast<void *>(VERTEX_POSITION_OFFSET * sizeof(GLfloat)), 3,
       STRIDE * sizeof(GLfloat));
   program_->setAttributeArray(
+      normalAttr_, GL_FLOAT,
+      reinterpret_cast<void *>(VERTEX_NORMAL_OFFSET * sizeof(GLfloat)), 3,
+      STRIDE * sizeof(GLfloat));
+  program_->setAttributeArray(
       colAttr_, GL_FLOAT,
       reinterpret_cast<void *>(VERTEX_COLOR_OFFSET * sizeof(GLfloat)), 3,
       STRIDE * sizeof(GLfloat));
 
   program_->enableAttributeArray(posAttr_);
+  program_->enableAttributeArray(normalAttr_);
   program_->enableAttributeArray(colAttr_);
 
   glDrawElements(GL_QUAD_STRIP, static_cast<GLsizei>(indices.size()),
@@ -194,12 +206,14 @@ void MainWindow::render() {
   arrayBuf_.bind();
   indexBuf_.bind();
 
+  program_->setUniformValue(offsetFromFaceUniform_, 1.0e-3F);
   program_->setUniformValue(colFactorUniform_, QMatrix4x4{} * 0);
 
   glDrawElements(GL_LINE_STRIP, static_cast<GLsizei>(indices.size()),
                  GL_UNSIGNED_INT, nullptr);
 
   program_->disableAttributeArray(colAttr_);
+  program_->disableAttributeArray(normalAttr_);
   program_->disableAttributeArray(posAttr_);
 
   program_->release();
