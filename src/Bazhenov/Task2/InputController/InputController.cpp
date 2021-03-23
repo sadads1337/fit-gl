@@ -1,10 +1,5 @@
 #include "InputController.hpp"
 
-template <typename T>
-bool contains(const std::unordered_set<T> &set, T value) {
-  return set.find(value) != set.end();
-}
-
 namespace Bazhenov {
 
 QQuaternion InputController::getRotation() const noexcept {
@@ -22,13 +17,13 @@ void InputController::mousePressEvent(QMouseEvent *event){
 }
 
 void InputController::mouseMoveEvent(QMouseEvent *event){
-  if (contains(pressedMouseButtons_, Qt::LeftButton)) {
+  if (!!pressedMouseButtons_.count(Qt::LeftButton)) {
     handleMove(event->pos());
   }
 }
 
 void InputController::mouseReleaseEvent(QMouseEvent *event){
-  if (contains(pressedMouseButtons_, Qt::LeftButton)) {
+  if (!!pressedMouseButtons_.count(Qt::LeftButton)) {
     handleMove(event->pos());
   }
 
@@ -44,7 +39,7 @@ void InputController::keyReleaseEvent(QKeyEvent *event){
 }
 
 void InputController::update() {
-  if (contains(pressedKeys_, Qt::Key::Key_Space)) {
+  if (!!pressedKeys_.count(Qt::Key::Key_Space)) {
     const auto color = QColorDialog::getColor(Qt::black, nullptr, "Select color");
 
     if (color.isValid()) {

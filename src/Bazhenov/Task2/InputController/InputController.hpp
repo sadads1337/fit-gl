@@ -9,13 +9,14 @@
 #include <QQuaternion>
 #include <QPoint>
 #include <QColorDialog>
+#include <QFlags>
 
 namespace Bazhenov {
 
 class InputController {
 public:
-  QQuaternion getRotation() const noexcept;
-  QColor getColor() const noexcept;
+  [[nodiscard]] QQuaternion getRotation() const noexcept;
+  [[nodiscard]] QColor getColor() const noexcept;
 
   void mousePressEvent(QMouseEvent *event);
   void mouseMoveEvent(QMouseEvent *event);
@@ -25,7 +26,7 @@ public:
   void keyReleaseEvent(QKeyEvent *event);
 
   void update();
-  bool destructiveCheckNewColorSelected();
+  [[nodiscard]] bool destructiveCheckNewColorSelected();
 
 private:
   void handleMove(QPoint newPosition);

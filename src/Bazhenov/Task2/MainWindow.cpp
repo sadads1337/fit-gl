@@ -24,8 +24,8 @@ constexpr GLfloat FAR_PLANE = 100.0F;
 constexpr QVector4D CLEAR_COLOR(0.25F, 0.25F, 0.375F, 1.0F);
 
 void initCube(GLfloat halfWidth, std::uint32_t factor = 1U) {
-  halfWidth = std::abs(halfWidth);
-  factor = std::max(1U, factor);
+  Q_ASSERT(halfWidth >= 0);
+  Q_ASSERT(factor >= 1U);
 
   for (auto face = 0U; face < 6; ++face) {
     // Add vertices
