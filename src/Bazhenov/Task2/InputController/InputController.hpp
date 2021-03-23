@@ -31,7 +31,7 @@ public:
 private:
   void handleMove(QPoint newPosition);
 
-  std::unordered_set<Qt::MouseButton> pressedMouseButtons_;
+  Qt::MouseButtons pressedMouseButtons_;
   QPoint mousePosition_;
   const float sensitivity_ = 0.2F;
 

@@ -13,21 +13,21 @@ QColor InputController::getColor() const noexcept {
 void InputController::mousePressEvent(QMouseEvent *event){
   mousePosition_ = event->pos();
 
-  pressedMouseButtons_.insert(event->button());
+  pressedMouseButtons_.setFlag(event->button(), true);
 }
 
 void InputController::mouseMoveEvent(QMouseEvent *event){
-  if (!!pressedMouseButtons_.count(Qt::LeftButton)) {
+  if (pressedMouseButtons_.testFlag(Qt::LeftButton)) {
     handleMove(event->pos());
   }
 }
 
 void InputController::mouseReleaseEvent(QMouseEvent *event){
-  if (!!pressedMouseButtons_.count(Qt::LeftButton)) {
+  if (pressedMouseButtons_.testFlag(Qt::LeftButton)) {
     handleMove(event->pos());
   }
 
-  pressedMouseButtons_.erase(event->button());
+  pressedMouseButtons_.setFlag(event->button(), false);
 }
 
 void InputController::keyPressEvent(QKeyEvent *event){
