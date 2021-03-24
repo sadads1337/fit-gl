@@ -36,16 +36,12 @@ private:
 
   std::unique_ptr<QOpenGLShaderProgram> program_ = nullptr;
 
-  // Frame counter for animation.
-  int frame_ = 0;
-
   QOpenGLBuffer indexBuf_{QOpenGLBuffer::IndexBuffer};
   QOpenGLBuffer arrayBuf_;
   QVector4D square_color{1.0, 1.0, 1.0, 1};
-  std::chrono::duration<float> time_;
   std::chrono::time_point<std::chrono::system_clock> start;
   QVector2D mousePressPosition{0.0, 0.0};
-  QVector3D rotationAxis = QVector3D(0.0, 1.0, 0.0).normalized();
+  QVector3D rotationAxis = QVector3D(0.0, 1.0, 0.0);
 };
 
 } // namespace fgl
