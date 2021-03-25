@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QSurfaceFormat>
+#include <iostream>
 
 #include "CubeWindow.h"
 
@@ -16,6 +17,5 @@ int main(int argc, char **argv) {
   window.show();
 
   window.setAnimated(true);
-
   return app.exec();
 }

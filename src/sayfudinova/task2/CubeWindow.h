@@ -25,6 +25,8 @@ protected:
   void mouseReleaseEvent(QMouseEvent *e) override;
   void keyPressEvent(QKeyEvent *event) override;
 
+  void initCube(float width, int N);
+
 private:
   GLint posAttr_ = 0;
   GLint matrixUniform_ = 0;
