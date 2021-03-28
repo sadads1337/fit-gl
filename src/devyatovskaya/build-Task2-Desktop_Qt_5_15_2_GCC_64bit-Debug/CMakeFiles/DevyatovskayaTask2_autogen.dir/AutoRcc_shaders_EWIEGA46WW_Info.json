@@ -1,0 +1,23 @@
+{
+	"BUILD_DIR" : "/home/alex/Рабочий стол/fit-gl/src/devyatovskaya/build-Task2-Desktop_Qt_5_15_2_GCC_64bit-Debug/DevyatovskayaTask2_autogen",
+	"CMAKE_BINARY_DIR" : "/home/alex/Рабочий стол/fit-gl/src/devyatovskaya/build-Task2-Desktop_Qt_5_15_2_GCC_64bit-Debug",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/alex/Рабочий стол/fit-gl/src/devyatovskaya/build-Task2-Desktop_Qt_5_15_2_GCC_64bit-Debug",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/alex/Task2",
+	"CMAKE_SOURCE_DIR" : "/home/alex/Task2",
+	"INCLUDE_DIR" : "/home/alex/Рабочий стол/fit-gl/src/devyatovskaya/build-Task2-Desktop_Qt_5_15_2_GCC_64bit-Debug/DevyatovskayaTask2_autogen/include",
+	"INPUTS" : 
+	[
+		"/home/alex/Task2/Shaders/fshader.fsh",
+		"/home/alex/Task2/Shaders/vshader.vsh"
+	],
+	"LOCK_FILE" : "/home/alex/Рабочий стол/fit-gl/src/devyatovskaya/build-Task2-Desktop_Qt_5_15_2_GCC_64bit-Debug/CMakeFiles/DevyatovskayaTask2_autogen.dir/AutoRcc_shaders_EWIEGA46WW_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "-name", "shaders" ],
+	"OUTPUT_CHECKSUM" : "EWIEGA46WW",
+	"OUTPUT_NAME" : "qrc_shaders.cpp",
+	"RCC_EXECUTABLE" : "/home/alex/Qt/5.15.2/gcc_64/bin/rcc",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "/home/alex/Рабочий стол/fit-gl/src/devyatovskaya/build-Task2-Desktop_Qt_5_15_2_GCC_64bit-Debug/CMakeFiles/DevyatovskayaTask2_autogen.dir/AutoRcc_shaders_EWIEGA46WW_Used.txt",
+	"SOURCE" : "/home/alex/Task2/shaders.qrc",
+	"VERBOSITY" : 0
+}

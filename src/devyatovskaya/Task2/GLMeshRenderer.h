@@ -1,49 +1,51 @@
 #pragma once
 #include <QOpenGLBuffer>
+#include <QOpenGLVertexArrayObject>
 #include <QOpenGLShaderProgram>
-#include <QOpenGLFunctions>
-#include <QOpenGLFunctions_3_0>
+#include <map>
+
 #include "GLMesh.h"
-#include <QOffscreenSurface>
+#include "GLTransform.h"
+#include "ShaderData.h"
 
+class GLCamera;
+class GLObject;
+class QOpenGLFunctions_3_0;
 
-class GLMeshRenderer : protected QOpenGLFunctions_3_0
+using obj_sptr = std::shared_ptr<GLObject>;
+
+class GLMeshRenderer
 {
 public:
-	GLMeshRenderer();
+    GLMeshRenderer(GLMesh& mesh, GLTransform& transform);
 
-    void init_renderer(GLMesh* mesh, const std::string& vertex, const std::string& fragment);
-    virtual void render() = 0;
-
-
-    QOpenGLShaderProgram& shader_program()
-    {
-        return shader_program_;
-    }
+	void init_renderer(std::shared_ptr<QOpenGLShaderProgram> shader_program);
+	void set_shader(std::shared_ptr<QOpenGLShaderProgram> shader_program);
+    virtual void render(QOpenGLFunctions_3_0& functions, const GLCamera& camera) = 0;
+	
+	void render_wireframe(QOpenGLFunctions_3_0& functions, const GLCamera& camera);
+	void upload_camera_details(const GLCamera& camera) const;
+	void reload();
 
 	virtual ~GLMeshRenderer() = default;
-
-	void reload()
-	{
-		init_vbo();
-		init_ibo();
-	}
-
+	
+	std::shared_ptr<QOpenGLShaderProgram> shader_program_;
 protected:
-	GLMesh* mesh_ = nullptr;
-
-	QOpenGLBuffer vertex_buf_;
-	QOpenGLBuffer index_buf_;
-    QOpenGLShaderProgram shader_program_;
-
-
-	void enable_attributes();
-	void disable_attributes();
-
 	
+	QOpenGLBuffer vbo_;
+	QOpenGLBuffer ibo_;
+	QOpenGLVertexArrayObject vao_;
+	
+	GLMesh& mesh_;
+	GLTransform& transform_;
+
+	void enable_attributes() const;
+	void disable_attributes() const;
+
+
 private:
-	
-    void init_shaders(const std::string& vertex, const std::string& fragment);
+
 	void init_vbo();
 	void init_ibo();
+	void init_vao();
 };

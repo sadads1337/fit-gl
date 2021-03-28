@@ -1,53 +1,51 @@
 #include <algorithm>
 #include "GLCubeMeshGenerator.h"
+#include "QMatrix4x4"
 
-GLCubeMeshGenerator::GLCubeMeshGenerator(const float edge_len)
-	: face_generator_{ edge_len }
+GLCubeMeshGenerator::GLCubeMeshGenerator(const float edge_len, const unsigned steps_count)
+	: face_generator_{ edge_len, steps_count }
 {
 }
-
-GLMesh GLCubeMeshGenerator::generate(const std::size_t mesh_steps) const
+GLMesh GLCubeMeshGenerator::generate(const QColor& color) const
 {
-	auto front_face = face_generator_.generate(mesh_steps);
+	auto front_face = face_generator_.generate(color);
 	auto cube_vertices = front_face.vertices;
-	
+
 	QMatrix4x4 rotation;
 	get_side_faces(front_face.vertices, cube_vertices, rotation);
 	get_top_n_bottom(front_face.vertices, cube_vertices, rotation);
 
-	// Indices offset
 	auto cube_indices = front_face.indices;
-	
+
 	const auto number_of_faces = 6u;
-	
+
 	for (auto i = 1u; i < number_of_faces; ++i) {
 		std::copy(front_face.indices.begin(), front_face.indices.end(), std::back_inserter(cube_indices));
-		
-		std::for_each(cube_indices.begin() + i * front_face.indices.size(), cube_indices.end(), [&](unsigned& index)
+
+		std::for_each(cube_indices.begin() + i * front_face.indices.size(), cube_indices.end(), [&](auto& index)
 		{
-                        //index += i * front_face.vertices.size();
-                        index += static_cast<unsigned>(i * front_face.vertices.size());
+				index += static_cast<unsigned>(i * front_face.vertices.size());
 		});
 	}
-	
+
 	return { cube_vertices, cube_indices };
 }
 
-GLMesh GLCubeMeshGenerator::generate() const
-{
-    return GLMesh{};
-}
 
 void GLCubeMeshGenerator::rotate_face(std::vector<GLVertex>& plane_vertices, const QMatrix4x4& matrix) const
 {
 	std::for_each(plane_vertices.begin(), plane_vertices.end(), [&](GLVertex& vertex)
 	{
 		vertex.coordinate = matrix * vertex.coordinate;
+		vertex.normal = matrix * vertex.normal;
+		
 	});
-
 }
 
-void GLCubeMeshGenerator::get_side_faces(std::vector<GLVertex>& plane_vertices, std::vector<GLVertex>& cube_vertices, QMatrix4x4& matrix) const
+
+void GLCubeMeshGenerator::get_side_faces(std::vector<GLVertex>& plane_vertices, 
+										 std::vector<GLVertex>& cube_vertices, 
+										 QMatrix4x4& matrix) const
 {
 	const auto side_faces = 4u;
 
@@ -58,12 +56,25 @@ void GLCubeMeshGenerator::get_side_faces(std::vector<GLVertex>& plane_vertices, 
 	}
 }
 
-void GLCubeMeshGenerator::get_top_n_bottom(std::vector<GLVertex>& plane_vertices, std::vector<GLVertex>& cube_vertices, QMatrix4x4& matrix) const
+
+
+void GLCubeMeshGenerator::get_top_n_bottom(std::vector<GLVertex>& plane_vertices, 
+										   std::vector<GLVertex>& cube_vertices,
+										   QMatrix4x4& matrix) const
 {
 	const auto up_n_bottom_faces = 2u;
+	
 	for (auto i = 0u; i < up_n_bottom_faces; ++i) {
 		matrix.rotate(90.f, 1.f, 0.f);
 		rotate_face(plane_vertices, matrix);
 		std::copy(plane_vertices.begin(), plane_vertices.end(), std::back_inserter(cube_vertices));
 	}
+}
+
+void GLCubeMeshGenerator::init_indices(std::vector<unsigned>& indices) const
+{
+}
+
+void GLCubeMeshGenerator::init_vertices(std::vector<GLVertex>& vertices, const QColor& color) const
+{
 }
