@@ -1,16 +1,14 @@
-
 #include <QApplication>
 #include <QSurfaceFormat>
 
 #include "CubeWindow.hpp"
 
 int main(int argc, char **argv) {
-  QApplication app(argc, argv); //application - holds events
+  QApplication app(argc, argv);
 
   QSurfaceFormat format;
-  format.setSamples(16); //Set the preferred number of samples per pixel when multisampling is enabled to numSamples. 
-  //By default, multisampling is disabled -??????
-  format.setVersion(2, 1); //Sets the desired major and minor OpenGL versions
+  format.setSamples(16);
+  format.setVersion(2, 1);
 
   fgl::CubeWindow window;
   window.setFormat(format);
