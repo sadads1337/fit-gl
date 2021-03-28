@@ -1,10 +1,10 @@
 #pragma once
 
 #include <Base/GLWindow.hpp>
-#include <QMouseEvent>
 #include <QColorDialog>
+#include <QMouseEvent>
 
-#include <memory> //for unique_ptr
+#include <memory>
 
 #include <QOpenGLShaderProgram>
 
@@ -19,7 +19,6 @@ public:
   void mouseReleaseEvent(QMouseEvent *e) override;
   void keyPressEvent(QKeyEvent *e) override;
 
-
 private:
   // Attributes and uniforms handlers.
   GLint posAttr_ = 0;
@@ -29,15 +28,13 @@ private:
   unsigned int vertex_buffer = 0;
   unsigned int ibo = 0;
 
-  QVector4D color{1.0, 0.0, 1.0, 0.2};
+  QVector4D color{1.0f, 0.0f, 1.0f, 0.2f};
 
   QVector2D mousePressPosition;
-  QVector3D rotationAxis{0.0, 1.0, 0.0};
+  QVector3D rotationAxis{0.0f, 1.0f, 0.0f};
 
   // Shader program handler.
   std::unique_ptr<QOpenGLShaderProgram> program_ = nullptr;
-  //std::unique_ptr is a smart pointer that owns and manages another object 
-  //through a pointer and disposes of that object when the unique_ptr goes out of scope
 
   // Frame counter for animation.
   int frame_ = 0;
