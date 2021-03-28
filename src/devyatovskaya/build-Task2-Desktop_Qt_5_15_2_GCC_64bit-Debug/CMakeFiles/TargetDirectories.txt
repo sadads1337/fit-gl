@@ -1,0 +1,5 @@
+/home/alex/Рабочий стол/fit-gl/src/devyatovskaya/build-Task2-Desktop_Qt_5_15_2_GCC_64bit-Debug/CMakeFiles/rebuild_cache.dir
+/home/alex/Рабочий стол/fit-gl/src/devyatovskaya/build-Task2-Desktop_Qt_5_15_2_GCC_64bit-Debug/CMakeFiles/edit_cache.dir
+/home/alex/Рабочий стол/fit-gl/src/devyatovskaya/build-Task2-Desktop_Qt_5_15_2_GCC_64bit-Debug/CMakeFiles/DevyatovskayaTask2.dir
+/home/alex/Рабочий стол/fit-gl/src/devyatovskaya/build-Task2-Desktop_Qt_5_15_2_GCC_64bit-Debug/CMakeFiles/DevyatovskayaTask2_autogen_timestamp_deps.dir
+/home/alex/Рабочий стол/fit-gl/src/devyatovskaya/build-Task2-Desktop_Qt_5_15_2_GCC_64bit-Debug/CMakeFiles/DevyatovskayaTask2_autogen.dir

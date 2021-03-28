@@ -4,15 +4,16 @@
 class GLFlatMeshGenerator : public GLMeshGenerator
 {
 public:
-	explicit GLFlatMeshGenerator(float edge_len);
+	explicit GLFlatMeshGenerator(float edge_len, unsigned steps_count);
 
 
-	GLMesh generate(std::size_t mesh_steps) const override;
-
+	GLMesh generate(const QColor& color) const override;
+	unsigned step_count() const;
+	
 private:
 	float edge_len_;
-	void init_vertices(std::vector<GLVertex>& vertices, std::size_t mesh_steps) const;
-	void init_indices(std::vector<unsigned>& indices, unsigned mesh_steps) const;
+	unsigned step_count_;
 
-	GLMesh generate() const override;
+	void init_vertices(std::vector<GLVertex>& vertices, const QColor& color) const override;
+	void init_indices(std::vector<unsigned>& indices) const override;
 };

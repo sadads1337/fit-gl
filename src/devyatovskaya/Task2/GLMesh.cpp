@@ -2,7 +2,7 @@
 
 #include <utility>
 
-GLMesh::GLMesh(std::vector<GLVertex> v, std::vector<unsigned> i)
-	: vertices{std::move(v)}, indices{std::move(i)}
+GLMesh::GLMesh(std::vector<GLVertex> _vertices, std::vector<unsigned> _indices)
+	: vertices{std::move(_vertices)}, indices{std::move(_indices)}
 {
 }
