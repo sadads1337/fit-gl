@@ -6,6 +6,7 @@
 #include <QOpenGLDebugLogger>
 
 #include <Camera.hpp>
+#include <ConstantRotationController.hpp>
 #include <DirectionInputController.hpp>
 #include <MotionInputController.hpp>
 #include <SceneObject.hpp>
@@ -38,6 +39,7 @@ private:
 
   std::shared_ptr<DirectionInputController> m_direction_input_controller;
   std::shared_ptr<MotionInputController> m_motion_input_controller;
+  std::shared_ptr<ConstantRotationController> m_rotation_controller;
 
   std::shared_ptr<Camera> m_camera;
 

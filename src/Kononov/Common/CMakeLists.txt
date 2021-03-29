@@ -1,6 +1,8 @@
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
 add_library(KononovCommon
+        ConstantRotationController.cpp
+        ConstantRotationController.hpp
         DirectionInputController.cpp
         DirectionInputController.hpp
         MotionInputController.cpp
