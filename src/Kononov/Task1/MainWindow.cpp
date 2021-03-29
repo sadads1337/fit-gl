@@ -205,7 +205,8 @@ void MainWindow::init() {
 }
 
 void MainWindow::render() {
-  m_motion_input_controller->update();
+  const float delta = 1.0F / static_cast<float>(screen()->refreshRate());
+  m_motion_input_controller->update(delta);
 
   // NOLINTNEXTLINE(hicpp-signed-bitwise)
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

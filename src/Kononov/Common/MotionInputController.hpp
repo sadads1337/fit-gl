@@ -3,18 +3,20 @@
 #include <memory>
 #include <unordered_set>
 
-#include "DirectionInputController.hpp"
 #include <QKeyEvent>
 #include <QVector3D>
 
+#include "Controller.hpp"
+#include "DirectionInputController.hpp"
+
 namespace Kononov {
 
-class MotionInputController {
+class MotionInputController : public Controller {
 public:
   void keyPressEvent(QKeyEvent *event);
   void keyReleaseEvent(QKeyEvent *event);
 
-  void update();
+  void update(float delta) override;
 
   const std::shared_ptr<PositionedObject> &getObject() const noexcept;
   void setObject(const std::shared_ptr<PositionedObject> &object);

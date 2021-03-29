@@ -3,13 +3,14 @@
 #include <QVector3D>
 #include <memory>
 
+#include "Controller.hpp"
 #include "PositionedObject.hpp"
 
 namespace Kononov {
 
-class ConstantRotationController {
+class ConstantRotationController : public Controller {
 public:
-  void update(float delta);
+  void update(float delta) override;
 
   [[nodiscard]] const std::shared_ptr<PositionedObject> &getObject() const;
   void setObject(const std::shared_ptr<PositionedObject> &object);

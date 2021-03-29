@@ -11,6 +11,7 @@ add_library(KononovCommon
         PositionedObject.hpp
         SceneObject.cpp
         SceneObject.hpp
+        Controller.hpp
         Renderable.hpp
         Resources.cpp
         Resources.hpp

@@ -212,7 +212,7 @@ void ThirdWindow::init() {
 
 void ThirdWindow::render() {
   const float delta = 1.0F / static_cast<float>(screen()->refreshRate());
-  m_motion_input_controller->update();
+  m_motion_input_controller->update(delta);
   m_rotation_controller->update(delta);
 
   // NOLINTNEXTLINE(hicpp-signed-bitwise)
