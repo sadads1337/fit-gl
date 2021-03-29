@@ -1,7 +1,5 @@
 #include "PreparedScenes.h"
 
-
-#include "AssimpMeshLoader.h"
 #include "GLDirectedLight.h"
 #include "GLPointLight.h"
 #include "GLSpotLight.h"
@@ -41,8 +39,7 @@ void PreparedScenes::init()
 GLScene PreparedScenes::default_morphing(ShaderData& data)
 {
 	GLScene scene;
-	const auto grid_size = 20u;
-
+    const auto grid_size = 10u;
 	
 	init_grid(scene, data, grid_size);
 	return scene;

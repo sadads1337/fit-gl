@@ -74,10 +74,10 @@ void GLCubeMeshGenerator::get_top_n_bottom(std::vector<GLVertex>& plane_vertices
 	}
 }
 
-void GLCubeMeshGenerator::init_indices(std::vector<unsigned>& indices) const
+void GLCubeMeshGenerator::init_indices([[maybe_unused]]std::vector<unsigned>& indices) const
 {
 }
 
-void GLCubeMeshGenerator::init_vertices(std::vector<GLVertex>& vertices, const QColor& color) const
+void GLCubeMeshGenerator::init_vertices([[maybe_unused]]std::vector<GLVertex>& vertices, [[maybe_unused]] const QColor& color) const
 {
 }

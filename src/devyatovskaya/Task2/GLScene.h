@@ -12,8 +12,6 @@ public:
 	
 	std::vector<obj_sptr> objects;
 	std::map<light_sptr, obj_sptr> lights_objects;
-
-
 	
 	void add_light(light_sptr light, ShaderData& data, const mesh_gen_sptr& mesh_generator);
 	void add_object(ShaderData& data, const mesh_gen_sptr& mesh_generator, const QVector3D& pos, const QColor& color, const GLMaterial& material);

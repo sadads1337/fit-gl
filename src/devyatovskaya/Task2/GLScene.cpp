@@ -17,7 +17,7 @@ obj_sptr GLScene::create_object(ShaderData& data, const mesh_gen_sptr& mesh_gene
 	return object;
 }
 
-obj_sptr GLScene::create_object(ShaderData& data, const GLMesh& mesh, const QVector3D& pos, const QColor& color, const GLMaterial& material) const
+obj_sptr GLScene::create_object(ShaderData& data, const GLMesh& mesh, const QVector3D& pos, [[maybe_unused]] const QColor& color, const GLMaterial& material) const
 {
 	auto object = std::make_shared<GLObject>();
 	object->mesh = mesh;

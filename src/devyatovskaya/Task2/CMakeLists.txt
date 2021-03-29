@@ -1,6 +1,18 @@
+cmake_minimum_required(VERSION 3.5)
+
+project(Task2 LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 set(Task2_SRSC
         main.cpp
-        AssimpMeshLoader.h
         FPSCounter.cpp
         FPSCounter.h
         GLCamera.cpp
@@ -68,6 +80,7 @@ set(Task2_SRSC
         ui_PhongLighting.h
         ui_RenderDialog.h
 
+        shaders.qrc
         Shaders/f_morphing.glsl
         Shaders/v_morphing.glsl
 )
