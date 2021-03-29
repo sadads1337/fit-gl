@@ -84,3 +84,4 @@ add_executable(Task2 ${Task2_SRSC}  ${UI_HEADERS})
 target_link_libraries(Task2 PRIVATE
     Qt5::Widgets
     ${OPENGL_LIBRARIES})
+    
