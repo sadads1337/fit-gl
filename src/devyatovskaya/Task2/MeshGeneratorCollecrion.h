@@ -17,7 +17,7 @@ public:
 
 	inline static std::map<std::string, std::shared_ptr<GLMeshGenerator>> generators =
 	{
-		{{"cube"}, std::make_shared<GLCubeMeshGenerator>(1.0f, initial_grid_step)},
+        {{"cube"}, std::make_shared<GLCubeMeshGenerator>(1.0f, static_cast<unsigned>(initial_grid_step))},
 		{{"sphere"}, std::make_shared<GLSphereMeshGenerator>(1.0f, initial_sector_count, initial_stack_count)}
 	};
 };
