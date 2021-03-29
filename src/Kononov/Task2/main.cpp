@@ -19,6 +19,7 @@ int main(int argc, char **argv) {
   format.setVersion(GL_VERSION_MAJOR, GL_VERSION_MINOR);
   format.setDepthBufferSize(Q_SURFACE_DEPTH_BUFFER_SIZE);
   format.setOption(QSurfaceFormat::DebugContext);
+  format.setProfile(QSurfaceFormat::CoreProfile);
 
   Kononov::SecondWindow main_window;
   main_window.setFormat(format);
