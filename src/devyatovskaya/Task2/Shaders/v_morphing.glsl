@@ -13,9 +13,6 @@ uniform float morphFactor;
 out vec2 TexCoords;
 out vec4 col;
 
-
-
-
 void main()
 {
     vec4 newPos = vec4(posAttr * (1 - morphFactor ) + morphFactor * normalize(posAttr), 1.f);
