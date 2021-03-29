@@ -70,16 +70,16 @@ void GLSphereMeshGenerator::init_indices(std::vector<unsigned>& indices) const
         {
             if (i != 0)
             {
-                indices.push_back(k1);
-                indices.push_back(k2);
-                indices.push_back(k1 + 1u);
+                indices.push_back(static_cast<unsigned>(k1));
+                indices.push_back(static_cast<unsigned>(k2));
+                indices.push_back(static_cast<unsigned>(k1 + 1u));
             }
-        	
+
             if (i != (stack_count_ - 1))
             {
-                indices.push_back(k1 + 1u);
-                indices.push_back(k2);
-                indices.push_back(k2 + 1u);
+                indices.push_back(static_cast<unsigned>(k1 + 1u));
+                indices.push_back(static_cast<unsigned>(k2));
+                indices.push_back(static_cast<unsigned>(k2 + 1u));
             }
         }
     }
