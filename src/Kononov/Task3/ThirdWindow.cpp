@@ -1,6 +1,5 @@
 #include "ThirdWindow.hpp"
 
-#include <cmath>
 #include <vector>
 
 #include <QOpenGLFunctions>
@@ -85,7 +84,9 @@ constexpr int SPECULAR_POW = 32;
 constexpr float MOUSE_SENSITIVITY = 0.2F;
 constexpr float ROTATION_SPEED = 30.0F;
 constexpr float MOTION_SPEED = 0.1F;
-constexpr bool USE_GOURAUD = true;
+
+constexpr QVector3D PHONG_TRANSLATION{0.0F, 1.5F, 0.0F};
+constexpr QVector3D GOURAUD_TRANSLATION{0.0F, -1.5F, 0.0F};
 
 void ThirdWindow::onMessageLogged(const QOpenGLDebugMessage &message) {
   qDebug() << message;
@@ -109,6 +110,72 @@ void ThirdWindow::keyPressEvent(QKeyEvent *event) {
 
 void ThirdWindow::keyReleaseEvent(QKeyEvent *event) {
   m_motion_input_controller->keyReleaseEvent(event);
+}
+
+void ThirdWindow::add_objects(
+    QVector3D translation,
+    const std::shared_ptr<QOpenGLShaderProgram> &program) {
+  auto skull_texture =
+      Resources::loadTextureShared(":/textures/skull-diffuse.jpg");
+
+  auto cube_texture =
+      Resources::loadTextureShared(":/textures/dice-diffuse.png");
+
+  auto skull_mesh = Resources::loadMeshShared<RegularVertex, GLuint>(
+      ":/models/skull.vbo-ibo", GL_TRIANGLES);
+
+  auto cube_mesh = std::make_shared<GenericMesh<RegularVertex, GLuint>>(
+      modelVertices, modelIndices, GL_TRIANGLE_STRIP);
+
+  FirstShader factory(program);
+  auto skull_shader = factory.createShared();
+  skull_shader->getParameters().setLightSource(LIGHT_POSITION + translation,
+                                               LIGHT_COLOR);
+  skull_shader->getParameters().setDiffuseTexture(skull_texture);
+  skull_shader->getParameters().setAmbientStrength(AMBIENT_STRENGTH);
+  skull_shader->getParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
+
+  auto cube_shader = factory.createShared();
+  cube_shader->setParameters(skull_shader->getParameters());
+  cube_shader->getParameters().setDiffuseTexture(cube_texture);
+
+  auto skull_rend = std::make_shared<GenericRenderable>(
+      std::dynamic_pointer_cast<TypedShader<RegularVertex::Interface>>(
+          skull_shader),
+      std::dynamic_pointer_cast<TypedMesh<RegularVertex>>(skull_mesh));
+
+  auto cube_rend = std::make_shared<GenericRenderable>(
+      std::dynamic_pointer_cast<TypedShader<RegularVertex::Interface>>(
+          cube_shader),
+      std::dynamic_pointer_cast<TypedMesh<RegularVertex>>(cube_mesh));
+
+  /*
+   * Init scene objects
+   */
+  const QVector3D skull_scale(0.1F, 0.1F, 0.1F);
+  auto skull = std::make_shared<SceneObject>();
+  skull->setRenderable(skull_rend);
+  skull->setScale(skull_scale);
+  skull->setPosition(QVector3D(-2, 0, 0) + translation);
+
+  auto cube = std::make_shared<SceneObject>();
+  cube->setRenderable(cube_rend);
+  cube->setPosition(QVector3D(2, 0, 0) + translation);
+
+  /*
+   * Init controllers
+   */
+  auto rotation_controller = std::make_shared<ConstantRotationController>();
+  rotation_controller->setObject(skull);
+  rotation_controller->setRotationSpeed(ROTATION_SPEED);
+  rotation_controller->setRotationAxis({0.0F, 1.0F, 0.0F});
+
+  /*
+   * Register created objects
+   */
+  m_objects.push_back(skull);
+  m_objects.push_back(cube);
+  m_controllers.push_back(rotation_controller);
 }
 
 void ThirdWindow::init() {
@@ -140,80 +207,33 @@ void ThirdWindow::init() {
   auto phong_program = Resources::loadShaderProgramShared(
       {":/shaders/third-phong.vert", ":/shaders/third-phong.frag",
        ":/shaders/third-common.frag"});
+  add_objects(PHONG_TRANSLATION, phong_program);
+
   auto gouraud_program = Resources::loadShaderProgramShared(
       {":/shaders/third-gouraud.vert", ":/shaders/third-gouraud.frag",
        ":/shaders/third-common.vert"});
-
-  auto program = USE_GOURAUD ? gouraud_program : phong_program;
-
-  auto skull_texture =
-      Resources::loadTextureShared(":/textures/skull-diffuse.jpg");
-
-  auto cube_texture =
-      Resources::loadTextureShared(":/textures/dice-diffuse.png");
-
-  auto skull_mesh = Resources::loadMeshShared<RegularVertex, GLuint>(
-      ":/models/skull.vbo-ibo", GL_TRIANGLES);
-
-  auto cube_mesh = std::make_shared<GenericMesh<RegularVertex, GLuint>>(
-      modelVertices, modelIndices, GL_TRIANGLE_STRIP);
-
-  FirstShader factory(program);
-  m_skull_shader = factory.createShared();
-  m_skull_shader->getParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
-  m_skull_shader->getParameters().setDiffuseTexture(skull_texture);
-  m_skull_shader->getParameters().setAmbientStrength(AMBIENT_STRENGTH);
-  m_skull_shader->getParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
-
-  m_cube_shader = factory.createShared();
-  m_cube_shader->setParameters(m_skull_shader->getParameters());
-  m_cube_shader->getParameters().setDiffuseTexture(cube_texture);
-
-  auto skull_rend = std::make_shared<GenericRenderable>(
-      std::dynamic_pointer_cast<TypedShader<RegularVertex::Interface>>(
-          m_skull_shader),
-      std::dynamic_pointer_cast<TypedMesh<RegularVertex>>(skull_mesh));
-
-  auto cube_rend = std::make_shared<GenericRenderable>(
-      std::dynamic_pointer_cast<TypedShader<RegularVertex::Interface>>(
-          m_cube_shader),
-      std::dynamic_pointer_cast<TypedMesh<RegularVertex>>(cube_mesh));
-
-  /*
-   * Init scene objects
-   */
-  const QVector3D skull_scale(0.1F, 0.1F, 0.1F);
-  m_skull = std::make_shared<SceneObject>();
-  m_skull->setRenderable(skull_rend);
-  m_skull->setScale(skull_scale);
-  m_skull->setPosition(QVector3D(-2, 0, 0));
-
-  m_cube = std::make_shared<SceneObject>();
-  m_cube->setRenderable(cube_rend);
-  m_cube->setPosition(QVector3D(2, 0, 0));
+  add_objects(GOURAUD_TRANSLATION, gouraud_program);
 
   m_camera = std::make_shared<Camera>();
   m_camera->setPosition(INITIAL_CAMERA_POSITION);
 
-  m_rotation_controller = std::make_shared<ConstantRotationController>();
-  m_rotation_controller->setObject(m_skull);
-  m_rotation_controller->setRotationSpeed(ROTATION_SPEED);
-  m_rotation_controller->setRotationAxis({0.0F, 1.0F, 0.0F});
-
   m_direction_input_controller = std::make_shared<DirectionInputController>();
   m_direction_input_controller->setObject(m_camera);
   m_direction_input_controller->setSensitivity(MOUSE_SENSITIVITY);
+  m_controllers.push_back(m_direction_input_controller);
 
   m_motion_input_controller = std::make_shared<MotionInputController>();
   m_motion_input_controller->setObject(m_camera);
   m_motion_input_controller->setDirectionSource(m_direction_input_controller);
   m_motion_input_controller->setMotionSpeed(MOTION_SPEED);
+  m_controllers.push_back(m_motion_input_controller);
 }
 
 void ThirdWindow::render() {
   const float delta = 1.0F / static_cast<float>(screen()->refreshRate());
-  m_motion_input_controller->update(delta);
-  m_rotation_controller->update(delta);
+  for (const auto &c : m_controllers) {
+    c->update(delta);
+  }
 
   // NOLINTNEXTLINE(hicpp-signed-bitwise)
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -224,10 +244,9 @@ void ThirdWindow::render() {
   m_camera->beginRender((GLsizei)(width() * pixel_ratio),
                         (GLsizei)(height() * pixel_ratio));
 
-  m_cube->render(*m_camera);
-  m_skull->render(*m_camera);
-
-  m_frame++;
+  for (const auto &obj : m_objects) {
+    obj->render(*m_camera);
+  }
 }
 
 } // namespace Kononov
