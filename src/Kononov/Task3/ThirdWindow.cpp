@@ -84,8 +84,6 @@ constexpr int SPECULAR_POW = 32;
 
 constexpr float MOUSE_SENSITIVITY = 0.2F;
 constexpr float ROTATION_SPEED = 30.0F;
-constexpr float ROTATION_AMPLITUDE_CUBE = 0.7F;
-constexpr float ROTATION_AMPLITUDE_SKULL = 0.1F;
 constexpr float MOTION_SPEED = 0.1F;
 constexpr bool USE_GOURAUD = true;
 
@@ -197,6 +195,11 @@ void ThirdWindow::init() {
   m_camera = std::make_shared<Camera>();
   m_camera->setPosition(INITIAL_CAMERA_POSITION);
 
+  m_rotation_controller = std::make_shared<ConstantRotationController>();
+  m_rotation_controller->setObject(m_skull);
+  m_rotation_controller->setRotationSpeed(ROTATION_SPEED);
+  m_rotation_controller->setRotationAxis({0.0F, 1.0F, 0.0F});
+
   m_direction_input_controller = std::make_shared<DirectionInputController>();
   m_direction_input_controller->setObject(m_camera);
   m_direction_input_controller->setSensitivity(MOUSE_SENSITIVITY);
@@ -208,7 +211,9 @@ void ThirdWindow::init() {
 }
 
 void ThirdWindow::render() {
+  const float delta = 1.0F / static_cast<float>(screen()->refreshRate());
   m_motion_input_controller->update();
+  m_rotation_controller->update(delta);
 
   // NOLINTNEXTLINE(hicpp-signed-bitwise)
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -220,10 +225,6 @@ void ThirdWindow::render() {
                         (GLsizei)(height() * pixel_ratio));
 
   m_cube->render(*m_camera);
-
-  const float angle = ROTATION_SPEED * static_cast<float>(m_frame) /
-                      static_cast<float>(screen()->refreshRate());
-  m_skull->setRotation(QQuaternion::fromAxisAndAngle(0, 1, 0, angle));
   m_skull->render(*m_camera);
 
   m_frame++;
