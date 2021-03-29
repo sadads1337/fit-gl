@@ -1,9 +1,12 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include <QMouseEvent>
 #include <QOpenGLDebugLogger>
+#include <QOpenGLShaderProgram>
+#include <QVector3D>
 
 #include <Camera.hpp>
 #include <ConstantRotationController.hpp>
@@ -35,21 +38,18 @@ public slots:
   static void onMessageLogged(const QOpenGLDebugMessage &message);
 
 private:
-  std::unique_ptr<QOpenGLDebugLogger> m_logger;
+  void add_objects(QVector3D translation,
+                   const std::shared_ptr<QOpenGLShaderProgram> &program);
 
-  std::shared_ptr<DirectionInputController> m_direction_input_controller;
-  std::shared_ptr<MotionInputController> m_motion_input_controller;
-  std::shared_ptr<ConstantRotationController> m_rotation_controller;
+  std::unique_ptr<QOpenGLDebugLogger> m_logger;
 
   std::shared_ptr<Camera> m_camera;
 
-  std::shared_ptr<FirstShader::Shader> m_cube_shader;
-  std::shared_ptr<FirstShader::Shader> m_skull_shader;
-  std::shared_ptr<SceneObject> m_cube;
-  std::shared_ptr<SceneObject> m_skull;
+  std::shared_ptr<DirectionInputController> m_direction_input_controller;
+  std::shared_ptr<MotionInputController> m_motion_input_controller;
 
-  // Frame counter for animation.
-  int m_frame = 0;
+  std::vector<std::shared_ptr<Controller>> m_controllers;
+  std::vector<std::shared_ptr<SceneObject>> m_objects;
 };
 
 } // namespace Kononov
