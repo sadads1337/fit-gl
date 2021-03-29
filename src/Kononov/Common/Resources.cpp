@@ -1,6 +1,7 @@
 #include "Resources.hpp"
 
 #include <stdexcept>
+#include <string>
 #include <unordered_map>
 
 #include <QFileInfo>
@@ -8,7 +9,7 @@
 namespace {
 
 // NOLINTNEXTLINE(cert-err58-cpp)
-const std::unordered_map<QString, QOpenGLShader::ShaderType> ext_type_map = {
+const std::unordered_map<std::string, QOpenGLShader::ShaderType> ext_type_map = {
     {"vert", QOpenGLShader::Vertex},
     {"vs", QOpenGLShader::Vertex},
     {"tesc", QOpenGLShader::TessellationControl},
@@ -48,7 +49,7 @@ Resources::loadShaderProgram(const std::vector<QString> &files) {
     if (!info.exists()) {
       throw std::invalid_argument("File not found");
     }
-    auto ext = info.suffix();
+    auto ext = info.suffix().toStdString();
     auto it = ext_type_map.find(ext);
     if (it == ext_type_map.end()) {
       throw std::invalid_argument("Unknown shader file extension");
