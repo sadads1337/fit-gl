@@ -26,7 +26,7 @@
      <x>0</x>
      <y>0</y>
      <width>600</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFunctions">
@@ -39,6 +39,16 @@
      </property>
      <addaction name="actionset_render_mode"/>
     </widget>
+    <widget class="QMenu" name="menuLighting">
+     <property name="title">
+      <string>Lighting</string>
+     </property>
+     <addaction name="actionAmbientDialog"/>
+     <addaction name="actionDiffuseDialog"/>
+     <addaction name="actionSpecularDialog"/>
+     <addaction name="actionLightColorDialog"/>
+     <addaction name="actionShininessDialog"/>
+    </widget>
     <widget class="QMenu" name="menuMorphing">
      <property name="title">
       <string>Morphing</string>
@@ -46,6 +56,7 @@
      <addaction name="actionset_morph_factor"/>
     </widget>
     <addaction name="menuRendering"/>
+    <addaction name="menuLighting"/>
     <addaction name="menuMorphing"/>
    </widget>
    <addaction name="menuFunctions"/>
@@ -123,7 +134,9 @@
    </slots>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="PhongLighting.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>PhongLightingWidget_</sender>

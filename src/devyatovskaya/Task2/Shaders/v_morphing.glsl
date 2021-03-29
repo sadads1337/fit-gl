@@ -1,5 +1,4 @@
-
-#version 450
+#version 330
 
 in vec3 posAttr;
 in vec4 colAttr;

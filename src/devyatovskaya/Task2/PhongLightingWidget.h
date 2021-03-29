@@ -6,8 +6,10 @@
 #include <QBasicTimer>
 
 #include "RenderDialog.h"
+#include "FPSCounter.h"
 #include "PreparedScenes.h"
 #include "GLSceneRenderer.h"
+#include "LightingDialog.h"
 #include "MorphingDialog.h"
 
 
@@ -26,12 +28,29 @@ public:
 
 public slots:
 	void show_render_dialog();
-
+	
+	void show_shininess_dialog();
+	void show_light_color_dialog();
+	void show_ambient_color_dialog();
+	void show_diffuse_color_dialog();
+	void show_specular_color_dialog();
 	void show_morphing_widget();
 	
 	void set_render_mode(int state);
+	void catch_fps(const QString&);
+
+
+	void set_light_color(const QColor& color);
+	void set_ambient_color(const QColor& color);
+	void set_diffuse_color(const QColor& color);
+	void set_specular_color(const QColor& color);
 	
+	void set_shininess(int shininess);
 	void set_morph_factor(int morph_factor);
+
+signals:
+	void send_fps(const QString&);
+
 	
 protected:
 	void initializeGL() override;
@@ -53,5 +72,13 @@ public:
 
 	RenderDialog render_dialog_;
 
+	LightingDialog lighting_dialog_;
+	MorphingDialog morphing_dialog_;
+	QColorDialog light_color_dialog_;
+	QColorDialog ambient_color_dialog_;
+	QColorDialog diffuse_color_dialog_;
+	QColorDialog specular_color_dialog_;
+	
+	FPSCounter fps_counter_;
 	QBasicTimer timer_;
 };

@@ -41,6 +41,7 @@ public:
     QMenuBar *menuBar;
     QMenu *menuFunctions;
     QMenu *menuRendering;
+    QMenu *menuLighting;
     QMenu *menuMorphing;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -82,11 +83,13 @@ public:
         PhongLightingClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(PhongLightingClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 600, 22));
+        menuBar->setGeometry(QRect(0, 0, 600, 21));
         menuFunctions = new QMenu(menuBar);
         menuFunctions->setObjectName(QString::fromUtf8("menuFunctions"));
         menuRendering = new QMenu(menuFunctions);
         menuRendering->setObjectName(QString::fromUtf8("menuRendering"));
+        menuLighting = new QMenu(menuFunctions);
+        menuLighting->setObjectName(QString::fromUtf8("menuLighting"));
         menuMorphing = new QMenu(menuFunctions);
         menuMorphing->setObjectName(QString::fromUtf8("menuMorphing"));
         PhongLightingClass->setMenuBar(menuBar);
@@ -99,8 +102,14 @@ public:
 
         menuBar->addAction(menuFunctions->menuAction());
         menuFunctions->addAction(menuRendering->menuAction());
+        menuFunctions->addAction(menuLighting->menuAction());
         menuFunctions->addAction(menuMorphing->menuAction());
         menuRendering->addAction(actionset_render_mode);
+        menuLighting->addAction(actionAmbientDialog);
+        menuLighting->addAction(actionDiffuseDialog);
+        menuLighting->addAction(actionSpecularDialog);
+        menuLighting->addAction(actionLightColorDialog);
+        menuLighting->addAction(actionShininessDialog);
         menuMorphing->addAction(actionset_morph_factor);
 
         retranslateUi(PhongLightingClass);
@@ -130,6 +139,7 @@ public:
         actionset_morph_factor->setText(QCoreApplication::translate("PhongLightingClass", "set morph factor", nullptr));
         menuFunctions->setTitle(QCoreApplication::translate("PhongLightingClass", "Functions", nullptr));
         menuRendering->setTitle(QCoreApplication::translate("PhongLightingClass", "Rendering", nullptr));
+        menuLighting->setTitle(QCoreApplication::translate("PhongLightingClass", "Lighting", nullptr));
         menuMorphing->setTitle(QCoreApplication::translate("PhongLightingClass", "Morphing", nullptr));
     } // retranslateUi
 

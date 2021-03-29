@@ -38,6 +38,9 @@ void GLCubeMeshGenerator::rotate_face(std::vector<GLVertex>& plane_vertices, con
 	{
 		vertex.coordinate = matrix * vertex.coordinate;
 		vertex.normal = matrix * vertex.normal;
+		// ?
+		vertex.tangent = matrix * vertex.tangent;
+		vertex.bitangent = matrix * vertex.bitangent;
 		
 	});
 }

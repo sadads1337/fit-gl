@@ -12,5 +12,6 @@ struct ShaderData final
 	std::shared_ptr<GLMeshRendererGenerator> renderer_generator;
 	std::shared_ptr<QOpenGLShaderProgram> shader_program{ nullptr };
 
+
 	std::shared_ptr<QOpenGLShaderProgram> get_shader_program();
 };

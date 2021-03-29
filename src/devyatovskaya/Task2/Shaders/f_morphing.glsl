@@ -1,5 +1,4 @@
-
-#version 450
+#version 330
 in vec4 col;
 in vec2 TexCoords;
 

@@ -16,6 +16,7 @@ GLMesh GLFlatMeshGenerator::generate(const QColor& color) const
 
     init_vertices(mesh.vertices, color);
     init_indices(mesh.indices);
+    init_tangent_bitangent_vectors(mesh.vertices, mesh.indices);
 
     return mesh;
 }
@@ -44,6 +45,8 @@ void GLFlatMeshGenerator::init_vertices(std::vector<GLVertex>& vertices, const Q
             vertex.color.setX(static_cast<float>(color.redF()));
             vertex.color.setY(static_cast<float>(color.greenF()));
             vertex.color.setZ(static_cast<float>(color.blueF()));
+
+            vertex.texture = { static_cast<float>(j) / normalized_step , static_cast<float>(i) / normalized_step };
 
             vertices.emplace_back(vertex);
         }

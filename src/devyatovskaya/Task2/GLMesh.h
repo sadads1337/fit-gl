@@ -8,6 +8,7 @@ public:
 	GLMesh() = default;
 	GLMesh(std::vector<GLVertex> _vertices, std::vector<unsigned> _indices);
 
+
 	std::vector<GLVertex> vertices;
 	std::vector<unsigned> indices;
 };

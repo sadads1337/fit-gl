@@ -31,10 +31,12 @@ void GLSceneRenderer::render(GLScene& scene)
 		functions_.glCullFace(GL_FRONT);
 	}
 
-		std::for_each(scene.objects.begin(), scene.objects.end(), [&](std::shared_ptr<GLObject>& object)
+	
+	render_lights_objects(scene);
+	std::for_each(scene.objects.begin(), scene.objects.end(), [&](std::shared_ptr<GLObject>& object)
 		{
 			if(mode_ & gl_fill) {
-                object->renderer->render(functions_, scene.camera_mover.camera);
+				object->renderer->render(functions_, scene.camera_mover.camera, scene.lights_objects);
 			}
 
 
@@ -57,4 +59,12 @@ void GLSceneRenderer::set_mode(const uint8_t mode)
 void GLSceneRenderer::reset_mode(const uint8_t mode)
 {
 	mode_ &= ~mode;
+}
+
+void GLSceneRenderer::render_lights_objects(GLScene& scene)
+{
+	for (auto& [light, light_object] : scene.lights_objects)
+	{
+		light_object->renderer->render(functions_, scene.camera_mover.camera, scene.lights_objects);
+	}
 }
