@@ -13,5 +13,5 @@ public:
 	std::size_t stack_count_;
 private:
 	void init_vertices(std::vector<GLVertex>& vertices, const QColor& color) const override;
-	void init_indices(std::vector<unsigned>& indices) const override;
+    void init_indices(std::vector<unsigned>& indices) const override;
 };
