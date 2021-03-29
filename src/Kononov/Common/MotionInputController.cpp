@@ -10,7 +10,7 @@ void MotionInputController::keyReleaseEvent(QKeyEvent *event) {
   m_pressed_keys.erase(event->key());
 }
 
-void MotionInputController::update() {
+void MotionInputController::update(float /*delta*/) {
   if (m_object == nullptr || m_direction_source == nullptr) {
     return;
   }

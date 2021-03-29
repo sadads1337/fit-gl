@@ -2,6 +2,8 @@
 
 namespace Kononov {
 
+void DirectionInputController::update(float /*delta*/) {}
+
 void DirectionInputController::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
     m_lastPosition = event->pos();

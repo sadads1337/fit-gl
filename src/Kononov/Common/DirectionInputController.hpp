@@ -6,12 +6,15 @@
 #include <QQuaternion>
 #include <QVector3D>
 
+#include "Controller.hpp"
 #include "PositionedObject.hpp"
 
 namespace Kononov {
 
-class DirectionInputController {
+class DirectionInputController : public Controller {
 public:
+  void update(float delta) override;
+
   void mousePressEvent(QMouseEvent *event);
   void mouseReleaseEvent(QMouseEvent *event);
   void mouseMoveEvent(QMouseEvent *event);
