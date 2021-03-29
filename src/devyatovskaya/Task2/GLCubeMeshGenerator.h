@@ -5,7 +5,7 @@
 class GLCubeMeshGenerator : public GLMeshGenerator
 {
 public:
-    explicit GLCubeMeshGenerator(float edge_len, std::size_t steps_count);
+    explicit GLCubeMeshGenerator(float edge_len, unsigned steps_count);
 
 	GLMesh generate(const QColor& color) const override;
 private:
