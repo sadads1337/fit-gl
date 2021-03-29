@@ -2,7 +2,7 @@
 #include "GLCubeMeshGenerator.h"
 #include "QMatrix4x4"
 
-GLCubeMeshGenerator::GLCubeMeshGenerator(const float edge_len, const unsigned steps_count)
+GLCubeMeshGenerator::GLCubeMeshGenerator(const float edge_len, const std::size_t steps_count)
 	: face_generator_{ edge_len, steps_count }
 {
 }
