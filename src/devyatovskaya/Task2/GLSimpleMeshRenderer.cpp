@@ -1,8 +1,12 @@
 #include <QOpenGLFunctions_3_0>
 
 #include "GLSimpleMeshRenderer.h"
+#include "GLPointLight.h"
+#include "GLDirectedLight.h"
+#include "GLSpotLight.h"
+#include "GLMaterial.h"
 
-GLSimpleMeshRenderer::GLSimpleMeshRenderer(GLMesh& mesh, GLTransform& transforml)
+GLSimpleMeshRenderer::GLSimpleMeshRenderer(GLMesh& mesh, GLTransform& transform, GLMaterial& material)
 	: GLMeshRenderer{ mesh, transform, material }
 {
 	

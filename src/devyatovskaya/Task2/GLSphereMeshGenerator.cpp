@@ -16,6 +16,8 @@ GLMesh GLSphereMeshGenerator::generate(const QColor& color) const
 	
     init_vertices(mesh.vertices, color);
     init_indices(mesh.indices);
+    init_tangent_bitangent_vectors(mesh.vertices, mesh.indices);
+
 	return mesh;
 }
 
@@ -47,6 +49,8 @@ void GLSphereMeshGenerator::init_vertices(std::vector<GLVertex>& vertices, const
             vertex.color.setX(static_cast<float>(color.redF()));
             vertex.color.setY(static_cast<float>(color.greenF()));
             vertex.color.setZ(static_cast<float>(color.blueF()));
+
+            vertex.texture = { static_cast<float>(j) / sector_count_ , static_cast<float>(i) / stack_count_ };
         	
             vertices.push_back(vertex);
 

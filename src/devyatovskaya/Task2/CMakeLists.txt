@@ -1,22 +1,18 @@
-cmake_minimum_required(VERSION 3.5)
-
-project(Task2 LANGUAGES CXX)
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 set(Task2_SRSC
         main.cpp
+        AssimpMeshLoader.h
+        FPSCounter.cpp
+        FPSCounter.h
         GLCamera.cpp
         GLCamera.h
         GLCameraMover.cpp
         GLCameraMover.h
+        GLDirectedLight.cpp
+        GLDirectedLight.h
+        GLMaterial.cpp
+        GLMaterial.h
+        GLLightSource.cpp
+        GLLightSource.h
         GLCubeMeshGenerator.cpp
         GLCubeMeshGenerator.h
         GLFlatMeshGenerator.cpp
@@ -24,9 +20,12 @@ set(Task2_SRSC
         GLMesh.cpp
         GLMesh.h
         GLMeshGenerator.h
+        GLMeshGenerator.cpp
         GLMeshRenderer.cpp
         GLMeshRenderer.h
         GLMeshRendererGenerator.h
+        GLPointLight.cpp
+        GLPointLight.h
         GLObject.cpp
         GLObject.h
         GLScene.cpp
@@ -34,6 +33,7 @@ set(Task2_SRSC
         GLSceneRenderer.cpp
         GLSceneRenderer.h
         GLSimpleMeshRenderer.h
+        GLSimpleMeshRenderer.cpp
         GLSimpleMeshRendererGenerator.cpp
         GLSimpleMeshRendererGenerator.h
         GLSphereMeshGenerator.cpp
@@ -41,6 +41,11 @@ set(Task2_SRSC
         GLTransform.cpp
         GLTransform.h
         GLVertex.h
+        LightingDialog.h
+        LightingDialog.ui
+        GLSpotLight.cpp
+        GLSpotLight.h
+        LigtingDialog.cpp
         MeshGeneratorCollecrion.h
         MorphingDialog.cpp
         MorphingDialog.h
@@ -49,6 +54,7 @@ set(Task2_SRSC
         PhongLightingWidget.cpp
         PhongLightingWidget.h
         PhongLighting.h
+        PhongLighting.cpp
         PhongLighting.qrc
         PreparedScenes.cpp
         PreparedScenes.h
@@ -62,7 +68,6 @@ set(Task2_SRSC
         ui_PhongLighting.h
         ui_RenderDialog.h
 
-        shader.qrc
         Shaders/f_morphing.glsl
         Shaders/v_morphing.glsl
 )
