@@ -9,13 +9,16 @@ add_library(KononovCommon
         PositionedObject.hpp
         SceneObject.cpp
         SceneObject.hpp
+        Renderable.hpp
+        Resources.cpp
+        Resources.hpp
         Camera.cpp
         Camera.hpp
         GLUtil.cpp
         GLUtil.hpp
-        ShaderProgram.hpp
-        MeshBuffers.hpp
-        Renderable.hpp)
+        Vertex.hpp
+        Shader.hpp
+        Mesh.hpp)
 
 target_include_directories(KononovCommon
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>shaders/second.frag</file>
+        <file>shaders/second.geom</file>
+        <file>shaders/second.vert</file>
+        <file>shaders/second-cube.geom</file>
+        <file>shaders/second-cube.tese</file>
+        <file>shaders/second-cube.tesc</file>
+        <file>shaders/second-cube.vert</file>
+    </qresource>
+</RCC>

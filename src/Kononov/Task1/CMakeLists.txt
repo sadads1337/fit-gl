@@ -1,26 +1,18 @@
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
+add_subdirectory(export)
+
 add_executable(KononovTask1
+        ${KONONOV_RESOURCES}
         shaders.qrc
         shaders/first.fs
         shaders/first.vs
 
-        textures.qrc
-        textures/dice-diffuse.png
-        textures/skull-diffuse.jpg
-
-        models.qrc
-        models/skull.vbo-ibo
-
         main.cpp
-        Vertex.hpp
         MainWindow.cpp
-        MainWindow.hpp
-        FirstShader.cpp
-        FirstShader.hpp
-        FirstRenderable.cpp
-        FirstRenderable.hpp)
+        MainWindow.hpp)
 
 target_link_libraries(KononovTask1
         PRIVATE Qt5::Widgets
-        PUBLIC Kononov::Common)
+        PUBLIC Kononov::Common
+        PRIVATE Kononov::Task1::export)

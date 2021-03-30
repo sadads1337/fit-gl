@@ -11,10 +11,11 @@
 #include <SceneObject.hpp>
 
 #include "Base/GLWindow.hpp"
+#include "SecondShader.hpp"
 
 namespace Kononov {
 
-class MainWindow final : public fgl::GLWindow {
+class SecondWindow final : public fgl::GLWindow {
   Q_OBJECT
 public:
   void init() override;
@@ -39,9 +40,10 @@ private:
 
   std::shared_ptr<Camera> m_camera;
 
-  std::shared_ptr<SceneObject> m_skull;
-  std::shared_ptr<SceneObject> m_skull_rotating;
+  std::shared_ptr<SecondShader::Shader> m_cube_shader;
+  std::shared_ptr<SecondShader::Shader> m_skull_shader;
   std::shared_ptr<SceneObject> m_cube;
+  std::shared_ptr<SceneObject> m_skull;
 
   // Frame counter for animation.
   int m_frame = 0;

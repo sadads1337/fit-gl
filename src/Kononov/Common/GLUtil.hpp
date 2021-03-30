@@ -2,6 +2,7 @@
 
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
+#include <QOpenGLFunctions_4_0_Core>
 
 namespace Kononov::GL {
 
@@ -16,5 +17,6 @@ template <> constexpr GLenum typeToEnum<GLushort>() {
 
 QOpenGLContext *requireContext();
 QOpenGLFunctions *requireFunctions();
+QOpenGLFunctions_4_0_Core *requireFunctions40core();
 
 } // namespace Kononov::GL
