@@ -30,11 +30,11 @@ void main() {
         float specularStrength = 0.5f;
         vec3 viewDir = normalize(viewPos - fragPos);
         vec3 reflectDir = reflect(-lightDir, norm);
-        float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+        float spec = pow(max(dot(viewDir, reflectDir), 0.0), 16);
         vec4 specular = specularStrength * spec * lightColor;
 
         vec4 result = (ambient + diffuse + specular) * col;
-        gl_FragColor = result;
+        gl_FragColor = specular + ambient + diffuse;
     };
 
     if (light_model == 0){

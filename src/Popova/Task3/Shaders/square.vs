@@ -26,7 +26,7 @@ void main() {
         //guro
         // gouraud shading
         vec3 Position = vec3(model * posAttr);
-        vec3 Normal = mat3(model) * norm;
+        vec3 Normal = mat3(normal_matrix) * norm;
         
         // ambient
         float ambientStrength = 0.1;
@@ -39,13 +39,13 @@ void main() {
         vec3 diffuse = diff * lightColor;
         
         // specular
-        float specularStrength = 1.0; 
+        float specularStrength = 0.5f; 
         vec3 viewDir = normalize(viewPos - Position);
-        vec3 reflectDir = reflect(-lightDir, norm);  
-        float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-        vec3 specular = specularStrength * spec * lightColor;      
+        vec3 reflectDir = reflect(-lightDir, norm2); 
+        float spec = pow(max(dot(viewDir, reflectDir), 0.0), 16);
+        vec3 specular = spec * specularStrength * lightColor;      
 
-        LightingColor = ambient + diffuse + specular;
+        LightingColor = specular + ambient + diffuse;
        
     };
 
