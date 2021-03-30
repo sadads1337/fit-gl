@@ -9,6 +9,7 @@
 #include <QVector2D>
 #include <QVector3D>
 #include <array>
+#include <iostream>
 namespace {
 
 struct VertexData {
@@ -49,18 +50,10 @@ std::array<VertexData, 24u> vertices{{
     VertexData{{0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,0.0f,-1.0f}},
     VertexData{{0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,-1.0f,0.0f}},
     VertexData{{0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {1.0f,0.0f,0.0f}},
-}
+  }
 };
-// std::array<GLushort, 14u> indices{{5, 4, 6, 7, 2, 4, 0, 5, 1, 6, 3, 2, 1, 0}};
 std::array<GLushort, 36u> indices{{0, 3, 6, 6, 3, 9, 2, 7, 13, 13, 7, 23, 4, 1, 17, 17, 1, 14, 19, 10, 16, 16, 10, 5, 18, 15, 21, 21, 15, 12, 11, 20, 8, 8, 20, 22 }};
-// std::array<QVector3D, 6u> norm{{
-// {1.0f, 0.0f, 0.0f}, 
-// {-1.0f, 0.0f, 0.0f}, 
-// {0.0f, 1.0f, 0.0f}, 
-// {0.0f, -1.0f, 0.0f}, 
-// {0.0f, 0.0f, 1.0f}, 
-// {0.0f, 0.0f, -1.0f}, 
-// }};
+
 template <typename C, typename M>
 inline ptrdiff_t memberOffset(M C::*member) noexcept {
   constexpr const char *null_ptr = nullptr;
@@ -77,7 +70,6 @@ void SquareWindow::init() {
 
   arrayBuf_.create();
   indexBuf_.create();
-  normalBuf_.create();
 
   arrayBuf_.bind();
   arrayBuf_.allocate(
@@ -101,18 +93,19 @@ void SquareWindow::init() {
   norm_ = program_->attributeLocation("norm");
   colAttr_ = program_->attributeLocation("colAttr");
   matrixUniform_ = program_->uniformLocation("matrix");
-  matrixUniform2_ = program_->uniformLocation("matrix2");
+  matrixUniform2_ = program_->uniformLocation("model");
 
-  program_->setAttributeBuffer(posAttr_, GL_FLOAT,
+
+  program_->setAttributeBuffer(norm_, GL_FLOAT,
                                memberOffset(&VertexData::norm), 3,
-                               sizeof(VertexData::norm));
-
+                               sizeof(VertexData));
   program_->setAttributeBuffer(posAttr_, GL_FLOAT,
                                memberOffset(&VertexData::position), 3,
-                               sizeof(VertexData::position));
+                               sizeof(VertexData));
   program_->setAttributeBuffer(colAttr_, GL_FLOAT,
                                memberOffset(&VertexData::color), 3,
-                               sizeof(VertexData::color));
+                               sizeof(VertexData));
+
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
 }
@@ -126,40 +119,40 @@ void SquareWindow::render() {
   program_->bind();
   for (int k = 0; k<12; k++){
   QMatrix4x4 matrix;
-  QMatrix4x4 matrix2;
-   matrix.perspective(60.0f, (float)width() / height(), 0.1f, 100.0f);
-  if (k<4) {
+  QMatrix4x4 model;
+  matrix.perspective(60.0f, (float)width() / height(), 0.1f, 100.0f);
+  if (k < 4) {
     matrix.translate(k, 0, -5);
-   matrix2.translate(k, 0, -5);
+    model.translate(k, 0, -5);
   }
-  if ((k>=4)&&(k<8)) {
-    matrix.translate(k-4, 1, -5);
-   matrix2.translate(k-4, 1, -5);
+  if ((k >= 4) && (k < 8)) {
+    matrix.translate(k - 4, 1, -5);
+    model.translate(k - 4, 1, -5);
   }
-  if ((k>=8)&&(k<12)) {
-    matrix.translate(k-8, -1, -5);
-   matrix2.translate(k-8, -1, -5);
+  if ((k >= 8) && (k < 12)) {
+    matrix.translate(k - 8, -1, -5);
+    model.translate(k - 8, -1, -5);
   }
   
-  matrix.rotate(100.0 * frame_ / screen()->refreshRate(), rotationAxis);
+  matrix.rotate(50.0 * frame_ / screen()->refreshRate(), rotationAxis);
+  model.rotate(50.0 * frame_ / screen()->refreshRate(), rotationAxis);
   matrix.scale(0.5, 0.5, 0.5);
-  matrix2.scale(0.5, 0.5, 0.5);
+  model.scale(0.5, 0.5, 0.5);
   program_->setUniformValue(matrixUniform_, matrix);
- program_->setUniformValue(matrixUniform2_, matrix2);
+  program_->setUniformValue(matrixUniform2_, model);
+  program_->setUniformValue("normal_matrix", model.normalMatrix());
   program_->setUniformValue("col", square_color);
-  glVertexAttribPointer(norm_, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
-  glVertexAttribPointer(posAttr_, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
-  glVertexAttribPointer(colAttr_, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),
-                        reinterpret_cast<char *>(sizeof(QVector3D)));
+  //Choose "0" to use Guro lighting model; "1" to use Phong lighting model
+  program_->setUniformValue("lightModel", 1);
 
-  glEnableVertexAttribArray(norm_);
-  glEnableVertexAttribArray(posAttr_);
-  glEnableVertexAttribArray(colAttr_);
+  program_->enableAttributeArray(norm_);
+  program_->enableAttributeArray(posAttr_);
+  program_->enableAttributeArray(colAttr_);
 
   glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, nullptr);
-  glDisableVertexAttribArray(colAttr_);
-  glDisableVertexAttribArray(posAttr_);
-  glDisableVertexAttribArray(norm_);
+  program_->disableAttributeArray(colAttr_);
+  program_->disableAttributeArray(posAttr_);
+  program_->disableAttributeArray(norm_);
 
   }
   
