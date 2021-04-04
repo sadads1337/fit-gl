@@ -1,5 +1,4 @@
-#ifndef BAZHENOV_TASK2_MAINWINDOW_HPP
-#define BAZHENOV_TASK2_MAINWINDOW_HPP
+#pragma once
 
 #include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
@@ -44,5 +43,3 @@ private:
 };
 
 } // namespace Bazhenov
-
-#endif // BAZHENOV_TASK2_MAINWINDOW_HPP

@@ -1,5 +1,4 @@
-#ifndef BAZHENOV_TASK2_INPUTCONTROLLER_INPUTCONTROLLER_HPP
-#define BAZHENOV_TASK2_INPUTCONTROLLER_INPUTCONTROLLER_HPP
+#pragma once
 
 #include <unordered_set>
 #include <memory>
@@ -44,5 +43,3 @@ private:
 };
 
 }
-
-#endif // BAZHENOV_TASK2_INPUTCONTROLLER_INPUTCONTROLLER_HPP
