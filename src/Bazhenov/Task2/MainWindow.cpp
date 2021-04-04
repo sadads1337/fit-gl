@@ -1,7 +1,7 @@
 #include "MainWindow.hpp"
 
-#include <vector>
 #include <algorithm>
+#include <vector>
 
 #include <QOpenGLShader>
 #include <QVector4D>
@@ -44,7 +44,8 @@ void initCube(GLfloat halfWidth, std::uint32_t factor = 1U) {
 
         position[constCoord] = normal[constCoord] * halfWidth;
         position[coord1] = (x * 2.0F / factor - 1.0F) * halfWidth;
-        position[coord2] = (y * 2.0F / factor - 1.0F) * halfWidth * normal[constCoord];
+        position[coord2] =
+            (y * 2.0F / factor - 1.0F) * halfWidth * normal[constCoord];
 
         auto color = QColor{};
         color.setRedF((x % 5 + y % 5 + face) % 4 / 3.0F);
@@ -64,16 +65,17 @@ void initCube(GLfloat halfWidth, std::uint32_t factor = 1U) {
     }
 
     // Add indices
-    const auto faceIndexOffset = face*(factor+1)*(factor+1);
+    const auto faceIndexOffset = face * (factor + 1) * (factor + 1);
     for (auto y = 0U; y < factor; ++y) {
-      const auto rowIndexOffset = (factor+1) * y;
+      const auto rowIndexOffset = (factor + 1) * y;
 
       indices.push_back(faceIndexOffset + rowIndexOffset);
-      for (auto x = 0U; x < factor+1; ++x) {
+      for (auto x = 0U; x < factor + 1; ++x) {
         indices.push_back(faceIndexOffset + rowIndexOffset + x);
-        indices.push_back(faceIndexOffset + rowIndexOffset + x + (factor+1));
+        indices.push_back(faceIndexOffset + rowIndexOffset + x + (factor + 1));
       }
-      indices.push_back(faceIndexOffset + rowIndexOffset + factor + (factor+1));
+      indices.push_back(faceIndexOffset + rowIndexOffset + factor +
+                        (factor + 1));
     }
   }
 }
