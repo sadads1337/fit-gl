@@ -239,7 +239,7 @@
   <customwidget>
    <class>CubeWidget</class>
    <extends>QWidget</extends>
-   <header>cubewidget.hpp</header>
+   <header>Biryuchkov/Task2/cubewidget.hpp</header>
    <container>1</container>
    <slots>
     <slot>setMorphFactorI(int)</slot>
