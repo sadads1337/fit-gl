@@ -7,7 +7,6 @@ uniform highp float u_morph_param;
 
 
 void main() {
-
    float x = posAttr.x;
    float y = posAttr.y;
    float z = posAttr.z;
