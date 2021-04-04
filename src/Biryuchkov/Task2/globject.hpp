@@ -4,6 +4,7 @@
 class GLObject
 {
 public:
-    virtual void draw(QOpenGLShaderProgram& program) = 0;
+  virtual ~GLObject() = default;
+  virtual void draw(QOpenGLShaderProgram& program) = 0;
 };
 

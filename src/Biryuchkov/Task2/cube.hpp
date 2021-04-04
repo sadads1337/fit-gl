@@ -14,6 +14,7 @@ class Cube : public GLObject {
 public:
   Cube(size_t steps, QVector3D const &size, QColor const &face_color,
        QColor const &edges_color = Qt::GlobalColor::white);
+  ~Cube() override = default;
 
   void draw(QOpenGLShaderProgram &program) override;
   void initialize(size_t steps, QColor const &face_color,
