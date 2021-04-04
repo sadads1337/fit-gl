@@ -1,20 +1,15 @@
-#ifndef FIT_GL_COMMONWIDGET_H
-#define FIT_GL_COMMONWIDGET_H
+#pragma once
 
 #include "MainWindow.h"
+#include <QColorDialog>
+#include <QLabel>
 #include <QSlider>
 #include <QVBoxLayout>
-#include <QLabel>
 #include <QWidget>
-#include <QColorDialog>
 
-
-class CommonWidget: public QWidget {
-    Q_OBJECT
+class CommonWidget : public QWidget {
+  Q_OBJECT
 
 public:
-        CommonWidget();
+  CommonWidget();
 };
-
-
-#endif //FIT_GL_COMMONWIDGET_H
