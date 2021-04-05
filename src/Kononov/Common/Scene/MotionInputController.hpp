@@ -7,7 +7,7 @@
 #include <QVector3D>
 
 #include "Controller.hpp"
-#include "DirectionInputController.hpp"
+#include "Kononov/Common/Scene/DirectionInputController.hpp"
 
 namespace Kononov {
 

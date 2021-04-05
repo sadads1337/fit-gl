@@ -34,43 +34,11 @@ constexpr float ROTATION_AMPLITUDE_CUBE = 0.7F;
 constexpr float ROTATION_AMPLITUDE_SKULL = 0.1F;
 constexpr float MOTION_SPEED = 0.1F;
 
-void SecondWindow::onMessageLogged(const QOpenGLDebugMessage &message) {
-  qDebug() << message;
-}
-
-void SecondWindow::mousePressEvent(QMouseEvent *event) {
-  m_direction_input_controller->mousePressEvent(event);
-}
-
-void SecondWindow::mouseMoveEvent(QMouseEvent *event) {
-  m_direction_input_controller->mouseMoveEvent(event);
-}
-
-void SecondWindow::mouseReleaseEvent(QMouseEvent *event) {
-  m_direction_input_controller->mouseReleaseEvent(event);
-}
-
-void SecondWindow::keyPressEvent(QKeyEvent *event) {
-  m_motion_input_controller->keyPressEvent(event);
-}
-
-void SecondWindow::keyReleaseEvent(QKeyEvent *event) {
-  m_motion_input_controller->keyReleaseEvent(event);
-}
-
 void SecondWindow::init() {
-  /*
-   * Logger initialization
-   */
-  m_logger = std::make_unique<QOpenGLDebugLogger>(this);
-
-  connect(m_logger.get(), &QOpenGLDebugLogger::messageLogged, this,
-          &SecondWindow::onMessageLogged);
-
-  if (m_logger->initialize()) {
-    m_logger->startLogging(QOpenGLDebugLogger::SynchronousLogging);
-    m_logger->enableMessages();
-  }
+  SceneWindow::init();
+  getCamera()->setPosition(INITIAL_CAMERA_POSITION);
+  getDirectionInputController()->setSensitivity(MOUSE_SENSITIVITY);
+  getMotionInputController()->setMotionSpeed(MOTION_SPEED);
 
   /*
    * Configure OpenGL
@@ -131,52 +99,30 @@ void SecondWindow::init() {
    * Init scene objects
    */
   const QVector3D skull_scale(0.1F, 0.1F, 0.1F);
-  m_skull = std::make_shared<SceneObject>();
-  m_skull->setRenderable(skull_rend);
-  m_skull->setScale(skull_scale);
-  m_skull->setPosition(QVector3D(-2, 0, 0));
+  auto skull = std::make_shared<SceneObject>();
+  skull->setRenderable(skull_rend);
+  skull->setScale(skull_scale);
+  skull->setPosition(QVector3D(-2, 0, 0));
+  getObjects().push_back(skull);
 
-  m_cube = std::make_shared<SceneObject>();
-  m_cube->setRenderable(cube_rend);
-  m_cube->setPosition(QVector3D(2, 0, 0));
-
-  m_camera = std::make_shared<Camera>();
-  m_camera->setPosition(INITIAL_CAMERA_POSITION);
-
-  m_direction_input_controller = std::make_shared<DirectionInputController>();
-  m_direction_input_controller->setObject(m_camera);
-  m_direction_input_controller->setSensitivity(MOUSE_SENSITIVITY);
-
-  m_motion_input_controller = std::make_shared<MotionInputController>();
-  m_motion_input_controller->setObject(m_camera);
-  m_motion_input_controller->setDirectionSource(m_direction_input_controller);
-  m_motion_input_controller->setMotionSpeed(MOTION_SPEED);
+  auto cube = std::make_shared<SceneObject>();
+  cube->setRenderable(cube_rend);
+  cube->setPosition(QVector3D(2, 0, 0));
+  getObjects().push_back(cube);
 }
 
 void SecondWindow::render() {
-  const float delta = 1.0F / static_cast<float>(screen()->refreshRate());
-  m_motion_input_controller->update(delta);
-
-  // NOLINTNEXTLINE(hicpp-signed-bitwise)
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  const auto pixel_ratio = devicePixelRatio();
-  const auto ratio = static_cast<float>(width()) / static_cast<float>(height());
-  m_camera->setPerspective(PERSPECTIVE_FOV, ratio, NEAR_PLANE, FAR_PLANE);
-  m_camera->beginRender((GLsizei)(width() * pixel_ratio),
-                        (GLsizei)(height() * pixel_ratio));
-
   m_cube_shader->getParameters().setSkewness(
       ROTATION_AMPLITUDE_CUBE *
       std::sin(static_cast<float>(m_frame) * ROTATION_SPEED));
-  m_cube->render(*m_camera);
 
   m_skull_shader->getParameters().setSkewness(
       ROTATION_AMPLITUDE_SKULL *
       std::cos(static_cast<float>(m_frame) * ROTATION_SPEED));
-  m_skull->render(*m_camera);
 
   m_frame++;
+
+  SceneWindow::render();
 }
 
 } // namespace Kononov
