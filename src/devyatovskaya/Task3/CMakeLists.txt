@@ -71,8 +71,6 @@ set(Task3_SRSC
         Shaders/Lighting/f_light_source.glsl
         Shaders/Lighting/v_phong_lighting_wo_normal_mapping.glsl
         Shaders/Lighting/f_phong_lighting_wo_normal_mapping.glsl
-        Shaders/Lighting/v_phong_lighting_normal_mapping.glsl
-        Shaders/Lighting/f_phong_lighting_normal_mapping.glsl
         Shaders/Lighting/v_guro_lighting_wo_normal_mapping.glsl
         Shaders/Lighting/f_guro_lighting_wo_normal_mapping.glsl
 )
