@@ -15,6 +15,8 @@ add_library(KononovCommon
         Renderable.hpp
         Resources.cpp
         Resources.hpp
+        CubeMesh.hpp
+        CubeMesh.cpp
         Camera.cpp
         Camera.hpp
         GLUtil.cpp

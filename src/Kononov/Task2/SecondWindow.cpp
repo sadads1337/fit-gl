@@ -1,70 +1,17 @@
 #include "SecondWindow.hpp"
 
 #include <cmath>
-#include <vector>
 
 #include <QOpenGLFunctions>
 #include <QScreen>
 
+#include <CubeMesh.hpp>
 #include <Resources.hpp>
 #include <Shader.hpp>
 #include <Vertex.hpp>
 
 #include "SecondShader.hpp"
 #include "TesselatedRenderable.hpp"
-
-namespace {
-
-const std::vector<Kononov::RegularVertex> modelVertices = {
-    {{-1.0F, -1.0F, 1.0F}, {0, 0, 1}, {0.0F, 0.0F}},  // v0
-    {{1.0F, -1.0F, 1.0F}, {0, 0, 1}, {0.333F, 0.0F}}, // v1
-    {{-1.0F, 1.0F, 1.0F}, {0, 0, 1}, {0.0F, 0.5F}},   // v2
-    {{1.0F, 1.0F, 1.0F}, {0, 0, 1}, {0.333F, 0.5F}},  // v3
-
-    // Vertex data for face 1
-    {{1.0F, -1.0F, 1.0F}, {1, 0, 0}, {0.0F, 0.5F}},    // v4
-    {{1.0F, -1.0F, -1.0F}, {1, 0, 0}, {0.333F, 0.5F}}, // v5
-    {{1.0F, 1.0F, 1.0F}, {1, 0, 0}, {0.0F, 1.0F}},     // v6
-    {{1.0F, 1.0F, -1.0F}, {1, 0, 0}, {0.333F, 1.0F}},  // v7
-
-    // Vertex data for face 2
-    {{1.0F, -1.0F, -1.0F}, {0, 0, -1}, {0.666F, 0.5F}}, // v8
-    {{-1.0F, -1.0F, -1.0F}, {0, 0, -1}, {1.0F, 0.5F}},  // v9
-    {{1.0F, 1.0F, -1.0F}, {0, 0, -1}, {0.666F, 1.0F}},  // v10
-    {{-1.0F, 1.0F, -1.0F}, {0, 0, -1}, {1.0F, 1.0F}},   // v11
-
-    // Vertex data for face 3
-    {{-1.0F, -1.0F, -1.0F}, {-1, 0, 0}, {0.666F, 0.0F}}, // v12
-    {{-1.0F, -1.0F, 1.0F}, {-1, 0, 0}, {1.0F, 0.0F}},    // v13
-    {{-1.0F, 1.0F, -1.0F}, {-1, 0, 0}, {0.666F, 0.5F}},  // v14
-    {{-1.0F, 1.0F, 1.0F}, {-1, 0, 0}, {1.0F, 0.5F}},     // v15
-
-    // Vertex data for face 4
-    {{-1.0F, -1.0F, -1.0F}, {0, -1, 0}, {0.333F, 0.0F}}, // v16
-    {{1.0F, -1.0F, -1.0F}, {0, -1, 0}, {0.666F, 0.0F}},  // v17
-    {{-1.0F, -1.0F, 1.0F}, {0, -1, 0}, {0.333F, 0.5F}},  // v18
-    {{1.0F, -1.0F, 1.0F}, {0, -1, 0}, {0.666F, 0.5F}},   // v19
-
-    // Vertex data for face 5
-    {{-1.0F, 1.0F, 1.0F}, {0, 1, 0}, {0.333F, 0.5F}},  // v20
-    {{1.0F, 1.0F, 1.0F}, {0, 1, 0}, {0.666F, 0.5F}},   // v21
-    {{-1.0F, 1.0F, -1.0F}, {0, 1, 0}, {0.333F, 1.0F}}, // v22
-    {{1.0F, 1.0F, -1.0F}, {0, 1, 0}, {0.666F, 1.0F}},  // v23
-};
-
-// Indices for drawing cube faces using triangle strips.
-// Triangle strips can be connected by duplicating indices
-// between the strips. If connecting strips have opposite
-// vertex order then last index of the first strip and first
-// index of the second strip needs to be duplicated. If
-// connecting strips have same vertex order then only last
-// index of the first strip needs to be duplicated.
-const std::vector<GLuint> modelIndices = {
-    0,  1,  2,  2,  1,  3,  4,  5,  6,  6,  5,  7,  8,  9,  10, 10, 9,  11,
-    12, 13, 14, 14, 13, 15, 16, 17, 18, 18, 17, 19, 20, 21, 22, 22, 21, 23,
-};
-
-} // namespace
 
 namespace Kononov {
 
@@ -156,7 +103,7 @@ void SecondWindow::init() {
       ":/models/skull.vbo-ibo", GL_TRIANGLES);
 
   auto cube_mesh = std::make_shared<GenericMesh<RegularVertex, GLuint>>(
-      modelVertices, modelIndices, GL_PATCHES);
+      cubeVertices, cubeTrianglesIndices, GL_PATCHES);
 
   SecondShader factory(program);
   m_skull_shader = factory.createShared();
