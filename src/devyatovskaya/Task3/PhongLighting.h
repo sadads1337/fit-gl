@@ -1,6 +1,4 @@
 #pragma once
-
-#include <QtWidgets/QMainWindow>
 #include "ui_PhongLighting.h"
 
 class PhongLighting : public QMainWindow
@@ -10,6 +8,7 @@ class PhongLighting : public QMainWindow
 public:
     PhongLighting(QWidget *parent = Q_NULLPTR);
 
+	
 private:
     Ui::PhongLightingClass ui;
 };

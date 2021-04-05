@@ -1,4 +1,6 @@
 #include <utility>
+#include <QOpenGLFunctions_3_0>
+
 #include "GLMeshRenderer.h"
 #include "GLCamera.h"
 
@@ -20,8 +22,6 @@ GLMeshRenderer::GLMeshRenderer(GLMesh& mesh, GLTransform& transform, GLMaterial&
 
 void GLMeshRenderer::init_renderer(std::shared_ptr<QOpenGLShaderProgram> shader_program)
 {
-	initializeOpenGLFunctions();
-
 	shader_program_ = std::move(shader_program);
 
 	init_vao();
@@ -38,16 +38,16 @@ void GLMeshRenderer::set_shader(std::shared_ptr<QOpenGLShaderProgram> shader_pro
 	shader_program_ = std::move(shader_program);
 }
 
-void GLMeshRenderer::render_wireframe(const GLCamera& camera)
+void GLMeshRenderer::render_wireframe(QOpenGLFunctions_3_0& functions, const GLCamera& camera)
 {
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	functions.glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	
 	shader_program_->bind();
 	shader_program_->setUniformValue("wireframe_enabled", true);
 	upload_camera_details(camera);
 	
 	vao_.bind();
-	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh_.indices.size()), GL_UNSIGNED_INT, nullptr);
+	functions.glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh_.indices.size()), GL_UNSIGNED_INT, nullptr);
 	vao_.release();
 }
 
@@ -75,10 +75,10 @@ void GLMeshRenderer::enable_attributes() const
 	shader_program_->setAttributeBuffer("textureAttr", GL_FLOAT, offsetof(GLVertex, texture), 2, sizeof(GLVertex));
 	
 	shader_program_->enableAttributeArray("tangentAttr");
-	shader_program_->setAttributeBuffer("aTangent", GL_FLOAT, offsetof(GLVertex, tangent), 3, sizeof(GLVertex));
+	shader_program_->setAttributeBuffer("tangentAttr", GL_FLOAT, offsetof(GLVertex, tangent), 3, sizeof(GLVertex));
 	
 	shader_program_->enableAttributeArray("bitangentAttr");
-	shader_program_->setAttributeBuffer("aBitangent", GL_FLOAT, offsetof(GLVertex, bitangent), 3, sizeof(GLVertex));
+	shader_program_->setAttributeBuffer("bitangentAttr", GL_FLOAT, offsetof(GLVertex, bitangent), 3, sizeof(GLVertex));
 }
 
 void GLMeshRenderer::disable_attributes() const

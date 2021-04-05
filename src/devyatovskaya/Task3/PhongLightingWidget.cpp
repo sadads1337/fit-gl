@@ -1,5 +1,6 @@
 #include <future>
 #include <QStatusBar>
+
 #include "PhongLightingWidget.h"
 #include "ShaderCollection.h"
 
@@ -56,6 +57,11 @@ void PhongLightingWidget::set_shininess(const int shininess)
         });
 }
 
+void PhongLightingWidget::set_morph_factor(const int morph_factor)
+{
+    morph_factor_ = static_cast<float>(morph_factor) / 100.f;
+}
+
 void PhongLightingWidget::set_render_mode(const int state)
 {
 	auto* obj = sender();
@@ -100,11 +106,13 @@ void PhongLightingWidget::catch_fps(const QString& fps)
 PhongLightingWidget::PhongLightingWidget(QWidget* parent)
 	:   QOpenGLWidget{ parent },
 		render_dialog_{*this },
-		lighting_dialog_{*this}
+		lighting_dialog_{*this},
+		morphing_dialog_{ *this }
 {
 	setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
 	connect(&fps_counter_, &FPSCounter::emit_fps, this, &PhongLightingWidget::catch_fps);
+	
     connect(&light_color_dialog_, &QColorDialog::currentColorChanged, this, &PhongLightingWidget::set_light_color);
     connect(&ambient_color_dialog_, &QColorDialog::currentColorChanged, this, &PhongLightingWidget::set_ambient_color);
     connect(&diffuse_color_dialog_, &QColorDialog::currentColorChanged, this, &PhongLightingWidget::set_diffuse_color);
@@ -122,45 +130,25 @@ void PhongLightingWidget::keyPressEvent(QKeyEvent* event)
     if (event->key() == Qt::Key_1) {
         makeCurrent();
         ++scene_count_;
+
+    	
+    	if(scene_count_ == prep_scenes_.scenes.size() - 1) {
+            is_morphing_ = true;
+    	}
+    	
         lighting_dialog_.reset_state();
         const auto current_scene = std::next(prep_scenes_.scenes.begin(), scene_count_);
     	if(current_scene == prep_scenes_.scenes.end()) {
             scene_count_ = 0;
-            current_scene_ = prep_scenes_.scenes.begin()->second;
+            current_scene_ = *prep_scenes_.scenes.begin();
+            is_morphing_ = false;
     	} else {
-            current_scene_ = current_scene->second;
+            current_scene_ = *current_scene;
     	}
-    }
-    if (event->key() == Qt::Key_2 && !is_guro_) {
-        auto& shader_data = ShaderCollection::shaders["guro_lighting"];
-        auto shader_program = shader_data.get_shader_program();
-    	
-        std::for_each(current_scene_.objects.begin(), current_scene_.objects.end(), [&](std::shared_ptr<GLObject>& object)
-        {
-			object->renderer->set_shader(shader_program);
-        });
-
-        is_guro_ = true;
-    	
-    }
-    if (event->key() == Qt::Key_3 && is_guro_) {
-        auto& shader_data = ShaderCollection::shaders["phong_lighting"];
-        auto shader_program = shader_data.get_shader_program();
-
-        std::for_each(current_scene_.objects.begin(), current_scene_.objects.end(), [&](std::shared_ptr<GLObject>& object)
-            {
-                object->renderer->set_shader(shader_program);
-            });
-
-        is_guro_ = false;
-
-    }
-	else {
+    } else {
         current_scene_.camera_mover.set_key(event->key());
     }
 }
-
-
 
 
 
@@ -232,21 +220,19 @@ void PhongLightingWidget::show_specular_color_dialog()
     specular_color_dialog_.show();
 }
 
+void PhongLightingWidget::show_morphing_widget()
+{
+    morphing_dialog_.show();
+}
+
 void PhongLightingWidget::initializeGL()
 {
-    initializeOpenGLFunctions();
 
-    glClearColor(0.1f, 0.5f, 2.f, 1);
+    const auto retina_scale = static_cast<GLsizei>(devicePixelRatio());    
 
-    const auto retina_scale = static_cast<GLsizei>(devicePixelRatio());
-    glViewport(0, 0, width() * retina_scale, height() * retina_scale);
-
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-
-    renderer_.init();
+    renderer_.init(width(), height(), retina_scale);
     prep_scenes_.init();
-    current_scene_ = prep_scenes_.scenes.begin()->second;
+    current_scene_ = *prep_scenes_.scenes.begin();
 
     timer_.start(16, this);
 }
@@ -254,11 +240,11 @@ void PhongLightingWidget::initializeGL()
 void PhongLightingWidget::paintGL()
 {
     update_framerate();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
     std::for_each(current_scene_.objects.begin(), current_scene_.objects.end(), [&](std::shared_ptr<GLObject>& object)
         {
-            object->transform.rotate(100.f / 85.f, { 1, 1, 0});
+            object->transform.rotate(100.f / 600.f, { 0, 0, -1});
+            object->renderer->shader_program_->setUniformValue("morphFactor", morph_factor_);
         });
 	
     renderer_.render(current_scene_);

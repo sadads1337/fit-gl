@@ -1,8 +1,6 @@
 #pragma once
 #include <qobjectdefs.h>
 #include "ui_LightingDialog.h"
-
-
 class PhongLightingWidget;
 
 class LightingDialog : public QWidget, public Ui::Form

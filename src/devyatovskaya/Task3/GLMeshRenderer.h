@@ -2,7 +2,6 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLShaderProgram>
-#include <QOpenGLFunctions_3_0>
 #include <map>
 
 #include "GLMesh.h"
@@ -13,27 +12,28 @@ struct GLMaterial;
 class GLCamera;
 class GLObject;
 class GLLightSource;
+class QOpenGLFunctions_3_0;
 
 using light_sptr = std::shared_ptr<GLLightSource>;
 using obj_sptr = std::shared_ptr<GLObject>;
 
 
-class GLMeshRenderer : protected QOpenGLFunctions_3_0
+class GLMeshRenderer
 {
 public:
 	GLMeshRenderer(GLMesh& mesh, GLTransform& transform, GLMaterial& material);
 
 	void init_renderer(std::shared_ptr<QOpenGLShaderProgram> shader_program);
 	void set_shader(std::shared_ptr<QOpenGLShaderProgram> shader_program);
-	virtual void render(const GLCamera& camera, const std::map<light_sptr, obj_sptr>& lights) = 0;
+	virtual void render(QOpenGLFunctions_3_0& functions, const GLCamera& camera, const std::map<light_sptr, obj_sptr>& lights) = 0;
 	
-	void render_wireframe(const GLCamera& camera);
+	void render_wireframe(QOpenGLFunctions_3_0& functions, const GLCamera& camera);
 	void upload_camera_details(const GLCamera& camera) const;
 	void reload();
 
 	virtual ~GLMeshRenderer() = default;
 	
-	std::shared_ptr<QOpenGLShaderProgram> shader_program_{ nullptr };
+	std::shared_ptr<QOpenGLShaderProgram> shader_program_;
 protected:
 	
 	QOpenGLBuffer vbo_;

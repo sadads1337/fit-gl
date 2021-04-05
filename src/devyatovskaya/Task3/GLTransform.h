@@ -11,7 +11,4 @@ public:
 	void rotate(float angle, const QVector3D& axis);
 	void rotate(const QQuaternion& quaternion);
 	void reset();
-	
-private:
-
 };

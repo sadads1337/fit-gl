@@ -1,5 +1,4 @@
 #pragma once
-
 #include <QOpenGLFunctions_3_0>
 class GLScene;
 
@@ -13,18 +12,19 @@ enum render_mode : uint64_t
 	gl_cull_face_front = 0x00000008U
 };
 
-class GLSceneRenderer final : protected QOpenGLFunctions_3_0
+class GLSceneRenderer final
 {
 public:
 	GLSceneRenderer();
 	
-	void init();
+	void init(int width, int height, int retina_scale);
 	void render(GLScene& scene);
 
 
 	void set_mode(uint8_t mode);
 	void reset_mode(uint8_t mode);
 private:
+	QOpenGLFunctions_3_0 functions_;
 	uint8_t mode_;
-	void render_lights_objects(GLScene& scene) const;
+	void render_lights_objects(GLScene& scene);
 };

@@ -49,8 +49,15 @@
      <addaction name="actionLightColorDialog"/>
      <addaction name="actionShininessDialog"/>
     </widget>
+    <widget class="QMenu" name="menuMorphing">
+     <property name="title">
+      <string>Morphing</string>
+     </property>
+     <addaction name="actionset_morph_factor"/>
+    </widget>
     <addaction name="menuRendering"/>
     <addaction name="menuLighting"/>
+    <addaction name="menuMorphing"/>
    </widget>
    <addaction name="menuFunctions"/>
   </widget>
@@ -103,6 +110,11 @@
     <string>ShininessDialog</string>
    </property>
   </action>
+  <action name="actionset_morph_factor">
+   <property name="text">
+    <string>set morph factor</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -118,6 +130,7 @@
     <slot>show_ambient_color_dialog()</slot>
     <slot>show_diffuse_color_dialog()</slot>
     <slot>show_specular_color_dialog()</slot>
+    <slot>show_morphing_widget()</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -226,6 +239,22 @@
    <signal>triggered()</signal>
    <receiver>PhongLightingWidget_</receiver>
    <slot>show_render_dialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>205</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionset_morph_factor</sender>
+   <signal>triggered()</signal>
+   <receiver>PhongLightingWidget_</receiver>
+   <slot>show_morphing_widget()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

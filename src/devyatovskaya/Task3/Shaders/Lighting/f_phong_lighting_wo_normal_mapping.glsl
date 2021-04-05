@@ -1,4 +1,4 @@
-#version 330
+#version 450
 struct Material {
     vec4 ambient;
     vec4 diffuse;
@@ -14,12 +14,14 @@ struct DirectedLightSource
     vec4 color;   
     float intensity;
 };
+
 struct PointLightSource
 {
     vec3 position;
     vec4 color;   
     float intensity;
 };
+
 struct SpotLightSource
 {
     vec3 position;
@@ -30,31 +32,23 @@ struct SpotLightSource
     float intensity;
 };
 
-uniform DirectedLightSource directed_lights[10];
-uniform int directed_lightsCount;
 uniform PointLightSource point_lights[10];
 uniform int point_lightsCount;
+uniform DirectedLightSource directed_lights[10];
+uniform int directed_lightsCount;
 uniform SpotLightSource spot_lights[10];
 uniform int spot_lightsCount;
-
 
 uniform highp mat4 model;
 uniform highp mat4 normal_matrix;
 uniform highp mat4 view;
 uniform highp mat4 projection;
+
 uniform vec3 cameraPos;
 
-in vec3 posAttr;
-in vec4 colAttr;
-in vec3 normalAttr;
-in vec2 textureAttr;
-in vec3 tangentAttr;
-in vec3 bitangentAttr; 
-
-out vec3 FragPos;
-out vec3 Normal;
-out vec3 PhongColor;
-out vec2 TexCoords;
+in vec3 Normal;
+in vec3 FragPos;
+in vec2 TexCoords;
 
 float attenuation(float dist)
 {
@@ -98,7 +92,6 @@ vec3 process_point_lights(vec3 norm, vec3 viewDir)
     return result;
 }
 
-
 vec3 process_spot_lights(vec3 norm, vec3 viewDir)
 {
     vec3 result = vec3(0);
@@ -125,13 +118,14 @@ vec3 process_spot_lights(vec3 norm, vec3 viewDir)
     return result;
 }
 
+
 vec3 calculate_lighting()
 {
     vec3 viewDir = normalize(cameraPos - FragPos);
     vec3 norm = normalize(Normal);
-
+    
     // Фоновая составляющая
-    vec3 ambient = vec3(material.ambient);
+    vec3 ambient = 0.089f * vec3(material.ambient);
     vec3 result = ambient;
 
     result += process_directed_lights(norm, viewDir);
@@ -141,12 +135,15 @@ vec3 calculate_lighting()
     return result;
 }
 
+out vec4 FragColor;
+uniform bool wireframe_enabled;
+
 void main()
 {
-    FragPos = vec3(model * vec4(posAttr, 1.0));
-    Normal = mat3(normal_matrix) * normalAttr;
-    TexCoords = textureAttr;
-
-    PhongColor = calculate_lighting();
-    gl_Position = projection * view * model * vec4(posAttr, 1.0);
+    if(wireframe_enabled) {
+        FragColor = vec4(1, 0.682, 0, 1.0f);
+    } else {
+        vec3 PhongColor = calculate_lighting();
+        FragColor = vec4(PhongColor, 1.0f);
+    }
 }

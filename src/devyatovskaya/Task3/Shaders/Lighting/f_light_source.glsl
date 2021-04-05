@@ -1,7 +1,10 @@
-#version 330
+#version 450
 in vec4 col;
 
+out vec4 FragColor;
 void main()
 {
-    gl_FragColor = col;
+    FragColor = col;
 }
+
+

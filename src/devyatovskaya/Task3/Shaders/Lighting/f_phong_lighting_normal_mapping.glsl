@@ -1,4 +1,4 @@
-#version 330
+#version 450
 struct Material {
     vec4 ambient;
     vec4 diffuse;
@@ -42,10 +42,10 @@ struct SpotLightSource
 uniform SpotLightSource spot_lights[10];
 uniform int spot_lightsCount;
 
-uniform highp mat4 model;
-uniform highp mat4 normal_matrix;
-uniform highp mat4 view;
-uniform highp mat4 projection;
+uniform mat4 model;
+uniform mat4 normal_matrix;
+uniform mat4 view;
+uniform mat4 projection;
 
 uniform vec3 cameraPos;
 uniform sampler2D ourTexture;
@@ -56,14 +56,29 @@ in vec3 FragPos;
 in vec2 TexCoords;
 in mat3 TBN;
 
+
 float attenuation(float dist)
 {
    return 1.0f / (1.0f + 0.01f * dist + 0.01f * dist * dist);
 }
 
+vec3 getNormal()
+{
+    vec3 normal_rgb = texture(normalMap, TexCoords).rgb; 
+    normal_rgb = normalize(normal_rgb * 2.0 - 1.0);
+    normal_rgb = normalize(TBN * normal_rgb);
+    return normal_rgb;
+}
+
+vec3 getBaseColor()
+{
+    return texture(ourTexture, TexCoords).rgb;
+}
+
+
 vec3 process_directed_lights(vec3 norm, vec3 viewDir)
 {
-    vec3 result = vec3(0);
+    vec3 result = vec3(0.f);
     for (int i = 0; i < directed_lightsCount; ++i) {
         vec3 lightDir = normalize(directed_lights[i].direction);
 
@@ -82,7 +97,7 @@ vec3 process_directed_lights(vec3 norm, vec3 viewDir)
 
 vec3 process_point_lights(vec3 norm, vec3 viewDir)
 {
-    vec3 result = vec3(0);
+    vec3 result = vec3(0.f);
     for (int i = 0; i < point_lightsCount; ++i) {
         vec3 lightDir = normalize(point_lights[i].position - FragPos);
         // Составляющая рассеивания
@@ -100,7 +115,7 @@ vec3 process_point_lights(vec3 norm, vec3 viewDir)
 
 vec3 process_spot_lights(vec3 norm, vec3 viewDir)
 {
-    vec3 result = vec3(0);
+    vec3 result = vec3(0.f);
     for (int i = 0; i < spot_lightsCount; ++i) {
         vec3 lightDir = normalize(spot_lights[i].position - FragPos);
         
@@ -127,10 +142,10 @@ vec3 process_spot_lights(vec3 norm, vec3 viewDir)
 vec3 calculate_lighting()
 {
     vec3 viewDir = normalize(cameraPos - FragPos);
-    vec3 norm = normalize(Normal);
+    vec3 norm = getNormal();
 
     // Фоновая составляющая
-    vec3 ambient = vec3(material.ambient);
+    vec3 ambient = 0.089f * vec3(material.ambient);
     vec3 result = ambient;
 
     result += process_directed_lights(norm, viewDir);
@@ -142,14 +157,13 @@ vec3 calculate_lighting()
 
 
 uniform bool wireframe_enabled;
-
+out vec4 FragColor;
 void main()
 {
     if(wireframe_enabled) {
-        gl_FragColor = vec4(1, 0.682, 0, 1.0f);
+        FragColor = vec4(1, 0.682, 0, 1.0f);
     } else {
         vec3 PhongColor = calculate_lighting();
-        // gl_FragColor = vec4(PhongColor, 1.0f);
-        gl_FragColor = vec4(texture(ourTexture, TexCoords).rgb, 1.f) * vec4(PhongColor, 1.0f);
+        FragColor = vec4(getBaseColor(), 1.0f) * vec4(PhongColor, 1.0f);
     }
 }

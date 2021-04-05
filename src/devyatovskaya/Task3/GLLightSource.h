@@ -11,13 +11,7 @@ public:
 	QColor color;
 	float intensity;
 
-	GLLightSource(const QVector3D& _position, const QColor& _color, const float _intensity)
-		:	position{ _position },
-			color{ _color },
-			intensity{ _intensity }
-	{
-		
-	}
+	GLLightSource(QVector3D _position, QColor _color, float _intensity);
 
 	
 	virtual ~GLLightSource() = default;

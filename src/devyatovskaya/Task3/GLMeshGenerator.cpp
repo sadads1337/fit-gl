@@ -7,32 +7,34 @@ void GLMeshGenerator::init_tangent_bitangent_vectors(std::vector<GLVertex>& vert
         auto& vertex1 = vertices[indices[1u + i]];
         auto& vertex2 = vertices[indices[2u + i]];
 
-        auto& v0 = vertex0.coordinate;
-        auto& v1 = vertex1.coordinate;
-        auto& v2 = vertex2.coordinate;
 
-        auto& uv0 = vertex0.texture;
-        auto& uv1 = vertex1.texture;
-        auto& uv2 = vertex2.texture;
-
-        const auto deltaPos1 = v1 - v0;
-        const auto deltaPos2 = v2 - v0;
-
-        const auto deltaUV1 = uv1 - uv0;
-        const auto deltaUV2 = uv2 - uv0;
-
-        const auto r = 1.0f / (deltaUV1.x() * deltaUV2.y() - deltaUV1.y() * deltaUV2.x());
-        const auto tangent = (deltaPos1 * deltaUV2.y() - deltaPos2 * deltaUV1.y()) * r;
-        const auto bitangent = (deltaPos2 * deltaUV1.x() - deltaPos1 * deltaUV2.x()) * r;
+        const auto Edge1 = vertex1.coordinate - vertex0.coordinate;
+        const auto Edge2 = vertex2.coordinate - vertex0.coordinate;
 
 
-        vertex0.tangent = tangent.normalized();
-        vertex1.tangent = tangent.normalized();
-        vertex2.tangent = tangent.normalized();
+        const auto DeltaU1 = vertex1.texture.x() - vertex0.texture.x();
+        const auto DeltaV1 = vertex1.texture.y() - vertex0.texture.y();
+        const auto DeltaU2 = vertex2.texture.x() - vertex0.texture.x();
+        const auto DeltaV2 = vertex2.texture.y() - vertex0.texture.y();
 
-        vertex0.bitangent = bitangent.normalized();
-        vertex1.bitangent = bitangent.normalized();
-        vertex2.bitangent = bitangent.normalized();
+        const auto f = 1.0f / (DeltaU1 * DeltaV2 - DeltaU2 * DeltaV1);
 
+        QVector3D Tangent, Bitangent;
+
+        Tangent.setX(f * (DeltaV2 * Edge1.x() - DeltaV1 * Edge2.x()));
+        Tangent.setY(f * (DeltaV2 * Edge1.y() - DeltaV1 * Edge2.y()));
+        Tangent.setZ(f * (DeltaV2 * Edge1.z() - DeltaV1 * Edge2.z()));
+
+        Bitangent.setX(f * (-DeltaU2 * Edge1.x() + DeltaU1 * Edge2.x()));
+        Bitangent.setY(f * (-DeltaU2 * Edge1.y() + DeltaU1 * Edge2.y()));
+        Bitangent.setZ(f * (-DeltaU2 * Edge1.z() + DeltaU1 * Edge2.z()));
+
+    	vertex0.tangent = Tangent.normalized();
+        vertex1.tangent = Tangent.normalized();
+        vertex2.tangent = Tangent.normalized();
+
+        vertex0.bitangent = Bitangent.normalized();
+        vertex1.bitangent = Bitangent.normalized();
+        vertex2.bitangent = Bitangent.normalized();
     }
 }
