@@ -17,10 +17,6 @@ constexpr QVector3D LIGHT_POSITION(3.F, 2.F, 3.F);
 constexpr QVector3D LIGHT_COLOR(1.F, 0.7F, 0.7F);
 constexpr QVector4D CLEAR_COLOR(0.F, 0.5F, 1.F, 1.F);
 
-constexpr float PERSPECTIVE_FOV = 60.0F;
-constexpr float NEAR_PLANE = 0.1F;
-constexpr float FAR_PLANE = 100.0F;
-
 constexpr float AMBIENT_STRENGTH = 0.3F;
 constexpr float SPECULAR_STRENGTH = 0.5F;
 constexpr int SPECULAR_POW = 32;
