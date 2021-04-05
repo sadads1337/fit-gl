@@ -1,15 +1,4 @@
-cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
-
-project(Task2 VERSION 1.0.0 LANGUAGES CXX)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_AUTOUIC ON)
-
-set(Task2_SRSC
+set(Task3_SRSC
         main.cpp
         FPSCounter.cpp
         FPSCounter.h
@@ -95,9 +84,9 @@ include_directories( ${OPENGL_INCLUDE_DIRS})
 
 qt5_wrap_ui(UI_HEADERS PhongLighting.ui RenderDialog.ui MorphingDialog.ui)
 
-add_executable(Task2 ${Task2_SRSC}  ${UI_HEADERS})
+add_executable(Task3 ${Task3_SRSC}  ${UI_HEADERS})
 
-target_link_libraries(Task2 PRIVATE
+target_link_libraries(Task3 PRIVATE
     Qt5::Widgets
     ${OPENGL_LIBRARIES})
     
