@@ -4,6 +4,7 @@
 #include <QScreen>
 
 #include <CubeMesh.hpp>
+#include <Kononov/Common/Scene/ConstantRotationController.hpp>
 #include <Resources.hpp>
 #include <Shader.hpp>
 #include <Vertex.hpp>
@@ -15,10 +16,6 @@ constexpr QVector3D LIGHT_POSITION(3.0F, 2.0F, 3.0F);
 constexpr QVector3D LIGHT_COLOR(1.0F, 0.7F, 0.7F);
 constexpr QVector4D CLEAR_COLOR(0.0F, 0.5F, 1.0F, 1.0F);
 
-constexpr float PERSPECTIVE_FOV = 60.0F;
-constexpr float NEAR_PLANE = 0.1F;
-constexpr float FAR_PLANE = 100.0F;
-
 constexpr float AMBIENT_STRENGTH = 0.3F;
 constexpr float SPECULAR_STRENGTH = 2.0F;
 constexpr int SPECULAR_POW = 32;
@@ -29,30 +26,6 @@ constexpr float MOTION_SPEED = 0.1F;
 
 constexpr QVector3D PHONG_TRANSLATION{0.0F, 1.5F, 0.0F};
 constexpr QVector3D GOURAUD_TRANSLATION{0.0F, -1.5F, 0.0F};
-
-void ThirdWindow::onMessageLogged(const QOpenGLDebugMessage &message) {
-  qDebug() << message;
-}
-
-void ThirdWindow::mousePressEvent(QMouseEvent *event) {
-  m_direction_input_controller->mousePressEvent(event);
-}
-
-void ThirdWindow::mouseMoveEvent(QMouseEvent *event) {
-  m_direction_input_controller->mouseMoveEvent(event);
-}
-
-void ThirdWindow::mouseReleaseEvent(QMouseEvent *event) {
-  m_direction_input_controller->mouseReleaseEvent(event);
-}
-
-void ThirdWindow::keyPressEvent(QKeyEvent *event) {
-  m_motion_input_controller->keyPressEvent(event);
-}
-
-void ThirdWindow::keyReleaseEvent(QKeyEvent *event) {
-  m_motion_input_controller->keyReleaseEvent(event);
-}
 
 void ThirdWindow::add_objects(
     QVector3D translation,
@@ -115,24 +88,16 @@ void ThirdWindow::add_objects(
   /*
    * Register created objects
    */
-  m_objects.push_back(skull);
-  m_objects.push_back(cube);
-  m_controllers.push_back(rotation_controller);
+  getObjects().push_back(skull);
+  getObjects().push_back(cube);
+  getControllers().push_back(rotation_controller);
 }
 
 void ThirdWindow::init() {
-  /*
-   * Logger initialization
-   */
-  m_logger = std::make_unique<QOpenGLDebugLogger>(this);
-
-  connect(m_logger.get(), &QOpenGLDebugLogger::messageLogged, this,
-          &ThirdWindow::onMessageLogged);
-
-  if (m_logger->initialize()) {
-    m_logger->startLogging(QOpenGLDebugLogger::SynchronousLogging);
-    m_logger->enableMessages();
-  }
+  SceneWindow::init();
+  getCamera()->setPosition(INITIAL_CAMERA_POSITION);
+  getDirectionInputController()->setSensitivity(MOUSE_SENSITIVITY);
+  getMotionInputController()->setMotionSpeed(MOTION_SPEED);
 
   /*
    * Configure OpenGL
@@ -155,40 +120,6 @@ void ThirdWindow::init() {
       {":/shaders/third-gouraud.vert", ":/shaders/third-gouraud.frag",
        ":/shaders/third-common.vert"});
   add_objects(GOURAUD_TRANSLATION, gouraud_program);
-
-  m_camera = std::make_shared<Camera>();
-  m_camera->setPosition(INITIAL_CAMERA_POSITION);
-
-  m_direction_input_controller = std::make_shared<DirectionInputController>();
-  m_direction_input_controller->setObject(m_camera);
-  m_direction_input_controller->setSensitivity(MOUSE_SENSITIVITY);
-  m_controllers.push_back(m_direction_input_controller);
-
-  m_motion_input_controller = std::make_shared<MotionInputController>();
-  m_motion_input_controller->setObject(m_camera);
-  m_motion_input_controller->setDirectionSource(m_direction_input_controller);
-  m_motion_input_controller->setMotionSpeed(MOTION_SPEED);
-  m_controllers.push_back(m_motion_input_controller);
-}
-
-void ThirdWindow::render() {
-  const float delta = 1.0F / static_cast<float>(screen()->refreshRate());
-  for (const auto &c : m_controllers) {
-    c->update(delta);
-  }
-
-  // NOLINTNEXTLINE(hicpp-signed-bitwise)
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  const auto pixel_ratio = devicePixelRatio();
-  const auto ratio = static_cast<float>(width()) / static_cast<float>(height());
-  m_camera->setPerspective(PERSPECTIVE_FOV, ratio, NEAR_PLANE, FAR_PLANE);
-  m_camera->beginRender((GLsizei)(width() * pixel_ratio),
-                        (GLsizei)(height() * pixel_ratio));
-
-  for (const auto &obj : m_objects) {
-    obj->render(*m_camera);
-  }
 }
 
 } // namespace Kononov
