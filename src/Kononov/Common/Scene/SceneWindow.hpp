@@ -61,9 +61,9 @@ public:
   [[nodiscard]] float getFov() const;
   void setFov(float fov);
   [[nodiscard]] float getNear() const;
-  void setNear(float near);
+  void setNear(float near_plane);
   [[nodiscard]] float getFar() const;
-  void setFar(float far);
+  void setFar(float far_plane);
 };
 
 } // namespace Kononov

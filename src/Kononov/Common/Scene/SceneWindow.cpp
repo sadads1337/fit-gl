@@ -99,8 +99,8 @@ std::vector<std::shared_ptr<SceneObject>> &SceneWindow::getObjects() {
 float SceneWindow::getFov() const { return m_fov; }
 void SceneWindow::setFov(float fov) { m_fov = fov; }
 float SceneWindow::getNear() const { return m_near; }
-void SceneWindow::setNear(float near) { m_near = near; }
+void SceneWindow::setNear(float near_plane) { m_near = near_plane; }
 float SceneWindow::getFar() const { return m_far; }
-void SceneWindow::setFar(float far) { m_far = far; }
+void SceneWindow::setFar(float far_plane) { m_far = far_plane; }
 
 } // namespace Kononov
