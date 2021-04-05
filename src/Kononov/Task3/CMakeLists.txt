@@ -4,6 +4,8 @@ add_executable(KononovTask3
         ${KONONOV_RESOURCES}
         shaders.qrc
         shaders/third-common.glsl
+        shaders/third-gouraud.vert
+        shaders/third-gouraud.frag
         shaders/third-phong.vert
         shaders/third-phong.frag
 
