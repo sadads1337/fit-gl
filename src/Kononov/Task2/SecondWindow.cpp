@@ -5,8 +5,8 @@
 #include <QOpenGLFunctions>
 #include <QScreen>
 
-#include <CubeMesh.hpp>
 #include <Resources.hpp>
+#include <Scene/CubeMesh.hpp>
 #include <Shader.hpp>
 #include <Vertex.hpp>
 
