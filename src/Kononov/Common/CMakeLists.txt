@@ -9,6 +9,8 @@ add_library(KononovCommon
         Scene/MotionInputController.hpp
         Scene/SceneWindow.cpp
         Scene/SceneWindow.hpp
+        Scene/CubeMesh.hpp
+        Scene/CubeMesh.cpp
         PositionedObject.cpp
         PositionedObject.hpp
         SceneObject.cpp
@@ -17,8 +19,6 @@ add_library(KononovCommon
         Renderable.hpp
         Resources.cpp
         Resources.hpp
-        CubeMesh.hpp
-        CubeMesh.cpp
         Camera.cpp
         Camera.hpp
         GLUtil.cpp

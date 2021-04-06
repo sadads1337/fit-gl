@@ -3,9 +3,9 @@
 #include <QOpenGLFunctions>
 #include <QScreen>
 
-#include <CubeMesh.hpp>
-#include <Kononov/Common/Scene/ConstantRotationController.hpp>
 #include <Resources.hpp>
+#include <Scene/ConstantRotationController.hpp>
+#include <Scene/CubeMesh.hpp>
 #include <Shader.hpp>
 #include <Vertex.hpp>
 
