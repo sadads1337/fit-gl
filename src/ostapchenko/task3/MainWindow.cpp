@@ -75,8 +75,8 @@ void MainWindow:: paintGL() {
           view_matrix.setToIdentity();
           view_matrix.rotate(100.0 * frame_ / refreshRate, rotationAxis);
           model_matrix.rotate(100.0 * frame_ / refreshRate, rotationAxis);
-          view_matrix.scale(0.7, 0.7, 0.7);
-          model_matrix.scale(0.7, 0.7, 0.7);
+          view_matrix.scale(0.7f, 0.7f, 0.7f);
+          model_matrix.scale(0.7f, 0.7f, 0.7f);
 
 
           program_->setUniformValue("u_projection_matrix", projection_matrix);
