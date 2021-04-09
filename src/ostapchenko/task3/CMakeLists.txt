@@ -8,7 +8,6 @@ add_executable(ostapchenkotask3
         shaders.qrc
         Shaders/fragment_shader.fs
         Shaders/vertex_shader.vs
-        Shaders/vertex_shader_G.vs
         CommonWidget.cpp
         CommonWidget.h)
 
