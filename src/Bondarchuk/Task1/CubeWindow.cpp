@@ -3,9 +3,6 @@
 #include <QColorDialog>
 #include <QMouseEvent>
 #include <QOpenGLBuffer>
-#include <QOpenGLFunctions>
-#include <QOpenGLFunctions_4_0_Core>
-#include <QRgb>
 #include <QScreen>
 #include <QVector2D>
 #include <QVector3D>
@@ -28,9 +25,6 @@ constexpr std::array<QVector3D, 8u> vertices = {
 constexpr std::array<GLuint, 34u> indexes = {0, 1, 2, 3, 3, 1, 1, 4, 3, 5, 5, 4,
                                              4, 6, 5, 7, 7, 6, 6, 0, 7, 2, 2, 6,
                                              6, 4, 0, 1, 1, 2, 2, 3, 7, 5};
-
-constexpr std::array<GLuint, 24u> lineindexes = {
-    0, 1, 2, 3, 3, 1, 1, 4, 3, 5, 5, 4, 4, 6, 5, 7, 7, 6, 6, 0, 7, 2, 2, 0};
 
 } // namespace
 
