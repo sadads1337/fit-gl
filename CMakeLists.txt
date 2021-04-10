@@ -13,16 +13,7 @@ else()
     add_compile_options(-Wall -Wextra -pedantic -Werror)
 endif()
 
+add_subdirectory(thirdparty)
+
 include_directories(src)
 add_subdirectory(src)
-
-# Adding some hardcoded thirdparty libs
-add_subdirectory(thirdparty/GSL)
-include_directories(thirdparty/GSL/include)
-
-add_subdirectory(thirdparty/glm)
-include_directories(thirdparty/glm)
-
-# Disable warnings from thirdparty libs
-target_compile_options(GSL INTERFACE -Wno-error)
-target_compile_options(glm INTERFACE -Wno-error)
