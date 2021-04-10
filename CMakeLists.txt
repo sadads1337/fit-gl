@@ -22,3 +22,7 @@ include_directories(thirdparty/GSL/include)
 
 add_subdirectory(thirdparty/glm)
 include_directories(thirdparty/glm)
+
+# Disable warnings from thirdparty libs
+target_compile_options(GSL INTERFACE -Wno-error)
+target_compile_options(glm INTERFACE -Wno-error)
