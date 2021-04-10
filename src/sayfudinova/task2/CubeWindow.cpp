@@ -6,8 +6,8 @@
 #include <QScreen>
 
 struct VertexData {
-  VertexData() {}
-  VertexData(QVector3D p) : position(p) {}
+  VertexData(QVector3D p, QVector3D n)
+      : position(p){}
   QVector3D position;
 };
 
@@ -16,30 +16,35 @@ void CubeWindow::initCube(float width, int N) {
   float step = width / float(N - 1);
 
   QVector<VertexData> vertices;
-  for (auto z = -halfWidth; z <= halfWidth; z += width) {
-    for (auto j = 0; j < N; j++) {
-      for (auto i = 0; i < N; i++) {
+
+  for (auto z = -1; z <= 1; z += 2) {
+    for (auto y = 0; y < N; y++) {
+      for (auto x = 0; x < N; x++) {
         vertices.append(VertexData(
-            QVector3D(-halfWidth + i * step, -halfWidth + j * step, z)));
+            QVector3D(z*(-halfWidth +  x * step), -halfWidth + y * step, z * halfWidth),
+            QVector3D(0.0, 0.0, z)));
       }
     }
   }
-  for (auto x = -halfWidth; x <= halfWidth; x += width) {
-    for (auto k = 0; k < N; k++) {
-      for (auto j = 0; j < N; j++) {
+  for (auto x = -1; x <= 1; x += 2) {
+    for (auto z = 0; z < N; z++) {
+      for (auto y = 0; y < N; y++) {
         vertices.append(VertexData(
-            QVector3D(x, -halfWidth + j * step, halfWidth - k * step)));
+            QVector3D(x * halfWidth, -halfWidth + y * step, x*(-halfWidth + z * step)),
+            QVector3D(x, 0.0, 0.0)));
       }
     }
   }
-  for (auto y = -halfWidth; y <= halfWidth; y += width) {
-    for (auto i = 0; i < N; i++) {
-      for (auto k = 0; k < N; k++) {
+  for (auto y = -1; y <= 1; y += 2) {
+    for (auto x = 0; x < N; x++) {
+      for (auto z = 0; z < N; z++) {
         vertices.append(VertexData(
-            QVector3D(-halfWidth + i * step, y, halfWidth - k * step)));
+            QVector3D(-halfWidth + x * step, y * halfWidth, y*(-halfWidth + z * step)),
+            QVector3D(0.0, y, 0.0)));
       }
     }
   }
+
 
   QVector<GLuint> indices;
   for (int i = 0; i < 6 * N * N; i += N * N) {
@@ -89,6 +94,8 @@ void CubeWindow::init() {
 }
 
 void CubeWindow::render() {
+  time_ = std::chrono::system_clock::now() - start;
+
   // Configure viewport
   const auto retinaScale = devicePixelRatio();
   glViewport(0, 0, width() * retinaScale, height() * retinaScale);
@@ -101,21 +108,24 @@ void CubeWindow::render() {
   matrix.perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
   matrix.translate(0, 0, -2);
   matrix.rotate(100.0 * frame_ / screen()->refreshRate(), rotationAxis);
+  matrix.scale(0.6, 0.6, 0.6);
 
   // Bind shader and set attrs and unis
   program_->bind();
   program_->setUniformValue(matrixUniform_, matrix);
   program_->setUniformValue("col", changeColor);
-  program_->setAttributeBuffer(posAttr_, GL_FLOAT, 0, 3, 3 * sizeof(GLfloat));
+  program_->setAttributeBuffer(posAttr_, GL_FLOAT, 0, 3, sizeof(VertexData));
   program_->enableAttributeArray(posAttr_);
 
-  // Bind buffers
-  vbo.bind();
-  ibo.bind();
+  program_->setUniformValue("time", time_.count());
+  program_->setUniformValue("flag", 1);
 
-  // Draw
-  glDrawElements(GL_TRIANGLE_STRIP, static_cast<GLsizei>(indices.size()),
-                 GL_UNSIGNED_INT, nullptr);
+  glDrawElements(GL_TRIANGLE_STRIP, ibo.size(), GL_UNSIGNED_SHORT, nullptr);
+
+  program_->setUniformValue("flag", 0);
+  program_->bind();
+
+  glDrawElements(GL_LINES, ibo.size(), GL_UNSIGNED_INT, nullptr);
 
   // Release all and increase counter
   program_->disableAttributeArray(posAttr_);
@@ -139,6 +149,5 @@ void CubeWindow::mousePressEvent(QMouseEvent *e) {
 void CubeWindow::mouseReleaseEvent(QMouseEvent *e) {
   // Mouse release position - mouse press position
   const auto diff = QVector2D(e->localPos()) - mousePressPosition;
-
   rotationAxis = QVector3D(diff.y(), diff.x(), 0.0).normalized();
 }
