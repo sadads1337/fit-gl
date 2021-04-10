@@ -5,9 +5,10 @@
 #include <QOpenGLFunctions>
 #include <QScreen>
 
-struct VertexData {
-  VertexData(QVector3D p, QVector3D n)
-      : position(p){}
+struct VertexData{
+  VertexData(){ }
+  VertexData(QVector3D p) :
+      position(p){ }
   QVector3D position;
 };
 
@@ -21,8 +22,7 @@ void CubeWindow::initCube(float width, int N) {
     for (auto y = 0; y < N; y++) {
       for (auto x = 0; x < N; x++) {
         vertices.append(VertexData(
-            QVector3D(z*(-halfWidth +  x * step), -halfWidth + y * step, z * halfWidth),
-            QVector3D(0.0, 0.0, z)));
+            QVector3D(z*(-halfWidth +  x * step), -halfWidth + y * step, z * halfWidth)));
       }
     }
   }
@@ -30,8 +30,7 @@ void CubeWindow::initCube(float width, int N) {
     for (auto z = 0; z < N; z++) {
       for (auto y = 0; y < N; y++) {
         vertices.append(VertexData(
-            QVector3D(x * halfWidth, -halfWidth + y * step, x*(-halfWidth + z * step)),
-            QVector3D(x, 0.0, 0.0)));
+            QVector3D(x * halfWidth, -halfWidth + y * step, x*(-halfWidth + z * step))));
       }
     }
   }
@@ -39,8 +38,7 @@ void CubeWindow::initCube(float width, int N) {
     for (auto x = 0; x < N; x++) {
       for (auto z = 0; z < N; z++) {
         vertices.append(VertexData(
-            QVector3D(-halfWidth + x * step, y * halfWidth, y*(-halfWidth + z * step)),
-            QVector3D(0.0, y, 0.0)));
+            QVector3D(-halfWidth + x * step, y * halfWidth, y*(-halfWidth + z * step))));
       }
     }
   }

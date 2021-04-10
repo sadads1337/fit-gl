@@ -35,7 +35,7 @@ private:
 
   std::unique_ptr<QOpenGLShaderProgram> program_ = nullptr;
 
-  QVector4D changeColor{0.7, 0.5, 0.0, 1};
+  QVector4D changeColor{0.5, 0.0, 0.6, 1};
 
   int frame_ = 0;
 
