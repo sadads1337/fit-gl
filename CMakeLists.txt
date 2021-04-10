@@ -19,3 +19,6 @@ add_subdirectory(src)
 # Adding some hardcoded thirdparty libs
 add_subdirectory(thirdparty/GSL)
 include_directories(thirdparty/GSL/include)
+
+add_subdirectory(thirdparty/glm)
+include_directories(thirdparty/glm)
