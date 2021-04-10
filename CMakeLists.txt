@@ -15,3 +15,7 @@ endif()
 
 include_directories(src)
 add_subdirectory(src)
+
+# Adding some hardcoded thirdparty libs
+add_subdirectory(thirdparty/GSL)
+include_directories(thirdparty/GSL/include)
