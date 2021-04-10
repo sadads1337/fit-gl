@@ -10,9 +10,9 @@ set(SRCS
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-add_executable(sayfudinova-task1 ${SRCS})
+add_executable(sayfudinova-task2 ${SRCS})
 
-target_link_libraries(sayfudinova-task1
+target_link_libraries(sayfudinova-task2
         PRIVATE
         Qt5::Widgets
         FGL::Base
