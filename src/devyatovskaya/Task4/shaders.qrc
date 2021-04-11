@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Shaders/f_morphing.glsl</file>
+        <file>Shaders/v_morphing.glsl</file>
+        <file>Shaders/Lighting/v_light_source.glsl</file>
+        <file>Shaders/Lighting/f_light_source.glsl</file>
+        <file>Shaders/Lighting/v_phong_lighting_wo_normal_mapping.glsl</file>
+        <file>Shaders/Lighting/f_phong_lighting_wo_normal_mapping.glsl</file>
+        <file>Shaders/Lighting/v_guro_lighting_wo_normal_mapping.glsl</file>
+        <file>Shaders/Lighting/f_guro_lighting_wo_normal_mapping.glsl</file>
+        <file>Shaders/Lighting/v_phong_lighting_normal_mapping.glsl</file>
+        <file>Shaders/Lighting/f_phong_lighting_normal_mapping.glsl</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PhongLightingClass</class>
+ <widget class="QMainWindow" name="PhongLightingClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>399</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>PhongLighting</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="PhongLightingWidget" name="PhongLightingWidget_"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>600</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFunctions">
+    <property name="title">
+     <string>Functions</string>
+    </property>
+    <widget class="QMenu" name="menuRendering">
+     <property name="title">
+      <string>Rendering</string>
+     </property>
+     <addaction name="actionset_render_mode"/>
+    </widget>
+    <widget class="QMenu" name="menuLighting">
+     <property name="title">
+      <string>Lighting</string>
+     </property>
+     <addaction name="actionAmbientDialog"/>
+     <addaction name="actionDiffuseDialog"/>
+     <addaction name="actionSpecularDialog"/>
+     <addaction name="actionLightColorDialog"/>
+     <addaction name="actionShininessDialog"/>
+    </widget>
+    <widget class="QMenu" name="menuMorphing">
+     <property name="title">
+      <string>Morphing</string>
+     </property>
+     <addaction name="actionset_morph_factor"/>
+    </widget>
+    <addaction name="menuRendering"/>
+    <addaction name="menuLighting"/>
+    <addaction name="menuMorphing"/>
+   </widget>
+   <addaction name="menuFunctions"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionset_specific_color">
+   <property name="text">
+    <string>set specific color</string>
+   </property>
+  </action>
+  <action name="actionset_render_mode">
+   <property name="text">
+    <string>set render mode</string>
+   </property>
+  </action>
+  <action name="actionLightingDialog">
+   <property name="text">
+    <string>ShininessDialog</string>
+   </property>
+  </action>
+  <action name="actionAmbientDialog">
+   <property name="text">
+    <string>AmbientDialog</string>
+   </property>
+  </action>
+  <action name="actionDiffuseDialog">
+   <property name="text">
+    <string>DiffuseDialog</string>
+   </property>
+  </action>
+  <action name="actionSpecularDialog">
+   <property name="text">
+    <string>SpecularDialog</string>
+   </property>
+  </action>
+  <action name="actionLightColorDialog">
+   <property name="text">
+    <string>LightColorDialog</string>
+   </property>
+  </action>
+  <action name="actionShininessDialog">
+   <property name="text">
+    <string>ShininessDialog</string>
+   </property>
+  </action>
+  <action name="actionset_morph_factor">
+   <property name="text">
+    <string>set morph factor</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>PhongLightingWidget</class>
+   <extends>QOpenGLWidget</extends>
+   <header>phonglightingwidget.h</header>
+   <slots>
+    <signal>send_fps(QString)</signal>
+    <slot>show_light_color_dialog()</slot>
+    <slot>show_render_dialog()</slot>
+    <slot>show_shininess_dialog()</slot>
+    <slot>show_ambient_color_dialog()</slot>
+    <slot>show_diffuse_color_dialog()</slot>
+    <slot>show_specular_color_dialog()</slot>
+    <slot>show_morphing_widget()</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="PhongLighting.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>PhongLightingWidget_</sender>
+   <signal>send_fps(QString)</signal>
+   <receiver>statusBar</receiver>
+   <slot>showMessage(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>299</x>
+     <y>207</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>387</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAmbientDialog</sender>
+   <signal>triggered()</signal>
+   <receiver>PhongLightingWidget_</receiver>
+   <slot>show_ambient_color_dialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>207</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSpecularDialog</sender>
+   <signal>triggered()</signal>
+   <receiver>PhongLightingWidget_</receiver>
+   <slot>show_specular_color_dialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>206</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDiffuseDialog</sender>
+   <signal>triggered()</signal>
+   <receiver>PhongLightingWidget_</receiver>
+   <slot>show_diffuse_color_dialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>205</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionLightColorDialog</sender>
+   <signal>triggered()</signal>
+   <receiver>PhongLightingWidget_</receiver>
+   <slot>show_light_color_dialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>205</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShininessDialog</sender>
+   <signal>triggered()</signal>
+   <receiver>PhongLightingWidget_</receiver>
+   <slot>show_shininess_dialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>205</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionset_render_mode</sender>
+   <signal>triggered()</signal>
+   <receiver>PhongLightingWidget_</receiver>
+   <slot>show_render_dialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>205</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionset_morph_factor</sender>
+   <signal>triggered()</signal>
+   <receiver>PhongLightingWidget_</receiver>
+   <slot>show_morphing_widget()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>205</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
