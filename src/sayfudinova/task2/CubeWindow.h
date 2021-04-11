@@ -20,8 +20,8 @@ public:
   void render() override;
 
 protected:
-  void mousePressEvent(QMouseEvent *e) override;
-  void mouseReleaseEvent(QMouseEvent *e) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
   void keyPressEvent(QKeyEvent *event) override;
 
   void initCube(float width, int N);
@@ -30,18 +30,18 @@ private:
   GLint posAttr_ = 0;
   GLint matrixUniform_ = 0;
 
-  QOpenGLBuffer vbo;
-  QOpenGLBuffer ibo{QOpenGLBuffer::Type::IndexBuffer};
+  QOpenGLBuffer vbo_;
+  QOpenGLBuffer ibo_{QOpenGLBuffer::Type::IndexBuffer};
 
   std::unique_ptr<QOpenGLShaderProgram> program_ = nullptr;
 
-  QVector4D changeColor{0.5, 0.0, 0.6, 1};
+  QVector4D changeColor_{0.5, 0.0, 0.6, 1};
 
   int frame_ = 0;
 
   std::chrono::duration<float> time_;
-  std::chrono::time_point<std::chrono::system_clock> start;
+  std::chrono::time_point<std::chrono::system_clock> start_;
 
-  QVector2D mousePressPosition{0., 0.};
-  QVector3D rotationAxis = QVector3D(0.0, 1.0, 0.0).normalized();
+  QVector2D mousePressPosition_{0., 0.};
+  QVector3D rotationAxis_ = QVector3D(0.0, 1.0, 0.0).normalized();
 };
