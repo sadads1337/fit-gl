@@ -8,7 +8,7 @@ SquareWindow::SquareWindow(QWidget *parent)
     :QOpenGLWidget(parent)
 {   }
 
-SquareWindow::~SquareWindow() = default;
+
 
 void SquareWindow::initializeGL() {
   initializeOpenGLFunctions();
