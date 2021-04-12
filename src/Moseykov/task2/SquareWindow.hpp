@@ -26,6 +26,7 @@ Q_OBJECT
 
 public:
   explicit SquareWindow(QWidget *parent = nullptr);
+  ~SquareWindow() override;
   void initializeGL() override;
   void resizeGL(int w, int h) override;
   void  paintGL() override;
@@ -38,7 +39,6 @@ private:
   void mouseReleaseEvent(QMouseEvent *e) override;
   void timerEvent(QTimerEvent *e) override;
   void init_cube(float width, int N);
-  ~SquareWindow() override = default;
 
   // Attributes and uniforms handlers.
   GLint posAttr_ = 0;
