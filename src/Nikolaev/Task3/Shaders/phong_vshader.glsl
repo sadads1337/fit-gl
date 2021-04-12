@@ -18,15 +18,15 @@ void main()
 {
     mat4 mv_matrix = view_matrix * model_matrix;
 
-    float factor = (sin(t / 30.0F) + 1.0F) / 2.0F;
+    float factor = (sin(t / 30.0) + 1.0) / 2.0;
 
     vec3 cube_position_3d = vertex_position.xyz + offset_from_face * vertex_normal.xyz;
     vec3 sphere_position_3d = normalize(cube_position_3d);
-    vec3 morphed_position_3d = factor * cube_position_3d + (1.0F - factor) * sphere_position_3d;
+    vec3 morphed_position_3d = factor * cube_position_3d + (1.0 - factor) * sphere_position_3d;
 
-    gl_Position = projection_matrix * mv_matrix * vec4(morphed_position_3d, 1.0F);
+    gl_Position = projection_matrix * mv_matrix * vec4(morphed_position_3d, 1.0);
 
-    frag_position = vec3(mv_matrix * vec4(morphed_position_3d, 1.0F));
+    frag_position = vec3(mv_matrix * vec4(morphed_position_3d, 1.0));
     frag_normal = normalize(vec3(mv_matrix * vec4(vertex_normal, 0.0)));
     frag_color = vertex_color;
 }

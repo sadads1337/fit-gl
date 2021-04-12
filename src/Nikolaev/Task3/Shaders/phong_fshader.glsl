@@ -9,14 +9,14 @@ varying vec3 frag_color;
 
 void main()
 {
-    if(frag_color_factor > 0.5f) {
-        vec3 lightColor = vec3(1.0f, 1.0f, 1.0f);
+    if(frag_color_factor > 0.5) {
+        vec3 lightColor = vec3(1.0, 1.0, 1.0);
         vec3 viewPos = vec3(0.0, 0.0, 0.0);
         vec3 norm = normalize(frag_normal);
         vec3 lightDir = normalize(u_lightPosition - frag_position);
 
         /* Ambient lighting */
-        float ambientStrength = 0.1f;
+        float ambientStrength = 0.1;
         vec3 ambient = ambientStrength * lightColor;
 
         /* Diffusive lighting */
@@ -24,8 +24,8 @@ void main()
         vec3 diffuse = diff * lightColor;
 
         /* Specular blick lighting */
-        float specularStrength = 1.0f;
-        float specularFactor = 256.0f;
+        float specularStrength = 1.0;
+        float specularFactor = 256.0;
         vec3 viewDir = normalize(viewPos - frag_position);
         vec3 reflectDir = reflect(-lightDir, norm);
         float spec = pow(max(dot(viewDir, reflectDir), 0.0), specularFactor);
@@ -33,7 +33,7 @@ void main()
 
         vec3 resultColor = (ambient  + diffuse + specular) * frag_color;
 
-        gl_FragColor = vec4(resultColor, 1.0f);
+        gl_FragColor = vec4(resultColor, 1.0);
     }
-    else if(frag_color_factor < 0.5f) gl_FragColor = vec4(frag_color, 1.0f) * 1.0f;
+    else gl_FragColor = vec4(frag_color, 1.0) * 1.0;
 }

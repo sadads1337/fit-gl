@@ -5,17 +5,11 @@
 GeometryEngine::GeometryEngine()
     : arrayBuf(QOpenGLBuffer::VertexBuffer),
       indexBuf(QOpenGLBuffer::IndexBuffer) {
-  initializeOpenGLFunctions();
 
   arrayBuf.create();
   indexBuf.create();
 
   initCubeGeometry(1.0f, 1);
-}
-
-GeometryEngine::~GeometryEngine() {
-  arrayBuf.destroy();
-  indexBuf.destroy();
 }
 
 void GeometryEngine::initCubeGeometry(float width, unsigned int factor) {
@@ -32,7 +26,7 @@ void GeometryEngine::initCubeGeometry(float width, unsigned int factor) {
   QVector<VertexData> vertexes;
   QVector<GLuint> indexes;
 
-  for (auto face = 0U; face < 6; ++face) {
+  for (auto face = 0U; face < 6U; ++face) {
     // Add vertices
     const auto constCoord = face % 3;
     const auto coord1 = (face + 1) % 3;
@@ -40,10 +34,10 @@ void GeometryEngine::initCubeGeometry(float width, unsigned int factor) {
 
     for (auto y = 0U; y < factor + 1; ++y) {
       for (auto x = 0U; x < factor + 1; ++x) {
-        auto position = QVector3D{0, 0, 0};
-        auto normal = QVector3D{0, 0, 0};
+        QVector3D position{0, 0, 0};
+        QVector3D normal{0, 0, 0};
 
-        normal[constCoord] = int(face / 3 * 2) - 1;
+        normal[constCoord] = (static_cast<int>(face) / 3 * 2) - 1;
 
         position[constCoord] = normal[constCoord] * half_width;
         position[coord1] = (x * 2.0F / factor - 1.0F) * half_width;
@@ -52,14 +46,15 @@ void GeometryEngine::initCubeGeometry(float width, unsigned int factor) {
 
         auto color = QColor{};
 
-        color.setRedF(0.3f);
-        color.setGreenF(0.3f);
+        color.setRedF(0.7f);
+        color.setGreenF(0.7f);
         color.setBlueF(0.3f);
 
-        vertexes.append(
-            VertexData(QVector3D(position.x(), position.y(), position.z()),
-                       QVector3D(normal.x(), normal.y(), normal.z()),
-                       QVector3D(color.redF(), color.greenF(), color.blueF())));
+        vertexes.append({
+            QVector3D(position.x(), position.y(), position.z()),
+            QVector3D(normal.x(), normal.y(), normal.z()),
+            QVector3D(color.redF(), color.greenF(), color.blueF()),
+        });
       }
     }
 
@@ -89,7 +84,6 @@ void GeometryEngine::initCubeGeometry(float width, unsigned int factor) {
 void GeometryEngine::drawCubeGeometry(QOpenGLShaderProgram *program,
                                       QOpenGLFunctions *functions) {
   QMatrix4x4 modelMatrix;
-  modelMatrix.setToIdentity();
   modelMatrix.translate(m_translate);
   modelMatrix.rotate(m_rotate);
 
@@ -102,23 +96,23 @@ void GeometryEngine::drawCubeGeometry(QOpenGLShaderProgram *program,
   program->setUniformValue("offset_from_face", 0.0f);
   program->setUniformValue("frag_color_factor", 1.0f);
 
-  quintptr offset = 0;
+  std::ptrdiff_t offset = 0;
 
-  int vertexLocation = program->attributeLocation("vertex_position");
+  auto vertexLocation = program->attributeLocation("vertex_position");
   program->enableAttributeArray(vertexLocation);
   program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3,
                               sizeof(VertexData));
 
   offset += sizeof(QVector3D);
 
-  int vertexNormal = program->attributeLocation("vertex_normal");
+  auto vertexNormal = program->attributeLocation("vertex_normal");
   program->enableAttributeArray(vertexNormal);
   program->setAttributeBuffer(vertexNormal, GL_FLOAT, offset, 3,
                               sizeof(VertexData));
 
   offset += sizeof(QVector3D);
 
-  int vertexColor = program->attributeLocation("vertex_color");
+  auto vertexColor = program->attributeLocation("vertex_color");
   program->enableAttributeArray(vertexColor);
   program->setAttributeBuffer(vertexColor, GL_FLOAT, offset, 3,
                               sizeof(VertexData));
