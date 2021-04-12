@@ -6,7 +6,9 @@ add_executable(MoseykovTask2
         SquareWindow.cpp
         Shaders/square.fs
         Shaders/square.vs
-        shaders.qrc MyWidget.h MyWidget.cpp)
+        shaders.qrc
+        MyWidget.h
+        MyWidget.cpp)
 
 target_link_libraries(MoseykovTask2
     PRIVATE
