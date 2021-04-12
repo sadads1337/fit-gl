@@ -1,5 +1,4 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include "GeometryEngine.h"
 #include "Controller/InputController.h"
@@ -28,7 +27,6 @@ protected:
   void timerEvent(QTimerEvent *e) override;
 
   void keyPressEvent(QKeyEvent *event) override;
-  void keyReleaseEvent(QKeyEvent *event) override;
 
   void initializeGL() override;
   void resizeGL(int w, int h) override;
@@ -54,5 +52,3 @@ private:
 
   int frame_ = 0;
 };
-
-#endif // MainWindow_H

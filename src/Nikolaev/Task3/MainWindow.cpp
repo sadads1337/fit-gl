@@ -1,5 +1,4 @@
 #include "MainWindow.h"
-#include <iostream>
 #include <QScreen>
 
 void MainWindow::mousePressEvent(QMouseEvent *e) {
@@ -27,10 +26,6 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *e) {
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
   inputCtrl->keyPressEvent(event);
-}
-
-void MainWindow::keyReleaseEvent(QKeyEvent *event) {
-  inputCtrl->keyReleaseEvent(event);
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event) {
@@ -67,7 +62,7 @@ void MainWindow::initializeGL() {
 
   initShaders(InputController::Phong);
 
-  m_z = -8.0;
+  m_z = -8.0f;
   inputCtrl = std::make_unique<InputController>();
 
   float step = 2.0f;
@@ -99,7 +94,7 @@ void MainWindow::initShaders(unsigned int currentShader) {
       close();
   }
   /* Init Gouraud shader */
-  else if(currentShader == InputController::Guaraud){
+  else if(currentShader == InputController::Gouraud){
     if (!program.addShaderFromSourceFile(QOpenGLShader::Vertex,
                                          ":/Shaders/gouraud_vshader.glsl"))
       close();
@@ -133,23 +128,14 @@ void MainWindow::resizeGL(int w, int h) {
 }
 
 void MainWindow::paintGL() {
-  // Clear color and depth buffer
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  auto prevStateMorphing = inputCtrl->vertexFactor;
-  auto prevStateShader = inputCtrl->currentShader;
-  inputCtrl->update();
-  auto curStateShader = inputCtrl->currentShader;
-  auto curStateMorphing = inputCtrl->vertexFactor;
-
-  if (curStateMorphing != prevStateMorphing) {
+  if (inputCtrl->swapKeyFlag) {
     for (auto &m_object : m_objects) {
-      m_object->initCubeGeometry(1.0f, curStateMorphing);
+      m_object->initCubeGeometry(1.0f, inputCtrl->vertexFactor);
     }
-  }
-
-  if (curStateShader != prevStateShader) {
-    initShaders(curStateShader);
+    initShaders(inputCtrl->currentShader);
+    inputCtrl->swapKeyFlag = false;
   }
 
   program.bind();

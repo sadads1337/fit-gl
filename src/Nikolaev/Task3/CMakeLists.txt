@@ -1,9 +1,11 @@
 set(Task3_SRCS
         main.cpp
-
-        MainWindow.cpp MainWindow.h
-        GeometryEngine.cpp GeometryEngine.h
-        Controller/InputController.cpp Controller/InputController.h
+        MainWindow.cpp
+        MainWindow.h
+        GeometryEngine.cpp
+        GeometryEngine.h
+        Controller/InputController.cpp
+        Controller/InputController.h
 
         shaders.qrc
         Shaders/phong_vshader.glsl

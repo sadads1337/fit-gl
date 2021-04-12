@@ -7,8 +7,8 @@ varying vec3 resultColor;
 
 void main()
 {
-    if(frag_color_factor > 0.5f)
-        gl_FragColor = vec4(frag_color * resultColor, 1.0F);
+    if(frag_color_factor > 0.5)
+        gl_FragColor = vec4(resultColor, 1.0);
     else
-        gl_FragColor = vec4(frag_color, 1.0f) * 1.0f;
+        gl_FragColor = vec4(frag_color, 1.0) * 1.0;
 }
