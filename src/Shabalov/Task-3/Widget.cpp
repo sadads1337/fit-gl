@@ -174,24 +174,20 @@ void Widget::timerEvent(QTimerEvent *) {
 
 void Widget::setXRotation(float angle) {
   x_rot = angle / 100.0f;
-  emit xRotationChanged(angle);
   update();
 }
 
 void Widget::setYRotation(float angle) {
   y_rot = angle / 100.0f;
-  emit yRotationChanged(angle);
   update();
 }
 
 void Widget::setZRotation(float angle) {
   z_rot = angle / 100.0f;
-  emit zRotationChanged(angle);
   update();
 }
 
 void Widget::setColor(const QColor &color) {
   m_color = color;
-  emit ColorChanged(color);
   update();
 }
