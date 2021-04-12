@@ -76,6 +76,7 @@ set(Task4_SRSC
         Shaders/Lighting/v_phong_lighting_normal_mapping.glsl
         Shaders/Lighting/f_phong_lighting_normal_mapping.glsl
 
+        textures.qrc
         Texture/Earth_Albedo.jpg
         Texture/Earth_NormalMap.jpg
 )

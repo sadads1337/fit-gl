@@ -30,6 +30,7 @@ void init_grid(GLScene& scene, ShaderData& data, const size_t grid_size)
 
 void PreparedScenes::init()
 {
+    scenes.push_back(default_scene_sphere(ShaderCollection::shaders["phong_normal_mapping"]));
 
     scenes.push_back(default_scene_sphere(ShaderCollection::shaders["phong_wo_normal_mapping"]));
     scenes.push_back(default_scene_sphere(ShaderCollection::shaders["guro_wo_normal_mapping"]));
@@ -37,7 +38,6 @@ void PreparedScenes::init()
     scenes.push_back(default_scene_cube(ShaderCollection::shaders["phong_wo_normal_mapping"]));
     scenes.push_back(default_scene_cube(ShaderCollection::shaders["guro_wo_normal_mapping"]));
 
-    scenes.push_back(default_scene_sphere(ShaderCollection::shaders["phong_normal_mapping"]));
     scenes.push_back(default_morphing(ShaderCollection::shaders["morphing"]));
 }
 
@@ -108,10 +108,6 @@ GLScene PreparedScenes::default_scene_cube(ShaderData& data)
     scene.add_object(data, generator, { -distance, 0, distance }, { 0, 0, 0 }, material);
     scene.add_object(data, generator, { distance, 0, distance }, { 0, 0, 0 }, material);
     scene.add_object(data, generator, { distance, 0, -distance }, { 0, 0, 0 }, material);
-    scene.add_object(data, generator, { 2*distance, 1, -2*distance }, { 0, 0, 0 }, material);
-    scene.add_object(data, generator, { -2*distance, 1, -2*distance }, { 0, 0, 0 }, material);
-    scene.add_object(data, generator, { 2*distance, 1, 2*distance }, { 0, 0, 0 }, material);
-    scene.add_object(data, generator, { -2*distance, 1, 2*distance }, { 0, 0, 0 }, material);
 
 
     for (auto& object : scene.objects) {
