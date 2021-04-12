@@ -9,7 +9,7 @@ add_subdirectory(Moseykov)
 
 add_subdirectory(Kononov)
 add_subdirectory(ostapchenko)
-add_subdirectory(Nikolaev/Task1)
+add_subdirectory(Nikolaev)
 add_subdirectory(Popova)
 add_subdirectory(devyatovskaya)
 add_subdirectory(Shabalov)
