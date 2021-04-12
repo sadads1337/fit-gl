@@ -35,11 +35,6 @@ protected:
   void mouseMoveEvent(QMouseEvent *event) override;
   void wheelEvent(QWheelEvent *event) override;
   void timerEvent(QTimerEvent *event) override;
-signals:
-  void xRotationChanged(float angle);
-  void yRotationChanged(float angle);
-  void zRotationChanged(float angle);
-  void ColorChanged(QColor color);
 
 private:
   QMatrix4x4 m_projectionMatrix;
