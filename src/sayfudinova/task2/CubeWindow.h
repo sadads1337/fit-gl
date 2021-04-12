@@ -35,13 +35,13 @@ private:
 
   std::unique_ptr<QOpenGLShaderProgram> program_ = nullptr;
 
-  QVector4D changeColor_{0.5, 0.0, 0.6, 1};
+  QVector4D changeColor_{0.5f, 0.0f, 0.6f, 1};
 
   int frame_ = 0;
 
   std::chrono::duration<float> time_;
   std::chrono::time_point<std::chrono::system_clock> start_;
 
-  QVector2D mousePressPosition_{0., 0.};
-  QVector3D rotationAxis_ = QVector3D(0.0, 1.0, 0.0).normalized();
+  QVector2D mousePressPosition_{0.f, 0.f};
+  QVector3D rotationAxis_ = QVector3D(0.0f, 1.0f, 0.0f).normalized();
 };
