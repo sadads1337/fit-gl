@@ -55,11 +55,11 @@ void CubeWindow::initCube(float width, int N) {
 
   vbo_.create();
   vbo_.bind();
-  vbo_.allocate(vertices.data(), vertices.size() * sizeof(QVector3D));
+  vbo_.allocate(vertices.data(), static_cast<GLsizei>((vertices.size() * sizeof(QVector3D))));
 
   ibo_.create();
   ibo_.bind();
-  ibo_.allocate(indices.data(), indices.size() * sizeof(GLuint));
+  ibo_.allocate(indices.data(), static_cast<GLsizei>(indices.size() * sizeof(GLuint)));
 }
 
 void CubeWindow::init() {
@@ -101,7 +101,7 @@ void CubeWindow::render() {
   matrix.perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
   matrix.translate(0, 0, -2);
   matrix.rotate(50.0 * frame_ / screen()->refreshRate(), rotationAxis_);
-  matrix.scale(0.6, 0.6, 0.6);
+  matrix.scale(0.6f, 0.6f, 0.6f);
 
   // Bind shader and set attrs and unis
   program_->bind();
