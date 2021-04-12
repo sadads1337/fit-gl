@@ -8,7 +8,7 @@ SquareWindow::SquareWindow(QWidget *parent)
     :QOpenGLWidget(parent)
 {   }
 
-SquareWindow::~SquareWindow() = default;
+
 
 void SquareWindow::initializeGL() {
   initializeOpenGLFunctions();
@@ -21,7 +21,6 @@ void SquareWindow::initializeGL() {
   posAttr_ = program_->attributeLocation("posAttr");
   Q_ASSERT(posAttr_ != -1);
   init_cube(1.5, 10);
-  glClearColor(0.0f,0.0f,0.0f, 0.0f);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   timer.start(30, this);
@@ -42,10 +41,10 @@ void SquareWindow::paintGL() {
   program_->setUniformValue("view_matrix", view_matrix);
   program_->setUniformValue("morph_param", morph_param);
 
-  glVertexAttribPointer(posAttr_, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
-  glEnableVertexAttribArray(posAttr_);
+  program_->setAttributeBuffer(posAttr_, GL_FLOAT, 0, 3, sizeof(VertexData));
+  program_->enableAttributeArray(posAttr_);
   glDrawElements(GL_LINES, indexBuffer.size(), GL_UNSIGNED_INT, nullptr);
-  glDisableVertexAttribArray(posAttr_);
+  program_->disableAttributeArray(posAttr_);
 
   program_->release();
 
