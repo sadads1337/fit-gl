@@ -11,6 +11,8 @@ add_library(KononovCommon
         Scene/SceneWindow.hpp
         Scene/CubeMesh.hpp
         Scene/CubeMesh.cpp
+        Scene/UVSphere.cpp
+        Scene/UVSphere.hpp
         PositionedObject.cpp
         PositionedObject.hpp
         SceneObject.cpp
