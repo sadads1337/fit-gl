@@ -4,5 +4,7 @@
         <file>textures/skull-diffuse.jpg</file>
         <file>textures/earth-diffuse.jpg</file>
         <file>textures/earth-normal.tif</file>
+        <file>textures/bricks-diffuse.jpg</file>
+        <file>textures/bricks-normal.jpg</file>
     </qresource>
 </RCC>

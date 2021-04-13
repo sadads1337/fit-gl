@@ -10,6 +10,19 @@
 #include <Shader.hpp>
 #include <Vertex.hpp>
 
+namespace {
+
+const std::vector<Kononov::TBNVertex> plane_vertices{
+    {{-1.0F, -1.0F, 0.0F}, {0.0F, 0.0F}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}}, // v0
+    {{1.0F, -1.0F, 0.0F}, {1.0F, 0.0F}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}},  // v1
+    {{-1.0F, 1.0F, 0.0F}, {0.0F, 1.0F}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}},  // v2
+    {{1.0F, 1.0F, 0.0F}, {1.0F, 1.0F}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}},   // v3
+};
+
+const std::vector<GLuint> plane_indices{0, 1, 2, 3, 0, 1};
+
+} // namespace
+
 namespace Kononov {
 
 constexpr QVector3D INITIAL_CAMERA_POSITION(0.0F, 1.3F, 8.0F);
@@ -21,8 +34,13 @@ constexpr float AMBIENT_STRENGTH = 0.5F;
 constexpr float SPECULAR_STRENGTH = 1.5F;
 constexpr int SPECULAR_POW = 8;
 
+constexpr float BRICKS_AMBIENT_STRENGTH = 0.2F;
+constexpr float BRICKS_SPECULAR_STRENGTH = 0.5F;
+constexpr int BRICKS_SPECULAR_POW = 8;
+
 constexpr float MOUSE_SENSITIVITY = 0.2F;
 constexpr float ROTATION_SPEED = 30.0F;
+constexpr float BRICKS_ROTATION_SPEED = 15.0F;
 constexpr float MOTION_SPEED = 0.1F;
 
 constexpr QVector3D TRANSLATION{0.0F, 1.5F, 0.0F};
@@ -38,7 +56,14 @@ void FourthWindow::add_objects(
   auto earth_normal =
       Resources::loadTextureShared(":/textures/earth-normal.tif");
 
+  auto bricks_diffuse =
+      Resources::loadTextureShared(":/textures/bricks-diffuse.jpg");
+  auto bricks_normal =
+      Resources::loadTextureShared(":/textures/bricks-normal.jpg");
+
   auto earth_mesh = UVSphere::generateShared(UV_LAT_NUM, UV_LONG_NUM);
+  auto bricks_mesh = std::make_shared<GenericMesh<TBNVertex, GLuint>>(
+      plane_vertices, plane_indices, GL_TRIANGLE_STRIP);
 
   FourthShader factory(program);
   auto earth_shader = factory.createShared();
@@ -49,10 +74,24 @@ void FourthWindow::add_objects(
   earth_shader->getParameters().setAmbientStrength(AMBIENT_STRENGTH);
   earth_shader->getParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
 
+  auto bricks_shader = factory.createShared();
+  bricks_shader->getParameters().setLightSource(LIGHT_POSITION + translation,
+                                                LIGHT_COLOR);
+  bricks_shader->getParameters().setDiffuseTexture(bricks_diffuse);
+  bricks_shader->getParameters().setNormalTexture(bricks_normal);
+  bricks_shader->getParameters().setAmbientStrength(BRICKS_AMBIENT_STRENGTH);
+  bricks_shader->getParameters().setSpecular(BRICKS_SPECULAR_STRENGTH,
+                                             BRICKS_SPECULAR_POW);
+
   auto earth_rend = std::make_shared<GenericRenderable>(
       std::dynamic_pointer_cast<TypedShader<TBNVertex::Interface>>(
           earth_shader),
       std::dynamic_pointer_cast<TypedMesh<TBNVertex>>(earth_mesh));
+
+  auto bricks_rend = std::make_shared<GenericRenderable>(
+      std::dynamic_pointer_cast<TypedShader<TBNVertex::Interface>>(
+          bricks_shader),
+      std::dynamic_pointer_cast<TypedMesh<TBNVertex>>(bricks_mesh));
 
   /*
    * Init scene objects
@@ -64,6 +103,13 @@ void FourthWindow::add_objects(
   earth->setScale(earth_scale);
   earth->setPosition(earth_pos + translation);
 
+  const QVector3D bricks_scale(2.0F, 2.0F, 2.0F);
+  const QVector3D bricks_pos(4.0F, -1.0F, 0.0F);
+  auto bricks = std::make_shared<SceneObject>();
+  bricks->setRenderable(bricks_rend);
+  bricks->setScale(bricks_scale);
+  bricks->setPosition(bricks_pos + translation);
+
   /*
    * Init controllers
    */
@@ -72,11 +118,18 @@ void FourthWindow::add_objects(
   rotation_controller->setRotationSpeed(ROTATION_SPEED);
   rotation_controller->setRotationAxis({0.0F, 1.0F, 0.0F});
 
+  auto rotation_controller2 = std::make_shared<ConstantRotationController>();
+  rotation_controller2->setObject(bricks);
+  rotation_controller2->setRotationSpeed(BRICKS_ROTATION_SPEED);
+  rotation_controller2->setRotationAxis({1.0F, 0.0F, 0.0F});
+
   /*
    * Register created objects
    */
   getObjects().push_back(earth);
+  getObjects().push_back(bricks);
   getControllers().push_back(rotation_controller);
+  getControllers().push_back(rotation_controller2);
 }
 
 void FourthWindow::init() {
