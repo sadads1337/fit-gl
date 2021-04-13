@@ -2,11 +2,12 @@
 
 in VertexData {
     vec3 pos;
-    vec3 normal;
     vec2 uv;
+    mat3 TBN;
 } frag;
 
 uniform sampler2D diffuse_map;
+uniform sampler2D normal_map;
 uniform float ambient_strength;
 uniform float specular_strength;
 uniform float specular_pow;
@@ -36,7 +37,9 @@ vec3 calc_specular(vec3 normal, vec3 light_dir, vec3 view_dir, float specular_st
 void main() {
     vec3 light_dir = normalize(light_pos - frag.pos);
     vec3 view_dir = normalize(view_pos - frag.pos);
-    vec3 norm = normalize(frag.normal);
+
+    vec3 local_norm = texture(normal_map, frag.uv).rgb * 2.0 - 1.0;
+    vec3 norm = normalize(frag.TBN * local_norm);
 
     vec3 ambient_light = calc_ambient(ambient_strength, light_color);
     vec3 diffuse_light = calc_diffuse(norm, light_dir, light_color);
