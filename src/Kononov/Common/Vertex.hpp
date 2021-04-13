@@ -63,4 +63,48 @@ template <>
 class VertexMapper<RegularVertex, SimpleVertex::Interface>
     : public VertexMapper<RegularVertex, RegularVertex::Interface> {};
 
+struct TBNVertex {
+  QVector3D position;
+  QVector2D uv;
+  QVector3D tangent;
+  QVector3D bitangent;
+  QVector3D normal;
+
+  class Interface : public RegularVertex::Interface {
+  public:
+    [[nodiscard]] virtual int getTangentOffset() const = 0;
+    [[nodiscard]] virtual int getBitangentOffset() const = 0;
+  };
+};
+
+template <>
+class VertexMapper<TBNVertex, TBNVertex::Interface>
+    : public TBNVertex::Interface {
+public:
+  [[nodiscard]] int getStride() const override { return sizeof(TBNVertex); }
+  [[nodiscard]] int getPositionOffset() const override {
+    return offsetof(TBNVertex, position);
+  }
+  [[nodiscard]] int getUVOffset() const override {
+    return offsetof(TBNVertex, uv);
+  }
+  [[nodiscard]] int getTangentOffset() const override {
+    return offsetof(TBNVertex, tangent);
+  }
+  [[nodiscard]] int getBitangentOffset() const override {
+    return offsetof(TBNVertex, bitangent);
+  }
+  [[nodiscard]] int getNormalOffset() const override {
+    return offsetof(TBNVertex, normal);
+  }
+};
+
+template <>
+class VertexMapper<TBNVertex, RegularVertex::Interface>
+    : public VertexMapper<TBNVertex, TBNVertex::Interface> {};
+
+template <>
+class VertexMapper<TBNVertex, SimpleVertex::Interface>
+    : public VertexMapper<TBNVertex, TBNVertex::Interface> {};
+
 } // namespace Kononov
