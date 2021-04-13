@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>textures/dice-diffuse.png</file>
         <file>textures/skull-diffuse.jpg</file>
+        <file>textures/earth-diffuse.jpg</file>
+        <file>textures/earth-normal.tif</file>
     </qresource>
 </RCC>
