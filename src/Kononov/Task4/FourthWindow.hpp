@@ -15,8 +15,7 @@ public:
   void init() override;
 
 private:
-  void add_objects(QVector3D translation,
-                   const std::shared_ptr<QOpenGLShaderProgram> &program);
+  void add_objects(const std::shared_ptr<QOpenGLShaderProgram> &program);
 };
 
 } // namespace Kononov

@@ -43,13 +43,10 @@ constexpr float ROTATION_SPEED = 30.0F;
 constexpr float BRICKS_ROTATION_SPEED = 15.0F;
 constexpr float MOTION_SPEED = 0.1F;
 
-constexpr QVector3D TRANSLATION{0.0F, 1.5F, 0.0F};
-
 constexpr unsigned int UV_LAT_NUM = 20;
 constexpr unsigned int UV_LONG_NUM = 20;
 
 void FourthWindow::add_objects(
-    QVector3D translation,
     const std::shared_ptr<QOpenGLShaderProgram> &program) {
   auto earth_diffuse =
       Resources::loadTextureShared(":/textures/earth-diffuse.jpg");
@@ -67,16 +64,14 @@ void FourthWindow::add_objects(
 
   FourthShader factory(program);
   auto earth_shader = factory.createShared();
-  earth_shader->getParameters().setLightSource(LIGHT_POSITION + translation,
-                                               LIGHT_COLOR);
+  earth_shader->getParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
   earth_shader->getParameters().setDiffuseTexture(earth_diffuse);
   earth_shader->getParameters().setNormalTexture(earth_normal);
   earth_shader->getParameters().setAmbientStrength(AMBIENT_STRENGTH);
   earth_shader->getParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
 
   auto bricks_shader = factory.createShared();
-  bricks_shader->getParameters().setLightSource(LIGHT_POSITION + translation,
-                                                LIGHT_COLOR);
+  bricks_shader->getParameters().setLightSource(LIGHT_POSITION, LIGHT_COLOR);
   bricks_shader->getParameters().setDiffuseTexture(bricks_diffuse);
   bricks_shader->getParameters().setNormalTexture(bricks_normal);
   bricks_shader->getParameters().setAmbientStrength(BRICKS_AMBIENT_STRENGTH);
@@ -97,18 +92,18 @@ void FourthWindow::add_objects(
    * Init scene objects
    */
   const QVector3D earth_scale(2.0F, 2.0F, 2.0F);
-  const QVector3D earth_pos(0.0F, -1.0F, 0.0F);
+  const QVector3D earth_pos(-2.0F, -0.5F, 0.0F);
   auto earth = std::make_shared<SceneObject>();
   earth->setRenderable(earth_rend);
   earth->setScale(earth_scale);
-  earth->setPosition(earth_pos + translation);
+  earth->setPosition(earth_pos);
 
   const QVector3D bricks_scale(2.0F, 2.0F, 2.0F);
-  const QVector3D bricks_pos(4.0F, -1.0F, 0.0F);
+  const QVector3D bricks_pos(2.0F, -0.5F, 0.0F);
   auto bricks = std::make_shared<SceneObject>();
   bricks->setRenderable(bricks_rend);
   bricks->setScale(bricks_scale);
-  bricks->setPosition(bricks_pos + translation);
+  bricks->setPosition(bricks_pos);
 
   /*
    * Init controllers
@@ -152,7 +147,7 @@ void FourthWindow::init() {
    */
   auto program = Resources::loadShaderProgramShared(
       {":/shaders/fourth.vert", ":/shaders/fourth.frag"});
-  add_objects(TRANSLATION, program);
+  add_objects(program);
 }
 
 } // namespace Kononov
