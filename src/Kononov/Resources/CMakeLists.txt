@@ -4,6 +4,8 @@ set(KONONOV_RESOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/textures/skull-diffuse.jpg
         ${CMAKE_CURRENT_SOURCE_DIR}/textures/earth-diffuse.jpg
         ${CMAKE_CURRENT_SOURCE_DIR}/textures/earth-normal.tif
+        ${CMAKE_CURRENT_SOURCE_DIR}/textures/bricks-diffuse.jpg
+        ${CMAKE_CURRENT_SOURCE_DIR}/textures/bricks-normal.jpg
         ${CMAKE_CURRENT_SOURCE_DIR}/models.qrc
         ${CMAKE_CURRENT_SOURCE_DIR}/models/skull.vbo-ibo
         PARENT_SCOPE)
