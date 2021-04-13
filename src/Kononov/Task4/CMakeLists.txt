@@ -9,6 +9,7 @@ add_executable(KononovTask4
         main.cpp
         FourthWindow.cpp
         FourthWindow.hpp
+        FourthShader.hpp
         )
 
 target_link_libraries(KononovTask4
