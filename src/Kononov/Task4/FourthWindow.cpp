@@ -1,11 +1,11 @@
 #include "FourthWindow.hpp"
+#include "FourthShader.hpp"
 
 #include <QOpenGLFunctions>
 #include <QScreen>
 
 #include <Resources.hpp>
 #include <Scene/ConstantRotationController.hpp>
-#include <Scene/CubeMesh.hpp>
 #include <Scene/UVSphere.hpp>
 #include <Shader.hpp>
 #include <Vertex.hpp>
@@ -40,16 +40,17 @@ void FourthWindow::add_objects(
 
   auto earth_mesh = UVSphere::generateShared(UV_LAT_NUM, UV_LONG_NUM);
 
-  FirstShader factory(program);
+  FourthShader factory(program);
   auto earth_shader = factory.createShared();
   earth_shader->getParameters().setLightSource(LIGHT_POSITION + translation,
                                                LIGHT_COLOR);
   earth_shader->getParameters().setDiffuseTexture(earth_diffuse);
+  earth_shader->getParameters().setNormalTexture(earth_normal);
   earth_shader->getParameters().setAmbientStrength(AMBIENT_STRENGTH);
   earth_shader->getParameters().setSpecular(SPECULAR_STRENGTH, SPECULAR_POW);
 
   auto earth_rend = std::make_shared<GenericRenderable>(
-      std::dynamic_pointer_cast<TypedShader<RegularVertex::Interface>>(
+      std::dynamic_pointer_cast<TypedShader<TBNVertex::Interface>>(
           earth_shader),
       std::dynamic_pointer_cast<TypedMesh<TBNVertex>>(earth_mesh));
 
