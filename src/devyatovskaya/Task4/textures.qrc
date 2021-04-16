@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Texture/Earth_Albedo.jpg</file>
+        <file>Texture/Earth_NormalMap.jpg</file>
+    </qresource>
+</RCC>
