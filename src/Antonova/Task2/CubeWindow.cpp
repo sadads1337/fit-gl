@@ -92,7 +92,7 @@ void CubeWindow::init() {
   Q_ASSERT(morphUniform_ != -1);
 
 
-  makeCube(1.0f, 10);
+  makeCube(1.0f, 5);
 
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
