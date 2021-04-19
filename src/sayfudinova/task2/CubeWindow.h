@@ -24,7 +24,7 @@ protected:
   void mouseReleaseEvent(QMouseEvent *event) override;
   void keyPressEvent(QKeyEvent *event) override;
 
-  void initCube(float width, int N);
+  void initCube(float width, GLuint N);
 
 private:
   GLint posAttr_ = 0;
@@ -35,7 +35,7 @@ private:
 
   std::unique_ptr<QOpenGLShaderProgram> program_ = nullptr;
 
-  QVector4D changeColor_{0.5f, 0.0f, 0.6f, 1};
+  QVector4D changeColor_{0.0f, 0.0f, 0.0f, 1};
 
   int frame_ = 0;
 
