@@ -48,7 +48,7 @@ void CubeWindow::makeCube(const float side_size, const int n_points) {
             for (int k = 0; k < (n_points - 1); k++) {
                 indices.emplace_back(i + j + k + n_points);
                 indices.emplace_back(i + j + k + 0);
-                indices.emplace_back(i + j + k + n_points + 1);
+                indices.emplace_back(i + j + k + n_points);
                 indices.emplace_back(i + j + k + n_points + 1);
                 indices.emplace_back(i + j + k + 0);
                 indices.emplace_back(i + j + k + 1);
@@ -92,7 +92,7 @@ void CubeWindow::init() {
   Q_ASSERT(morphUniform_ != -1);
 
 
-  makeCube(1.0f, 5);
+  makeCube(1.0f, 10);
 
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
