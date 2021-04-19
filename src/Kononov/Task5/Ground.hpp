@@ -11,9 +11,9 @@ private:
   float m_black_ref;
 
 public:
-  explicit Ground(float white_ref, float black_ref);
+  Ground(float white_ref, float black_ref);
 
-  bool getHit(const Ray &ray, RayHit &hit) const override;
+  [[nodiscard]] std::optional<RayHit> getHit(const Ray &ray) const override;
 };
 
 } // namespace Kononov

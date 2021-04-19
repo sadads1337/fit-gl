@@ -15,7 +15,7 @@ private:
 public:
   Sphere(QVector3D color, QVector3D center, float radius, float reflectivity);
 
-  bool getHit(const Ray &ray, RayHit &hit) const override;
+  [[nodiscard]] std::optional<RayHit> getHit(const Ray &ray) const override;
 };
 
 } // namespace Kononov
