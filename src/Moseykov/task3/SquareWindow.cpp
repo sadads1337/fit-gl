@@ -18,50 +18,57 @@ void SquareWindow::initializeGL() {
   program_->addShaderFromSourceFile(QOpenGLShader::Fragment,
                                     ":/Shaders/square.fs");
   program_->link();
+
+
   posAttr_ = program_->attributeLocation("posAttr");
+  normAttr_ = program_->attributeLocation("normAttr");
   Q_ASSERT(posAttr_ != -1);
 
-  normAttr_ = program_->attributeLocation("normAttr");
-  Q_ASSERT(normAttr_ != -1);
-  init_cube(1.5, 10);
+
+  init_cube(1.5, 25);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   timer.start(30, this);
 }
 
 void SquareWindow::paintGL() {
-//  const auto retinaScale = devicePixelRatio();
-//  glViewport(0, 0, width() * retinaScale, height() * retinaScale);
-//  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//  QMatrix4x4 view_matrix;
-//  QMatrix4x4 model_matrix;
-//  for(int k=0;k<3;k++) {
-//    for (int i = 0; i < 3; i++) {
-//      view_matrix.setToIdentity();
-//      view_matrix.translate(-2+k*2.5, -2 + i * 2.5, -8);
-//      view_matrix.rotate(100.0 * frame_ / 59.0, rotationAxis);
-//      program_->bind();
-//      program_->setUniformValue("projection_matrix", projection_matrix);
-//      program_->setUniformValue("model", view_matrix);
-//      program_->setUniformValue("view_matrix", view_matrix);
-//      program_->setUniformValue("morph_param", morph_param);
-//      program_->setUniformValue("norm_matrix", view_matrix.normalMatrix());
-//      program_->setUniformValue("lightPos", QVector3D(0.0, 0.0, 0.0));
-//      program_->setAttributeBuffer(posAttr_, GL_FLOAT, 0, 3,
-//                                   sizeof(VertexData));
-//      program_->enableAttributeArray(posAttr_);
-//
-//      program_->setAttributeBuffer(normAttr_, GL_FLOAT, sizeof(QVector3D) , 3, sizeof(VertexData));
-//      program_->enableAttributeArray(normAttr_);
-//      glDrawElements(GL_TRIANGLE_STRIP, indexBuffer.size(), GL_UNSIGNED_INT, nullptr);
-//      program_->disableAttributeArray(posAttr_);
-//    }
-//  }
-//
-//
-//  program_->release();
-//
-//  ++frame_;
+  const auto retinaScale = devicePixelRatio();
+  glViewport(0, 0, width() * retinaScale, height() * retinaScale);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  QMatrix4x4 view_matrix;
+  QMatrix4x4 model_matrix;
+  for(int k=0;k<3;k++) {
+    for (int i = 0; i < 3; i++) {
+      view_matrix.setToIdentity();
+      view_matrix.translate(-2.5 + k * 2.5, -2.5 + i * 2.5, -8);
+      view_matrix.rotate(100.0 * frame_ / 59.0, rotationAxis);
+      program_->bind();
+      program_->setUniformValue("projection_matrix", projection_matrix);
+      program_->setUniformValue("model", view_matrix);
+      program_->setUniformValue("view_matrix", view_matrix);
+      program_->setUniformValue("morph_param", morph_param);
+      program_->setUniformValue("norm_matrix", view_matrix.normalMatrix());
+      program_->setUniformValue("viewPos", QVector3D(0.0, 0.0, 0));
+      program_->setUniformValue("lightPos", QVector3D(3.0,1.0,-1.0));
+      program_->setUniformValue("type_of_light_model", 2);
+
+
+
+      program_->setAttributeBuffer(posAttr_, GL_FLOAT, 0, 3,
+                                   sizeof(VertexData));
+      program_->enableAttributeArray(posAttr_);
+
+      program_->setAttributeBuffer(normAttr_, GL_FLOAT, sizeof(QVector3D) , 3, sizeof(VertexData));
+      program_->enableAttributeArray(normAttr_);
+      glDrawElements(GL_LINES, indexBuffer.size(), GL_UNSIGNED_INT, nullptr);
+      program_->disableAttributeArray(posAttr_);
+    }
+  }
+
+
+  program_->release();
+
+  ++frame_;
 }
 
 void SquareWindow::resizeGL(const int w, const int h){
@@ -73,6 +80,11 @@ void SquareWindow::resizeGL(const int w, const int h){
 void SquareWindow::change_morph_param(float value){
   morph_param = value/1000;
   update();
+}
+
+void SquareWindow::change_type_of_light_model(float value){
+    type_of_light_model = value;
+    update();
 }
 
 void SquareWindow::mousePressEvent(QMouseEvent *e) {

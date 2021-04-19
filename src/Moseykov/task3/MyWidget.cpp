@@ -10,6 +10,7 @@ auto morph_slider(int min_value,int max_value, int tick_value) {
   slider->setRange(min_value, max_value);
   slider->setSingleStep(tick_value);
   slider->setTickPosition(QSlider::TicksRight);
+  slider->setValue(max_value);
   return slider;
 }
 }
@@ -18,6 +19,7 @@ MyWidget::MyWidget()
 {
   auto * const my_window = main<fgl::SquareWindow *>(new fgl::SquareWindow);
   auto * const tSlider = morph_slider(0, 1000, 50);
+
   auto * const container = main<QGridLayout *>(new QGridLayout);
   auto * const mainLayout = main<QVBoxLayout *>(new QVBoxLayout);
   auto * const w = main<QWidget *>(new QWidget);

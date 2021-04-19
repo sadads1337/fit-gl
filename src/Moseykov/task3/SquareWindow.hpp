@@ -31,6 +31,7 @@ public:
   void resizeGL(int w, int h) override;
   void  paintGL() override;
   void change_morph_param(float value);
+  void change_type_of_light_model(float value);
 
 
 private:
@@ -51,7 +52,8 @@ private:
   QOpenGLBuffer vertexBuffer;
   QOpenGLBuffer indexBuffer{QOpenGLBuffer::IndexBuffer};
 
-  float morph_param = 0;
+  float morph_param = 1.0;
+  float type_of_light_model = 2.0;
   QMatrix4x4 projection_matrix;
 
   // Frame counter for animation.
