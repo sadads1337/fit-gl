@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 #include "Geometry.hpp"
 
 namespace Kononov {
@@ -13,7 +15,7 @@ public:
   Renderable &operator=(const Renderable &) = default;
   Renderable &operator=(Renderable &&) noexcept = default;
 
-  virtual bool getHit(const Ray &ray, RayHit &hit) const = 0;
+  [[nodiscard]] virtual std::optional<RayHit> getHit(const Ray &ray) const = 0;
 };
 
 } // namespace Kononov

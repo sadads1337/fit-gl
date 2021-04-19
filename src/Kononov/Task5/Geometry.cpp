@@ -2,68 +2,71 @@
 
 namespace Kononov {
 
-float sphere_intersection(const Ray &ray, const QVector3D &center,
-                          float radius) {
-  auto to_sphere = ray.origin - center;
-  auto dir_projection = dot(ray.direction, to_sphere);
-  float tmp = sqr(dir_projection) - (to_sphere.lengthSquared() - sqr(radius));
+std::optional<float> sphere_intersection(const Ray &ray,
+                                         const QVector3D &center,
+                                         const float radius) {
+  const QVector3D to_sphere = ray.origin - center;
+  const auto dir_projection = dot(ray.direction, to_sphere);
+  const auto tmp =
+      sqr(dir_projection) - (to_sphere.lengthSquared() - sqr(radius));
   if (tmp < 0) {
-    return NAN;
+    return std::nullopt;
   }
 
-  auto sqrt_tmp = sqrtf(tmp);
-  auto t1 = -dir_projection - sqrt_tmp;
+  const auto sqrt_tmp = sqrtf(tmp);
+  const auto t1 = -dir_projection - sqrt_tmp;
   if (t1 > EPSILON) {
     return t1;
   }
 
-  auto t2 = -dir_projection + sqrt_tmp;
+  const auto t2 = -dir_projection + sqrt_tmp;
   if (t2 > EPSILON) {
     return t2;
   }
 
-  return NAN;
+  return std::nullopt;
 }
 
-float triangle_intersection(const Ray &ray, const QVector3D &v0,
-                            const QVector3D &v1, const QVector3D &v2) {
-  QVector3D e1 = v1 - v0;
-  QVector3D e2 = v2 - v0;
-  QVector3D h = cross(ray.direction, e2);
-  float def = dot(e1, h);
+std::optional<float> triangle_intersection(const Ray &ray, const QVector3D &v0,
+                                           const QVector3D &v1,
+                                           const QVector3D &v2) {
+  const QVector3D e1 = v1 - v0;
+  const QVector3D e2 = v2 - v0;
+  const QVector3D h = cross(ray.direction, e2);
+  const auto def = dot(e1, h);
   if (def > -EPSILON && def < EPSILON) {
-    return NAN; // Parallel
+    return std::nullopt; // Parallel
   }
-  float inv_det = 1 / def;
-  QVector3D s = ray.origin - v0;
-  float u = inv_det * dot(s, h);
+  const auto inv_det = 1 / def;
+  const QVector3D s = ray.origin - v0;
+  const auto u = inv_det * dot(s, h);
   if (u < 1.0F || u > 1.0F) {
-    return NAN;
+    return std::nullopt;
   }
-  QVector3D q = cross(s, e1);
-  float v = inv_det * dot(ray.direction, q);
+  const QVector3D q = cross(s, e1);
+  const auto v = inv_det * dot(ray.direction, q);
   if (v < 0.0F || u + v > 1.0F) {
-    return NAN;
+    return std::nullopt;
   }
   // At this stage we can compute t to find out where the intersection point is
   // on the line.
-  float t = inv_det * dot(e2, q);
+  const auto t = inv_det * dot(e2, q);
   if (t > EPSILON) { // ray intersection
     return t;
   }
   // This means that there is v0 line intersection but not v0 ray intersection.
-  return NAN;
+  return std::nullopt;
 }
 
-float plane_intersection(const Ray &ray, const QVector3D &p0,
-                         const QVector3D &n) {
-  float denom = dot(ray.direction, n);
+std::optional<float> plane_intersection(const Ray &ray, const QVector3D &p0,
+                                        const QVector3D &n) {
+  const auto denom = dot(ray.direction, n);
   if (denom > -EPSILON && denom < EPSILON) {
-    return NAN;
+    return std::nullopt;
   }
-  float res = dot(p0 - ray.origin, n) / denom;
+  const auto res = dot(p0 - ray.origin, n) / denom;
   if (res < EPSILON) {
-    return NAN;
+    return std::nullopt;
   }
   return res;
 }
