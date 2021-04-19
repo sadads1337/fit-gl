@@ -5,61 +5,56 @@
 #include <QOpenGLFunctions>
 #include <QScreen>
 
-void CubeWindow::initCube(float width, int N) {
+void CubeWindow::initCube(float width, GLuint N) {
   if (N <= 1)
     throw std::invalid_argument("The number of parts cannot be less than 1");
 
   auto halfWidth = width / 2.f;
-  auto step = width / (static_cast<float>(N) - 1.f);
 
   std::vector<QVector3D> vertices;
-
-  for (auto z = -1; z <= 1; z += 2) {
-    for (auto y = 0; y < N; y++) {
-      for (auto x = 0; x < N; x++) {
-        vertices.emplace_back(QVector3D(z * (-halfWidth + x * step),
-                                  -halfWidth + y * step, z * halfWidth));
-      }
-    }
-  }
-  for (auto x = -1; x <= 1; x += 2) {
-    for (auto z = 0; z < N; z++) {
-      for (auto y = 0; y < N; y++) {
-        vertices.emplace_back(QVector3D(x * halfWidth, -halfWidth + y * step,
-                                  x * (-halfWidth + z * step)));
-      }
-    }
-  }
-  for (auto y = -1; y <= 1; y += 2) {
-    for (auto x = 0; x < N; x++) {
-      for (auto z = 0; z < N; z++) {
-        vertices.emplace_back(QVector3D(-halfWidth + x * step, y * halfWidth,
-                                  y * (-halfWidth + z * step)));
-      }
-    }
-  }
-
   std::vector<GLuint> indices;
-  for (auto i = 0; i < 6 * N * N; i += N * N) {
-    for (auto j = 0; j < (N - 1) * (N - 1); j += N) {
-      for (auto k = 0; k < (N - 1); k++) {
-        indices.emplace_back(i + j + k + N);
-        indices.emplace_back(i + j + k + 0);
-        indices.emplace_back(i + j + k + N + 1);
-        indices.emplace_back(i + j + k + N + 1);
-        indices.emplace_back(i + j + k + 0);
-        indices.emplace_back(i + j + k + 1);
+
+  for (auto side = 0U; side < 6; ++side) {
+    const auto coord = side % 3;
+    const auto coord1 = (side + 1) % 3;
+    const auto coord2 = (side + 2) % 3;
+
+    for (auto y = 0U; y < N + 1; ++y) {
+      for (auto x = 0U; x < N + 1; ++x) {
+        auto position = QVector3D{0, 0, 0};
+        auto normal = QVector3D{0, 0, 0};
+
+        normal[coord] = int(side / 3 * 2) - 1;
+
+        position[coord] = normal[coord] * halfWidth;
+        position[coord1] = (x * 2.0f / N - 1.0f) * halfWidth;
+        position[coord2] = (y * 2.0f / N - 1.0f) * halfWidth * normal[coord];
+
+        vertices.emplace_back(position.x(), position.y(), position.z());
       }
+    }
+
+    const auto sideIndexOffset = side * (N + 1) * (N + 1);
+    for (auto y = 0U; y < N; ++y) {
+      const auto indexOffset = (N + 1) * y;
+      indices.emplace_back(sideIndexOffset + indexOffset);
+      for (auto x = 0U; x < N + 1; ++x) {
+        indices.emplace_back(sideIndexOffset + indexOffset + x);
+        indices.emplace_back(sideIndexOffset + indexOffset + x + (N + 1));
+      }
+      indices.emplace_back(sideIndexOffset + indexOffset + N + (N + 1));
     }
   }
 
   vbo_.create();
   vbo_.bind();
-  vbo_.allocate(vertices.data(), static_cast<GLsizei>((vertices.size() * sizeof(QVector3D))));
+  vbo_.allocate(vertices.data(),
+                static_cast<GLsizei>((vertices.size() * sizeof(QVector3D))));
 
   ibo_.create();
   ibo_.bind();
-  ibo_.allocate(indices.data(), static_cast<GLsizei>(indices.size() * sizeof(GLuint)));
+  ibo_.allocate(indices.data(),
+                static_cast<GLsizei>(indices.size() * sizeof(GLuint)));
 }
 
 void CubeWindow::init() {
@@ -72,7 +67,7 @@ void CubeWindow::init() {
 
   start_ = std::chrono::system_clock::now();
 
-  initCube(2.f, 15U);
+  initCube(2.f, 10U);
 
   // Configure shaders
   program_ = std::make_unique<QOpenGLShaderProgram>(this);
@@ -120,7 +115,7 @@ void CubeWindow::render() {
   program_->setUniformValue("flag", 0);
   program_->bind();
 
-  glDrawElements(GL_LINES, ibo_.size(), GL_UNSIGNED_INT, nullptr);
+  glDrawElements(GL_LINE_STRIP, ibo_.size(), GL_UNSIGNED_INT, nullptr);
 
   // Release all and increase counter
   program_->disableAttributeArray(posAttr_);
