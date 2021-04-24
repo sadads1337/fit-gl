@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>Texture/Texture_1.jpg</file>
+        <file>Texture/165.jpg</file>
+        <file>Texture/165_norm.jpg</file>
     </qresource>
 </RCC>

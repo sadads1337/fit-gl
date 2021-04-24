@@ -2,40 +2,33 @@
 
 uniform vec4 objectColor = vec4(1.0, 0.0, 0.0, 1.0);
 
-
 varying vec3 v_lightPos;
 varying vec3 v_viewPos;
-varying highp vec3 normal_vect;
 varying highp vec3 fragment_poss;
-varying highp float v_light_model;
 
 varying highp vec4 lightingColor;
 
 varying vec2 v_TextCoord;
+varying highp mat3 TBN;
 uniform sampler2D ourTexture;
+uniform sampler2D Normal_map;
 
 void main() {
 
-      objectColor = texture(ourTexture, v_TextCoord);
+      vec3 normal = texture2D(Normal_map, v_TextCoord).rgb;
+      normal = normalize(TBN*(normal * 2.0 - 1.0));
 
-      if(v_light_model == 1.0){
       float ambient = 0.1;
-      vec4 ambientColor = ambient * objectColor;
 
       vec3 lightDir = normalize(v_lightPos - fragment_poss);
-      float diffuse_impact = max(dot(normal_vect, lightDir), 0.0);
-      vec4 diffuseColor =  objectColor * diffuse_impact;
+      float diffuse_impact = max(dot(normal, lightDir), 0.0);
 
       float specularStrength = 0.5f;
       vec3 viewDir = normalize(v_viewPos - fragment_poss);
-      vec3 reflectDir = reflect(-lightDir, normal_vect);
+      vec3 reflectDir = reflect(-lightDir, normal);
 
       float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-      vec4 specularColor = specularStrength * spec * objectColor;
+      float specular_part = specularStrength * spec;
 
-      gl_FragColor = ambientColor + diffuseColor + specularColor;
-      }
-      else{
-        gl_FragColor = objectColor * lightingColor;
-      }
+      gl_FragColor = (ambient + diffuse_impact + specular_part) * texture2D(ourTexture, v_TextCoord);
 }

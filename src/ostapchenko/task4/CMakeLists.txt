@@ -10,7 +10,6 @@ add_executable(ostapchenkotask4
         Shaders/vertex_shader.vs
 
         textures.qrc
-        Texture/Texture_1.jpg
 
         CommonWidget.cpp
         CommonWidget.h)
