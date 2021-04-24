@@ -16,7 +16,10 @@ MainWindow::MainWindow(QWidget *parent)
   morph_param = 1;
 }
 
-MainWindow::~MainWindow() = default;
+MainWindow::~MainWindow(){
+    delete texture;
+    delete normal_map;
+}
 
 void MainWindow::initializeGL() {
 
@@ -36,10 +39,14 @@ void MainWindow::initializeGL() {
   textureAttr_ = program_->attributeLocation("textureAttr");
   Q_ASSERT(textureAttr_ != -1);
 
-  initCube(2.0f,10);
+  tangentAttr_ = program_->attributeLocation("tangentAttr");
+  Q_ASSERT(tangentAttr_ != -1);
 
-  img = QImage(":/Texture/Texture_1");
-  Q_ASSERT(img.isNull());
+  bitangentAttr_ = program_->attributeLocation("bitangentAttr");
+  Q_ASSERT(bitangentAttr_ != -1);
+
+  initTextures();
+  initCube(4.0f,10);
 
   glClearColor(0.0f,0.3f,0.0f, 0.8f);
   glEnable(GL_DEPTH_TEST);
@@ -81,46 +88,73 @@ void MainWindow:: paintGL() {
     program_->setUniformValue("u_model_matrix", model_matrix);
     program_->setUniformValue("objectColor", square_color);
     program_->setUniformValue("u_morph_param", morph_param);
-    program_->setUniformValue("lightPos", QVector3D(0.0, 0.0, 0.0));
+    program_->setUniformValue("lightPos", QVector3D(-1, 2, 0.0));
     program_->setUniformValue("normal_matrix", model_matrix.normalMatrix());
     program_->setUniformValue("viewPos", QVector3D(-1, 0.0, 0.0));
-    program_->setUniformValue("light_model", 1); // 0 -Gourand, 1 - Phong
+
+    texture->bind(0);
+    program_->setUniformValue("ourTexture", 0);
+
+    normal_map->bind(1);
+    program_->setUniformValue("Normal_map", 1);
 
     vertexBuffer.bind();
 
+    float offset = 0;
+
     program_->enableAttributeArray(posAttr_);
-    program_->setAttributeBuffer(posAttr_, GL_FLOAT, 0, 3,
+    program_->setAttributeBuffer(posAttr_, GL_FLOAT, offset, 3,
                                  sizeof(VertexData));
 
+    offset += sizeof(QVector3D);
 
     program_->enableAttributeArray(normAttr_);
-    program_->setAttributeBuffer(normAttr_, GL_FLOAT, sizeof(QVector3D) , 3, sizeof(VertexData));
+    program_->setAttributeBuffer(normAttr_, GL_FLOAT, offset, 3, sizeof(VertexData));
+
+    offset += sizeof(QVector3D);
 
     program_->enableAttributeArray(textureAttr_);
-    program_->setAttributeBuffer(textureAttr_, GL_FLOAT, 2*sizeof(QVector3D) , 2, sizeof(VertexData));
+    program_->setAttributeBuffer(textureAttr_, GL_FLOAT, offset , 2, sizeof(VertexData));
 
+    offset += sizeof(QVector2D);
+
+    program_->enableAttributeArray(tangentAttr_);
+    program_->setAttributeBuffer(tangentAttr_, GL_FLOAT, offset , 3, sizeof(VertexData));
+
+    offset += sizeof(QVector3D);
+
+    program_->enableAttributeArray(bitangentAttr_);
+    program_->setAttributeBuffer(bitangentAttr_, GL_FLOAT, offset , 3, sizeof(VertexData));
 
     indexBuffer.bind();
-
-    //Work with textures
-    GLuint texture;
-    context()->functions()->glGenTextures(1, &texture);
-    context()->functions()->glBindTexture(GL_TEXTURE_2D, texture);
-    context()->functions()->glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img.width(), img.height(), 0, GL_RGB, GL_UNSIGNED_BYTE, img.bits());
-    context()->functions()->glGenerateMipmap(GL_TEXTURE_2D);
-
-
-    context()->functions()->glDrawElements(GL_LINES, indexBuffer.size(),
+    context()->functions()->glDrawElements(GL_TRIANGLES, indexBuffer.size(),
                                            GL_UNSIGNED_INT, nullptr);
 
     program_->disableAttributeArray(posAttr_);
     program_->disableAttributeArray(normAttr_);
     program_->disableAttributeArray(textureAttr_);
+    program_->disableAttributeArray(tangentAttr_);
+    program_->disableAttributeArray(bitangentAttr_);
 
 
     program_->release();
 
     ++frame_;
+}
+
+void MainWindow::initTextures()
+{
+  // Load image
+  texture = new QOpenGLTexture(QImage(":/Texture/165.jpg").mirrored());
+  normal_map = new QOpenGLTexture(QImage(":/Texture/165_norm.jpg").mirrored());
+
+  texture->setMinificationFilter(QOpenGLTexture::Nearest);
+  texture->setMagnificationFilter(QOpenGLTexture::Linear);
+  texture->setWrapMode(QOpenGLTexture::Repeat);
+
+  normal_map->setMinificationFilter(QOpenGLTexture::Nearest);
+  normal_map->setMagnificationFilter(QOpenGLTexture::Linear);
+  normal_map->setWrapMode(QOpenGLTexture::Repeat);
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *e) {
@@ -151,29 +185,30 @@ void MainWindow::initCube(const float width, const int N) {
   }
   auto width_div_2 = width / 2.0f;
   auto step = width / float(N - 1);
+  auto texture_step = 1.0f / float(N - 1);
 
   std::vector<VertexData> vertexes;
   vertexes.reserve(6 * pow(N, 2));
-  for (auto z = -width_div_2; z <= width_div_2; z += width) {
+  for (auto z = -1; z <= 1; z += 2) {
     for (auto j = 0; j < N; j++) {
       for (auto i = 0; i < N; i++) {
-        vertexes.emplace_back( VertexData(QVector3D( -width_div_2 + i*step, -width_div_2 + j * step, z), QVector3D(0.0,0.0, z/width_div_2), QVector2D(-width_div_2 + i*step, -width_div_2 + j * step)));
+        vertexes.emplace_back( VertexData(QVector3D( z*(-width_div_2 +  i * step), -width_div_2 + j * step, z * width_div_2), QVector3D(0.0,0.0, z), QVector2D(i*texture_step, j * texture_step), QVector3D(z, 0.0,0.0), QVector3D(0.0,1.0,0.0)));
       }
     }
   }
-  for (auto x = -width_div_2; x <= width_div_2; x += width) {
+  for (auto x = -1; x <= 1; x += 2) {
     for (auto k = 0; k < N; k++) {
       for (auto j = 0; j < N; j++) {
         vertexes.emplace_back(VertexData(
-            QVector3D( x, -width_div_2 + j *step, + width_div_2 - k*step), QVector3D(x/width_div_2, 0.0, 0.0), QVector2D(-width_div_2 + j *step, + width_div_2 - k*step)));
+            QVector3D( x * width_div_2, -width_div_2 + j * step, x*(-width_div_2 + k * step)), QVector3D(x, 0.0, 0.0), QVector2D(j * texture_step,  k*texture_step), QVector3D(0.0,1.0, 0.0), QVector3D(0.0,0.0,x)));
       }
     }
   }
-  for (auto y = -width_div_2; y <= width_div_2; y += width) {
+  for (auto y = -1; y <= 1; y += 2) {
     for (auto i = 0; i < N; i++) {
       for (auto k = 0; k < N; k++) {
         vertexes.emplace_back(VertexData(
-            QVector3D(-width_div_2 + i * step, y, width_div_2 - k*step), QVector3D(0.0,y/width_div_2, 0.0), QVector2D(-width_div_2 + i * step,width_div_2 - k*step)));
+            QVector3D(-width_div_2 + i * step, y * width_div_2, y*(-width_div_2 + k * step)), QVector3D(0.0,y, 0.0), QVector2D(k* texture_step,i*texture_step), QVector3D( 0.0,y, 0.0), QVector3D(1.0,0.0,0.0)));
       }
     }
   }

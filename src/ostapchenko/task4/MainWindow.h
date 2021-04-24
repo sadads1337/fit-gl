@@ -6,6 +6,7 @@
 #include <Base/GLWindow.hpp>
 
 #include <QOpenGLWidget>
+#include <QOpenGLTexture>
 
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
@@ -18,11 +19,14 @@ namespace fgl {
 
 struct VertexData{
   VertexData(){ }
-  VertexData(QVector3D p, QVector3D n, QVector2D t) :
-      position(p), normal(n), textcoord(t) { }
+  VertexData(QVector3D p, QVector3D n, QVector2D t, QVector3D tng, QVector3D btg) :
+      position(p), normal(n), textcoord(t), tangent(tng), bitangent(btg) { }
   QVector3D position;
   QVector3D normal;
   QVector2D textcoord;
+  QVector3D tangent;
+  QVector3D bitangent;
+
 };
 class MainWindow :  public QOpenGLWidget, protected QOpenGLFunctions {
 Q_OBJECT
@@ -45,11 +49,15 @@ protected:
   //generating cubes
   void initCube(const float width,const int N);
 
+  void initTextures();
+
 private:
   // Attributes and uniforms handlers.
   GLint posAttr_ = 0;
   GLint normAttr_ = 0;
   GLint textureAttr_ = 0;
+  GLint tangentAttr_ = 0;
+  GLint bitangentAttr_ = 0;
 
   QMatrix4x4 projection_matrix;
   //morphing parameter
@@ -72,7 +80,10 @@ private:
 
   QBasicTimer timer;
 
-  QImage img;
+  QOpenGLTexture *texture = nullptr;
+  QOpenGLTexture *normal_map = nullptr;
+
+
 };
 
 } // namespace fgl
