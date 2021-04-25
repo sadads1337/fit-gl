@@ -1,13 +1,13 @@
 #pragma once
 
 #include <Base/GLWindow.hpp>
+#include <QBasicTimer>
 #include <QColorDialog>
 #include <QMouseEvent>
-#include <QBasicTimer>
 
-#include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 #include <QOpenGLFunctions>
+#include <QOpenGLShaderProgram>
 
 namespace fgl {
 
