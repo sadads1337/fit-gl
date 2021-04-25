@@ -67,11 +67,11 @@ void MainWindow::initializeGL() {
 
   float step = 2.0f;
 
-  for(auto x = -step; x <= step; x+=step){
-    for(auto y = -step; y <= step; y+=step){
-      for(auto z = -step; z <= step; z+=step){
+  for (auto x = -step; x <= step; x += step) {
+    for (auto y = -step; y <= step; y += step) {
+      for (auto z = -step; z <= step; z += step) {
         m_objects.append(std::make_shared<GeometryEngine>());
-        m_objects[m_objects.size()-1]->translate(QVector3D(x, y, z));
+        m_objects[m_objects.size() - 1]->translate(QVector3D(x, y, z));
       }
     }
   }
@@ -84,7 +84,7 @@ void MainWindow::initShaders(unsigned int currentShader) {
   program.removeAllShaders();
 
   /* Init Phong shader */
-  if(currentShader == InputController::Phong){
+  if (currentShader == InputController::Phong) {
     if (!program.addShaderFromSourceFile(QOpenGLShader::Vertex,
                                          ":/Shaders/phong_vshader.glsl"))
       close();
@@ -94,15 +94,15 @@ void MainWindow::initShaders(unsigned int currentShader) {
       close();
   }
   /* Init Gouraud shader */
-  else if(currentShader == InputController::Gouraud){
+  else if (currentShader == InputController::Gouraud) {
     if (!program.addShaderFromSourceFile(QOpenGLShader::Vertex,
                                          ":/Shaders/gouraud_vshader.glsl"))
       close();
 
     if (!program.addShaderFromSourceFile(QOpenGLShader::Fragment,
                                          ":/Shaders/gouraud_fshader.glsl"))
-      close();}
-
+      close();
+  }
 
   // Link shader pipeline
   if (!program.link())

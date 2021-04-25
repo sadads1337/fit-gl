@@ -12,10 +12,7 @@ public:
 
   unsigned int vertexFactor = 1U;
 
-  enum Shaders {
-    Phong = 0,
-    Gouraud = 1
-  };
+  enum Shaders { Phong = 0, Gouraud = 1 };
 
   unsigned int currentShader = Phong;
   bool swapKeyFlag = false;

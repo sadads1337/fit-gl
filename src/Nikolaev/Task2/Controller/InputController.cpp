@@ -9,9 +9,9 @@ void InputController::keyReleaseEvent(QKeyEvent *event) {
 }
 
 void InputController::update() {
-  for(auto factor = 1U; factor < 10U; factor++){
+  for (auto factor = 1U; factor < 10U; factor++) {
     unsigned int key = Qt::Key::Key_0 + factor;
-    if((pressedKeys.find(key) != pressedKeys.end())){
+    if ((pressedKeys.find(key) != pressedKeys.end())) {
       vertexFactor = factor;
     }
   }
