@@ -18,7 +18,7 @@ class Widget : public QOpenGLWidget, protected QOpenGLFunctions {
 
 public:
   explicit Widget(QWidget *parent = nullptr);
-  ~Widget() override;
+  ~Widget() override = default;
   void setXRotation(float angle);
   void setYRotation(float angle);
   void setZRotation(float angle);
