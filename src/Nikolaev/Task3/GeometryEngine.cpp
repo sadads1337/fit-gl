@@ -117,7 +117,8 @@ void GeometryEngine::drawCubeGeometry(QOpenGLShaderProgram *program,
   program->setAttributeBuffer(vertexColor, GL_FLOAT, offset, 3,
                               sizeof(VertexData));
 
-  functions->glDrawElements(GL_QUAD_STRIP, indexBuf.size(), GL_UNSIGNED_INT, nullptr);
+  functions->glDrawElements(GL_QUAD_STRIP, indexBuf.size(), GL_UNSIGNED_INT,
+                            nullptr);
 
   // Draw cube edges
   arrayBuf.bind();
@@ -126,7 +127,8 @@ void GeometryEngine::drawCubeGeometry(QOpenGLShaderProgram *program,
   program->setUniformValue("offset_from_face", 1.0e-3f);
   program->setUniformValue("frag_color_factor", 0.0f);
 
-  functions->glDrawElements(GL_LINE_STRIP, indexBuf.size(), GL_UNSIGNED_INT, nullptr);
+  functions->glDrawElements(GL_LINE_STRIP, indexBuf.size(), GL_UNSIGNED_INT,
+                            nullptr);
 
   program->disableAttributeArray("vertex_position");
   program->disableAttributeArray("vertex_normal");
@@ -136,10 +138,6 @@ void GeometryEngine::drawCubeGeometry(QOpenGLShaderProgram *program,
   indexBuf.release();
 }
 
-void GeometryEngine::rotate(const QQuaternion &r){
-  m_rotate = r * m_rotate;
-}
+void GeometryEngine::rotate(const QQuaternion &r) { m_rotate = r * m_rotate; }
 
-void GeometryEngine::translate(const QVector3D &t){
-  m_translate += t;
-}
+void GeometryEngine::translate(const QVector3D &t) { m_translate += t; }

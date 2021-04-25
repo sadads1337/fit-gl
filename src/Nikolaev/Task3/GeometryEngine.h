@@ -11,7 +11,7 @@ struct VertexData {
   QVector3D colour;
 };
 
-class GeometryEngine{
+class GeometryEngine {
 public:
   GeometryEngine();
 

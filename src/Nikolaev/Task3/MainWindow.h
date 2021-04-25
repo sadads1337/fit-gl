@@ -1,7 +1,7 @@
 #pragma once
 
-#include "GeometryEngine.h"
 #include "Controller/InputController.h"
+#include "GeometryEngine.h"
 
 #include <QBasicTimer>
 #include <QMatrix4x4>
