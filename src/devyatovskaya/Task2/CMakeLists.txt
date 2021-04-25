@@ -63,9 +63,6 @@ set(Task2_SRSC
         ShaderCollection.h
         ShaderData.cpp
         ShaderData.h
-        ui_MorphingDialog.h
-        ui_PhongLighting.h
-        ui_RenderDialog.h
 
         shaders.qrc
         Shaders/f_morphing.glsl
@@ -73,15 +70,7 @@ set(Task2_SRSC
 )
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
-find_package(OpenGL REQUIRED)
 
-include_directories( ${OPENGL_INCLUDE_DIRS})
+add_executable(DevyatovskayaTask2 ${Task2_SRSC})
 
-qt5_wrap_ui(UI_HEADERS PhongLighting.ui RenderDialog.ui MorphingDialog.ui)
-
-add_executable(Task2 ${Task2_SRSC}  ${UI_HEADERS})
-
-target_link_libraries(Task2 PRIVATE
-    Qt5::Widgets
-    ${OPENGL_LIBRARIES})
-    
+target_link_libraries(DevyatovskayaTask2 PRIVATE Qt5::Widgets)
