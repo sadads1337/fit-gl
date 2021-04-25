@@ -10,8 +10,8 @@
 #include <QQuaternion>
 #include <QVector2D>
 #include <QVector3D>
-#include <memory>
 #include <chrono>
+#include <memory>
 
 class CubeWindow final : public fgl::GLWindow {
 

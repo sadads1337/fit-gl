@@ -5,6 +5,8 @@
 #include <QOpenGLFunctions>
 #include <QScreen>
 
+#include <stdexcept>
+
 void CubeWindow::initCube(float width, GLuint N) {
   if (N <= 1)
     throw std::invalid_argument("The number of parts cannot be less than 1");
