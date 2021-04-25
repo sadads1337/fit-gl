@@ -19,40 +19,41 @@ struct VertexData {
 };
 
 std::array<VertexData, 24u> vertices{{
-    VertexData{{0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,0.0f,1.0f}},
-    VertexData{{0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,1.0f,0.0f}},
-    VertexData{{0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {1.0f,0.0f,0.0f}},
+    VertexData{{0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+    VertexData{{0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
+    VertexData{{0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
 
-    VertexData{{-0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,0.0f,1.0f}},
-    VertexData{{-0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,1.0f,0.0f}},
-    VertexData{{-0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {-1.0f,0.0f,0.0f}},
+    VertexData{{-0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+    VertexData{{-0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
+    VertexData{{-0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
 
-    VertexData{{0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,0.0f,1.0f}},
-    VertexData{{0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {1.0f,0.0f,0.0f}},
-    VertexData{{0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,-1.0f,0.0f}},
+    VertexData{{0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+    VertexData{{0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
+    VertexData{{0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
 
-    VertexData{{-0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,0.0f,1.0f}},
-    VertexData{{-0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {-1.0f,0.0f,0.0f}},
-    VertexData{{-0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,-1.0f,0.0f}},
+    VertexData{{-0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+    VertexData{{-0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
+    VertexData{{-0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
 
-    VertexData{{0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,0.0f,-1.0f}},
-    VertexData{{0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {1.0f,0.0f,0.0f}},
-    VertexData{{0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,1.0f,0.0f}},
+    VertexData{{0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, -1.0f}},
+    VertexData{{0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
+    VertexData{{0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
 
-    VertexData{{-0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,0.0f,-1.0f}},
-    VertexData{{-0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {-1.0f,0.0f,0.0f}},
-    VertexData{{-0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,1.0f,0.0f}},
+    VertexData{{-0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, -1.0f}},
+    VertexData{{-0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
+    VertexData{{-0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
 
-    VertexData{{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,0.0f,-1.0f}},
-    VertexData{{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {-1.0f,0.0f,0.0f}},
-    VertexData{{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,-1.0f,0.0f}},
+    VertexData{{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, -1.0f}},
+    VertexData{{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
+    VertexData{{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
 
-    VertexData{{0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,0.0f,-1.0f}},
-    VertexData{{0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f,-1.0f,0.0f}},
-    VertexData{{0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {1.0f,0.0f,0.0f}},
-  }
-};
-std::array<GLushort, 36u> indices{{0, 3, 6, 6, 3, 9, 2, 7, 13, 13, 7, 23, 4, 1, 17, 17, 1, 14, 19, 10, 16, 16, 10, 5, 18, 15, 21, 21, 15, 12, 11, 20, 8, 8, 20, 22 }};
+    VertexData{{0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, -1.0f}},
+    VertexData{{0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
+    VertexData{{0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
+}};
+std::array<GLushort, 36u> indices{
+    {0,  3,  6,  6,  3,  9, 2,  7,  13, 13, 7,  23, 4,  1,  17, 17, 1,  14,
+     19, 10, 16, 16, 10, 5, 18, 15, 21, 21, 15, 12, 11, 20, 8,  8,  20, 22}};
 
 template <typename C, typename M>
 inline ptrdiff_t memberOffset(M C::*member) noexcept {
@@ -95,10 +96,8 @@ void SquareWindow::init() {
   matrixUniform_ = program_->uniformLocation("matrix");
   matrixUniform2_ = program_->uniformLocation("model");
 
-
-  program_->setAttributeBuffer(norm_, GL_FLOAT,
-                               memberOffset(&VertexData::norm), 3,
-                               sizeof(VertexData));
+  program_->setAttributeBuffer(norm_, GL_FLOAT, memberOffset(&VertexData::norm),
+                               3, sizeof(VertexData));
   program_->setAttributeBuffer(posAttr_, GL_FLOAT,
                                memberOffset(&VertexData::position), 3,
                                sizeof(VertexData));
@@ -117,45 +116,43 @@ void SquareWindow::render() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   program_->bind();
-  for (int k = 0; k<12; k++){
-  QMatrix4x4 matrix;
-  QMatrix4x4 model;
-  matrix.perspective(60.0f, (float)width() / height(), 0.1f, 100.0f);
-  if (k < 4) {
-    matrix.translate(k, 0, -5);
-    model.translate(k, 0, -5);
-  }
-  if ((k >= 4) && (k < 8)) {
-    matrix.translate(k - 4, 1, -5);
-    model.translate(k - 4, 1, -5);
-  }
-  if ((k >= 8) && (k < 12)) {
-    matrix.translate(k - 8, -1, -5);
-    model.translate(k - 8, -1, -5);
-  }
-  
-  matrix.rotate(50.0 * frame_ / screen()->refreshRate(), rotationAxis);
-  model.rotate(50.0 * frame_ / screen()->refreshRate(), rotationAxis);
-  matrix.scale(0.5, 0.5, 0.5);
-  model.scale(0.5, 0.5, 0.5);
-  program_->setUniformValue(matrixUniform_, matrix);
-  program_->setUniformValue(matrixUniform2_, model);
-  program_->setUniformValue("normal_matrix", model.normalMatrix());
-  program_->setUniformValue("col", square_color);
-  //Choose "0" to use Guro lighting model; "1" to use Phong lighting model
-  program_->setUniformValue("lightModel", 1);
+  for (int k = 0; k < 12; k++) {
+    QMatrix4x4 matrix;
+    QMatrix4x4 model;
+    matrix.perspective(60.0f, (float)width() / height(), 0.1f, 100.0f);
+    if (k < 4) {
+      matrix.translate(k, 0, -5);
+      model.translate(k, 0, -5);
+    }
+    if ((k >= 4) && (k < 8)) {
+      matrix.translate(k - 4, 1, -5);
+      model.translate(k - 4, 1, -5);
+    }
+    if ((k >= 8) && (k < 12)) {
+      matrix.translate(k - 8, -1, -5);
+      model.translate(k - 8, -1, -5);
+    }
 
-  program_->enableAttributeArray(norm_);
-  program_->enableAttributeArray(posAttr_);
-  program_->enableAttributeArray(colAttr_);
+    matrix.rotate(50.0 * frame_ / screen()->refreshRate(), rotationAxis);
+    model.rotate(50.0 * frame_ / screen()->refreshRate(), rotationAxis);
+    matrix.scale(0.5, 0.5, 0.5);
+    model.scale(0.5, 0.5, 0.5);
+    program_->setUniformValue(matrixUniform_, matrix);
+    program_->setUniformValue(matrixUniform2_, model);
+    program_->setUniformValue("normal_matrix", model.normalMatrix());
+    program_->setUniformValue("col", square_color);
+    // Choose "0" to use Guro lighting model; "1" to use Phong lighting model
+    program_->setUniformValue("lightModel", 0);
 
-  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, nullptr);
-  program_->disableAttributeArray(colAttr_);
-  program_->disableAttributeArray(posAttr_);
-  program_->disableAttributeArray(norm_);
+    program_->enableAttributeArray(norm_);
+    program_->enableAttributeArray(posAttr_);
+    program_->enableAttributeArray(colAttr_);
 
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, nullptr);
+    program_->disableAttributeArray(colAttr_);
+    program_->disableAttributeArray(posAttr_);
+    program_->disableAttributeArray(norm_);
   }
-  
 
   program_->release();
 

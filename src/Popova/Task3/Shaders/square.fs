@@ -1,19 +1,23 @@
 #version 120
 
 uniform vec4 col = vec4(1.0, 0.0, 0.0, 1.0);
-varying vec3 normal;
-varying vec3 fragPos; 
-varying vec3 LightingColor; 
-uniform vec3 lightPos = vec3(-5.0, 0.0, 0.0);
+
+uniform vec3 lightPos = vec3(5.0, 0.0, 0.0);
 uniform vec4 result;
 uniform vec3 viewDir;
 uniform float spec;
 uniform vec3 specular;
-varying float light_model;
+uniform highp int lightModel;
+
+varying vec3 normal;
+varying vec3 fragPos; 
+varying vec3 LightingColor;
 
 uniform vec3 viewPos = vec3(-2.0, 1.0, 0.0);
+
+
 void main() {
-    if (light_model == 1){
+    if (lightModel == 1){
         //phong
         // Ambient
         vec4 lightColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -37,7 +41,7 @@ void main() {
         gl_FragColor = specular + ambient + diffuse;
     };
 
-    if (light_model == 0){
+    if (lightModel == 0){
         // guro
         gl_FragColor = vec4(LightingColor * vec3(col.xyz), 1.0);
     };

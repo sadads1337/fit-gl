@@ -2,27 +2,27 @@
 
 attribute highp vec4 posAttr;
 attribute highp vec3 norm;
+
 uniform highp mat4 matrix;
 uniform highp int lightModel;
 uniform highp mat4 model;
 uniform highp mat3 normal_matrix;
 uniform highp vec3 lightColor = vec3(1.0f, 1.0f, 1.0f);
-uniform vec3 lightPos = vec3(-5.0, 0.0, 0.0);
+uniform vec3 lightPos = vec3(5.0, 0.0, 0.0);
 uniform vec3 viewPos = vec3(-2.0, 1.0, 0.0);
+
 varying vec3 LightingColor; 
 varying vec3 normal;
-varying float light_model;
 varying vec3 fragPos;
+
 void main() {
-    light_model = lightModel;
-    gl_Position = matrix * posAttr;
-    if (lightModel == 1){
+    if (lightModel == 1) {
         //phong
         fragPos = vec3(model * posAttr);
         normal =  normal_matrix * norm;
     };
 
-    if (lightModel == 0){
+    if (lightModel == 0) {
         //guro
         // gouraud shading
         vec3 Position = vec3(model * posAttr);
@@ -46,7 +46,7 @@ void main() {
         vec3 specular = spec * specularStrength * lightColor;      
 
         LightingColor = specular + ambient + diffuse;
-       
     };
 
+    gl_Position = matrix * posAttr;
 }
