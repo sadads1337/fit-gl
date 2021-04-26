@@ -13,7 +13,7 @@ public:
 	void calculate_fps();
 
 
-	[[nodisacrd]] float delta_time() const noexcept;
+	float delta_time() const;
 private:
 	
 	QString fps_to_str() const;
