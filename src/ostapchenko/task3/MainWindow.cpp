@@ -101,7 +101,7 @@ void MainWindow:: paintGL() {
 
           indexBuffer.bind();
 
-          context()->functions()->glDrawElements(GL_LINES, indexBuffer.size(),
+          context()->functions()->glDrawElements(GL_TRIANGLES, indexBuffer.size(),
                                                  GL_UNSIGNED_INT, nullptr);
 
           program_->disableAttributeArray(posAttr_);
@@ -146,7 +146,7 @@ void MainWindow::initCube(const float width, const int N) {
         for (auto z = -width_div_2; z <= width_div_2; z += width) {
           for (auto j = 0; j < N; j++) {
             for (auto i = 0; i < N; i++) {
-              vertexes.emplace_back( VertexData(QVector3D( -width_div_2 + i*step, -width_div_2 + j * step, z), QVector3D(0.0,0.0, z/width_div_2)));
+              vertexes.emplace_back( VertexData(QVector3D( -z + i*step*z/width_div_2, -width_div_2 + j * step, z), QVector3D(0.0,0.0, z/width_div_2)));
             }
           }
         }
@@ -154,7 +154,7 @@ void MainWindow::initCube(const float width, const int N) {
           for (auto k = 0; k < N; k++) {
             for (auto j = 0; j < N; j++) {
               vertexes.emplace_back(VertexData(
-                  QVector3D( x, -width_div_2 + j *step, + width_div_2 - k*step), QVector3D(x/width_div_2, 0.0, 0.0)));
+                  QVector3D( x, -width_div_2 + j *step, -x + x*k*step/width_div_2), QVector3D(x/width_div_2, 0.0, 0.0)));
             }
           }
         }
@@ -162,7 +162,7 @@ void MainWindow::initCube(const float width, const int N) {
           for (auto i = 0; i < N; i++) {
             for (auto k = 0; k < N; k++) {
               vertexes.emplace_back(VertexData(
-                  QVector3D(-width_div_2 + i * step, y, width_div_2 - k*step), QVector3D(0.0,y/width_div_2, 0.0)));
+                  QVector3D(-width_div_2 + i * step, y, -y + y*k*step/width_div_2), QVector3D(0.0,y/width_div_2, 0.0)));
             }
           }
         }
