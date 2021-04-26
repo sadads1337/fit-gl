@@ -1,4 +1,4 @@
-set(Task2_SRSC
+set(Task3_SRSC
         main.cpp
         FPSCounter.cpp
         FPSCounter.h
@@ -67,10 +67,17 @@ set(Task2_SRSC
         shaders.qrc
         Shaders/f_morphing.glsl
         Shaders/v_morphing.glsl
+        Shaders/Lighting/v_light_source.glsl
+        Shaders/Lighting/f_light_source.glsl
+        Shaders/Lighting/v_phong_lighting_wo_normal_mapping.glsl
+        Shaders/Lighting/f_phong_lighting_wo_normal_mapping.glsl
+        Shaders/Lighting/v_guro_lighting_wo_normal_mapping.glsl
+        Shaders/Lighting/f_guro_lighting_wo_normal_mapping.glsl
 )
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-add_executable(DevyatovskayaTask2 ${Task2_SRSC})
+add_executable(DevyatovskayaTask3 ${Task3_SRSC})
 
-target_link_libraries(DevyatovskayaTask2 PRIVATE Qt5::Widgets)
+target_link_libraries(DevyatovskayaTask3 PRIVATE Qt5::Widgets)
+    

@@ -1,13 +1,13 @@
 #pragma once
-#include "ui_LightingDialog.h"
 #include <qobjectdefs.h>
+#include "ui_LightingDialog.h"
 class PhongLightingWidget;
 
-class LightingDialog : public QWidget, public Ui::Form {
-  Q_OBJECT
+class LightingDialog : public QWidget, public Ui::Form
+{
+    Q_OBJECT
 public:
-  explicit LightingDialog(PhongLightingWidget &phong_widget,
-                          QWidget *parent = nullptr);
+    explicit LightingDialog(PhongLightingWidget& phong_widget, QWidget* parent = nullptr);
 
-  void reset_state();
+    void reset_state();
 };
