@@ -82,14 +82,8 @@ set(Task4_SRSC
 )
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
-find_package(OpenGL REQUIRED)
 
-include_directories( ${OPENGL_INCLUDE_DIRS})
 
-qt5_wrap_ui(UI_HEADERS PhongLighting.ui RenderDialog.ui MorphingDialog.ui)
+add_executable(DevyatovskayaTask4 ${Task4_SRSC})
 
-add_executable(Task4 ${Task4_SRSC}  ${UI_HEADERS})
-
-target_link_libraries(Task4 PRIVATE
-    Qt5::Widgets
-    ${OPENGL_LIBRARIES})
+target_link_libraries(DevyatovskayaTask4 PRIVATE  Qt5::Widgets)
