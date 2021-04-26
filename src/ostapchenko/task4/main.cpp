@@ -1,11 +1,11 @@
-#include "CommonWidget.h"
+#include "MainWindow.h"
 #include <QApplication>
 #include <QSurfaceFormat>
 
 int main(int argc, char **argv) {
   QApplication app(argc, argv);
 
-  app.setApplicationName("Task 2");
+  app.setApplicationName("Task 4");
 
   QSurfaceFormat format;
   format.setSamples(16);
@@ -13,8 +13,8 @@ int main(int argc, char **argv) {
   format.setDepthBufferSize(24);
   QSurfaceFormat::setDefaultFormat(format);
 
-  auto const window = std::make_shared<CommonWidget>();
-  window->showMaximized();
+  auto const window = std::make_shared<fgl::MainWindow>();
+  window->showNormal();
 
   return app.exec();
 }
