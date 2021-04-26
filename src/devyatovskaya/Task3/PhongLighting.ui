@@ -121,7 +121,7 @@
   <customwidget>
    <class>PhongLightingWidget</class>
    <extends>QOpenGLWidget</extends>
-   <header>phonglightingwidget.h</header>
+   <header>devyatovskaya/Task2/PhongLightingWidget.h</header>
    <slots>
     <signal>send_fps(QString)</signal>
     <slot>show_light_color_dialog()</slot>
