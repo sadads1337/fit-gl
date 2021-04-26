@@ -11,8 +11,7 @@ add_executable(ostapchenkotask4
 
         textures.qrc
 
-        CommonWidget.cpp
-        CommonWidget.h)
+        )
 
 target_link_libraries(ostapchenkotask4
         PRIVATE

@@ -1,12 +1,8 @@
 #version 120
 
-uniform vec4 objectColor = vec4(1.0, 0.0, 0.0, 1.0);
-
 varying vec3 v_lightPos;
 varying vec3 v_viewPos;
 varying highp vec3 fragment_poss;
-
-varying highp vec4 lightingColor;
 
 varying vec2 v_TextCoord;
 varying highp mat3 TBN;

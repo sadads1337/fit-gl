@@ -12,14 +12,9 @@ namespace fgl {
 
 MainWindow::MainWindow(QWidget *parent)
     :QOpenGLWidget(parent)
-{
-  morph_param = 1;
-}
+{}
 
-MainWindow::~MainWindow(){
-    delete texture;
-    delete normal_map;
-}
+MainWindow::~MainWindow() = default;
 
 void MainWindow::initializeGL() {
 
@@ -48,7 +43,7 @@ void MainWindow::initializeGL() {
   initTextures();
   initCube(4.0f,10);
 
-  glClearColor(0.0f,0.3f,0.0f, 0.8f);
+  glClearColor(0.0f,0.0f,0.0f, 0.8f);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
 
@@ -86,8 +81,6 @@ void MainWindow:: paintGL() {
     program_->setUniformValue("u_projection_matrix", projection_matrix);
     program_->setUniformValue("u_view_matrix", view_matrix);
     program_->setUniformValue("u_model_matrix", model_matrix);
-    program_->setUniformValue("objectColor", square_color);
-    program_->setUniformValue("u_morph_param", morph_param);
     program_->setUniformValue("lightPos", QVector3D(-1, 2, 0.0));
     program_->setUniformValue("normal_matrix", model_matrix.normalMatrix());
     program_->setUniformValue("viewPos", QVector3D(-1, 0.0, 0.0));
@@ -145,8 +138,8 @@ void MainWindow:: paintGL() {
 void MainWindow::initTextures()
 {
   // Load image
-  texture = new QOpenGLTexture(QImage(":/Texture/165.jpg").mirrored());
-  normal_map = new QOpenGLTexture(QImage(":/Texture/165_norm.jpg").mirrored());
+  texture = std::make_shared<QOpenGLTexture>(QImage(":/Texture/165.jpg").mirrored());
+  normal_map = std::make_shared<QOpenGLTexture>(QImage(":/Texture/165_norm.jpg").mirrored());
 
   texture->setMinificationFilter(QOpenGLTexture::Nearest);
   texture->setMagnificationFilter(QOpenGLTexture::Linear);
@@ -236,18 +229,6 @@ void MainWindow::initCube(const float width, const int N) {
   indexBuffer.create();
   indexBuffer.bind();
   indexBuffer.allocate(indexes.data(),static_cast<int>(indexes.size()*sizeof(GLuint)));
-}
-
-void MainWindow::set_morph_param(float value){
-  morph_param = value/100.0f;
-  update();
-}
-
-void MainWindow::set_color(QColor color){
-
-  square_color = QVector4D(color.red() / 255.0, color.green() / 255.0,
-                           color.blue() / 255.0, 1);
-  update();
 }
 
 } // namespace fgl

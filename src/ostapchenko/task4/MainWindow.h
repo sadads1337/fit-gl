@@ -2,7 +2,6 @@
 
 #include <QBasicTimer>
 #include <QMouseEvent>
-#include <QColor>
 #include <Base/GLWindow.hpp>
 
 #include <QOpenGLWidget>
@@ -18,7 +17,6 @@
 namespace fgl {
 
 struct VertexData{
-  VertexData(){ }
   VertexData(QVector3D p, QVector3D n, QVector2D t, QVector3D tng, QVector3D btg) :
       position(p), normal(n), textcoord(t), tangent(tng), bitangent(btg) { }
   QVector3D position;
@@ -37,9 +35,6 @@ public:
   void initializeGL() override;
   void resizeGL(const int w,const  int h) override;
   void  paintGL() override;
-
-  void set_morph_param(float value);
-  void set_color(QColor color);
 
 protected:
   void mousePressEvent(QMouseEvent *e) override;
@@ -60,8 +55,6 @@ private:
   GLint bitangentAttr_ = 0;
 
   QMatrix4x4 projection_matrix;
-  //morphing parameter
-  float morph_param;
 
   //buffers
   QOpenGLBuffer vertexBuffer;
@@ -69,8 +62,7 @@ private:
 
   // Shader program handler.
   std::unique_ptr<QOpenGLShaderProgram> program_ = nullptr;
-  // color
-  QVector4D square_color{1.0, 1.0, 1.0, 1};
+
   // Frame counter for animation.
   int frame_ = 0;
 
@@ -80,9 +72,8 @@ private:
 
   QBasicTimer timer;
 
-  QOpenGLTexture *texture = nullptr;
-  QOpenGLTexture *normal_map = nullptr;
-
+  std::shared_ptr<QOpenGLTexture> texture = nullptr;
+  std::shared_ptr<QOpenGLTexture> normal_map = nullptr;
 
 };
 
