@@ -5,13 +5,8 @@
 
 Object3D::Object3D(const std::vector<VertexData> &vertData,
                    const std::vector<GLuint> &indexes, const QImage &texture, const QImage &normalMap)
-    : m_indexBuffer(QOpenGLBuffer::IndexBuffer), m_texture(nullptr), m_normalMap(nullptr){
+    : m_indexBuffer(QOpenGLBuffer::IndexBuffer), m_texture(nullptr), m_normalMap(nullptr), m_scale(1.0f){
   m_scale = 1.0f;
-  init(vertData, indexes, texture, normalMap);
-}
-
-void Object3D::init(const std::vector<VertexData> &vertData,
-                    const std::vector<GLuint> &indexes, const QImage &texture, const QImage &normalMap) {
   if (m_vertexBuffer.isCreated())
     m_vertexBuffer.destroy();
   if (m_indexBuffer.isCreated())
@@ -19,13 +14,14 @@ void Object3D::init(const std::vector<VertexData> &vertData,
 
   m_vertexBuffer.create();
   m_vertexBuffer.bind();
-  m_vertexBuffer.allocate(vertData.data(),
-                          vertData.size() * sizeof(VertexData));
+  m_vertexBuffer.allocate(vertData.data(), static_cast<int>(vertData.size()) *
+                                               sizeof(VertexData));
   m_vertexBuffer.release();
 
   m_indexBuffer.create();
   m_indexBuffer.bind();
-  m_indexBuffer.allocate(indexes.data(), indexes.size() * sizeof(GLuint));
+  m_indexBuffer.allocate(indexes.data(),
+                         static_cast<int>(indexes.size()) * sizeof(GLuint));
   m_indexBuffer.release();
 
   m_texture = std::make_unique<QOpenGLTexture>(texture.mirrored());
