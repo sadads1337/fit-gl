@@ -23,8 +23,6 @@ class Object3D {
 public:
   Object3D(const std::vector<VertexData> &vertData, const std::vector<GLuint> &indexes,
            const QImage &texture, const QImage &normalMap);
-  void init(const std::vector<VertexData> &vertData, const std::vector<GLuint> &indexes,
-            const QImage &texture, const QImage &normalMap);
   void draw(QOpenGLShaderProgram *program, QOpenGLFunctions *functions);
   void rotate(const QQuaternion &r);
   void translate(const QVector3D &t);
