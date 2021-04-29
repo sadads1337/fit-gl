@@ -97,12 +97,5 @@ void SourceLight::setAngle(float an)
     angle = an;
 }
 
-LightFactors::LightFactors()
-{
 
-}
-//
-// Created by Никита on 19.03.2021.
-//
 
-#include "sourcelight.h"

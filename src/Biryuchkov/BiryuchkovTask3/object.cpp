@@ -1,9 +1,6 @@
 #include "object.h"
 
-Object::Object()
-{
 
-}
 
 void Object::setObject(const std::vector<GLfloat>& vert ,const std::vector<GLfloat>& norms )
 {

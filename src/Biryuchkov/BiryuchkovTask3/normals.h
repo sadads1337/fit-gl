@@ -9,7 +9,7 @@ public:
     Normals();
     void setNormal(GLfloat _x,GLfloat _y,GLfloat _z);
     void setNormal(const std::vector<GLfloat>& vec);
-    const std::vector<GLfloat>& getNormal();
+    [[nodiscard]] const std::vector<GLfloat>& getNormal() const noexcept;
 private:
     std::vector<GLfloat> vect={};
 };

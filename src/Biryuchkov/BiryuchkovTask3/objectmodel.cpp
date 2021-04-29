@@ -1,10 +1,5 @@
 #include "objectmodel.h"
 
-ObjectModel::ObjectModel()
-{
-
-}
-
 void ObjectModel::setTranslate(GLfloat x,GLfloat y,GLfloat z)
 {
     tx= x;
@@ -43,4 +38,9 @@ QMatrix4x4 ObjectModel::getMatrix()
 int ObjectModel::frameBack()
 {
     return frame;
+}
+
+ObjectModel::ObjectModel()
+{
+
 }

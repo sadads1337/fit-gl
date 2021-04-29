@@ -12,10 +12,12 @@ public:
     void setDialog(QColorDialog* dial);
     void checkColor();
     void setActive(int ac);
-    void setSources(std::vector<SourceLight*> srcs);
+    void setSources(const std::vector<SourceLight*> &srcs);
 
 private:
     std::vector<SourceLight*> vect = {};
+
+
     int active = 0;
     QColorDialog* colorDialog = nullptr;
 };

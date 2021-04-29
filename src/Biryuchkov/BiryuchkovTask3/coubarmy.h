@@ -11,15 +11,15 @@ public:
     const std::vector<GLfloat>& getVertex();
 
     void setCoub(const Coub& cube);
-    long long unsigned int vertexCount();
+    [[nodiscard]] std::uint64_t vertexCount() const noexcept;
 
     void setCol(int c);
     void setRow(int r);
 
-    void makeArmy();
+     void makeArmy();
 private:
-    long long unsigned int rows = 1;
-    long long unsigned int cols = 1;
+    std::uint64_t rows = 1;
+    std::uint64_t cols = 1;
 
     GLfloat dist = 3.0f;
 

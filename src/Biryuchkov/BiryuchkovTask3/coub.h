@@ -8,12 +8,12 @@ class Coub
 {
 public:
     Coub();
-    std::vector<GLfloat> getVertex();
-    std::vector<GLfloat> getNormals();
+    [[nodiscard]] std::vector<GLfloat> getVertex() const noexcept;
+    [[nodiscard]] std::vector<GLfloat> getNormals() const noexcept;
 
-    size_t vertexCount();
+    [[nodiscard]] size_t vertexCount() const noexcept;
 
-    void setStep(GLfloat stp);
+     void setStep(GLfloat stp) ;
 private:
     enum types {X,Y,Z};
     std::vector<GLfloat> vert ={};
@@ -22,9 +22,9 @@ private:
     GLfloat step = 2.0f;
 
     void normals(types type , int size, bool inv);
-    std::vector<GLfloat> side();
-    std::vector<GLfloat> slideSide(types type);
-    std::vector<GLfloat> coubVertex();
+    [[nodiscard]] std::vector<GLfloat> side() const noexcept;
+    [[nodiscard]] std::vector<GLfloat> slideSide(types type) const noexcept;
+      std::vector<GLfloat> coubVertex();
 };
 
 #endif // COUB_H

@@ -29,7 +29,7 @@ void CoubsArmy::initializeGL()
     initVaoVbo();
 
     initObject();
-
+    glEnable(GL_DEPTH_TEST);
     m_vbo->allocate( &object.getData()[0], object.getData().size() * sizeof(GLfloat));
 
     f->glEnableVertexAttribArray(m_posAttr);
@@ -41,6 +41,7 @@ void CoubsArmy::initializeGL()
                              reinterpret_cast<void *>(3 * sizeof(GLfloat)));
 
     m_vbo->release();
+
 }
 void CoubsArmy::paintGL()
 {
@@ -58,7 +59,7 @@ void CoubsArmy::paintGL()
 
     projection.perspective(100.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 
-    glEnable(GL_DEPTH_TEST);
+
 
     colorOwner.checkColor();
 
@@ -93,7 +94,7 @@ void CoubsArmy::paintGL()
 
         m_program->setUniformValue(m_trMatrix , mat);
 
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glDrawArrays(GL_TRIANGLES, 0, object.getVertex().size()/3);
 
         m_program->setUniformValue(m_matrixUniform, projection*mat);

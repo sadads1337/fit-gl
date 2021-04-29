@@ -5,7 +5,7 @@ Coub::Coub()
     vert = coubVertex();
 }
 
-std::vector<GLfloat> Coub::side()
+[[nodiscard]] std::vector<GLfloat> Coub::side() const noexcept
 {
     std::vector<GLfloat> vec ={};
     for (GLfloat x = -1.0f ; x <= 1.01f-step ;x += step )
@@ -22,7 +22,7 @@ std::vector<GLfloat> Coub::side()
     }
     return vec;
 }
-std::vector<GLfloat> Coub::slideSide(types type)
+[[nodiscard]] std::vector<GLfloat> Coub::slideSide(const types type) const noexcept
 {
     auto vec = side();
     int slide = 0;
@@ -50,7 +50,7 @@ std::vector<GLfloat> Coub::slideSide(types type)
     }
     return vec;
 }
-std::vector<GLfloat> Coub::coubVertex()
+ std::vector<GLfloat> Coub::coubVertex()
 {
     norm.clear();
     std::vector<GLfloat>result = {};
@@ -91,7 +91,7 @@ std::vector<GLfloat> Coub::coubVertex()
     return result;
 }
 
-void Coub::normals(types type ,int size , bool inv)
+void Coub::normals(const types type ,const int size ,const bool inv)
 {
     std::vector<GLfloat> n ={0,0,0};
     switch (type){
@@ -123,24 +123,25 @@ void Coub::normals(types type ,int size , bool inv)
     }
 }
 
-std::vector<GLfloat> Coub::getVertex()
+[[nodiscard]] std::vector<GLfloat> Coub::getVertex() const noexcept
 {
     return vert;
 }
-std::vector<GLfloat> Coub::getNormals()
+[[nodiscard]] std::vector<GLfloat> Coub::getNormals() const noexcept
 {
     return norm;
 }
 
-size_t Coub::vertexCount()
+[[nodiscard]] size_t Coub::vertexCount() const noexcept
 {
     return vert.size();
 }
 
-void Coub::setStep(GLfloat stp)
+void Coub::setStep(const GLfloat stp)
 {
     step  = stp;
     vert = coubVertex();
+
 }
 
 

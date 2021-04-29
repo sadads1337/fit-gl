@@ -2,10 +2,10 @@
 
 coubArmy::coubArmy()
 {
-    makeArmy();
+     makeArmy();
 }
 
-size_t coubArmy::vertexCount()
+[[nodiscard]] std::uint64_t  coubArmy::vertexCount() const noexcept
 {
     return vert.size();
 }
@@ -20,12 +20,12 @@ void coubArmy::setCoub(const Coub& cube)
     origin = cube;
 }
 
-void coubArmy::setCol(int c)
+void coubArmy::setCol(const int c)
 {
     cols =c;
 }
 
-void coubArmy::setRow(int r)
+void coubArmy::setRow(const int r)
 {
     rows = r;
 }
