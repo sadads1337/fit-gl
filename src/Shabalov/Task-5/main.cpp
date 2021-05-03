@@ -9,7 +9,9 @@
 #include "Plane.h"
 #include <memory>
 
-#define _USE_MATH_DEFINES
+#ifndef M_PI
+    #define M_PI 3.14159265358979323846
+#endif
 
 const auto WIDTH = 1280;
 const auto HEIGHT = 960;
