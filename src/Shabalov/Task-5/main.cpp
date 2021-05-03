@@ -9,6 +9,8 @@
 #include "Plane.h"
 #include <memory>
 
+#define _USE_MATH_DEFINES
+
 const auto WIDTH = 1280;
 const auto HEIGHT = 960;
 const auto FOV = M_PI/3.;
