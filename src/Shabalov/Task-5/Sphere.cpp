@@ -1,5 +1,7 @@
 #include "Sphere.h"
 #include <utility>
+#include <cmath>
+
 
 Sphere::Sphere(const QVector3D &c,const float r, Material m)
 : center(c), radius(r), material(std::move(m)){}
