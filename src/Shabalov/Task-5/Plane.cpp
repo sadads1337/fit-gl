@@ -6,7 +6,7 @@ Plane::Plane(const QVector3D &p, const QVector3D &n, Material m) : position(p), 
 
 bool Plane::ray_intersect(const Ray &ray, float &t) const {
     auto denom = QVector3D::dotProduct(-normal, ray.direction);
-    if(fabs(denom) > 1e-6){
+    if(std::abs(denom) > 1e-6){
         QVector3D dist = position - ray.origin;
         t = QVector3D::dotProduct(dist, -normal) / denom;
         return (t >= 0);
