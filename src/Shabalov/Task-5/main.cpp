@@ -110,10 +110,10 @@ QVector3D cast_ray(const Ray &ray, const std::vector<Sphere> &spheres, const std
 
 
 int main(){
-    Material ivory(QVector3D(0.4, 0.4, 0.3), 50.f, 1.0, QVector4D(0.6,  0.3, 0.1, 0.0));
-    Material rubber(QVector3D(0.1, 0.1, 0.3),10.,1.0f, QVector4D(0.9,  0.1,0.0,0.0));
-    Material mirror(QVector3D(1.0, 1.0, 1.0),1425.,1.0, QVector4D(0.0f,  1.0f,0.8f, 0.0f));
-    Material glass(QVector3D(0.6, 0.7, 0.8),125.,1.5, QVector4D(0.0,  0.5,0.1, 0.8));
+    Material ivory(QVector3D(0.4, 0.4, 0.3), 50, 1.0, QVector4D(0.6f, 0.3f, 0.1f, 0.0f));
+    Material rubber(QVector3D(0.1, 0.1, 0.3),10.,1.0, QVector4D(0.9f, 0.1f, 0.0f, 0.0f));
+    Material mirror(QVector3D(1.0, 1.0, 1.0),1425.,1.0, QVector4D(0.0f, 1.0f, 0.8f, 0.0f));
+    Material glass(QVector3D(0.6, 0.7, 0.8),125.,1.5, QVector4D(0.0f, 0.5f, 0.1f, 0.8f));
     QImage mars_tex = QImage(":/textures/mars.jpg");
     Material mars(mars_tex);
     QImage earth_tex = QImage(":/textures/earth.jpg");
