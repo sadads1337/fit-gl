@@ -17,7 +17,7 @@ constexpr auto WIDTH = 1280;
 constexpr auto HEIGHT = 960;
 constexpr auto FOV = M_PI/3.;
 constexpr auto MAX_REFLECTIONS = 4;
-constexpr auto BACKGROUND_COLOR = QVector3D(0.2, 0.7, 0.8);
+constexpr auto BACKGROUND_COLOR = QVector3D(0.2f, 0.7f, 0.8f);
 
 
 QVector3D mix(const QVector3D &a, const QVector3D &b, const float k){
