@@ -9,7 +9,7 @@ bool Sphere::ray_intersect(const Ray &ray, float &t) const {
     auto tca = QVector3D::dotProduct(L,ray.direction);
     auto d2 = QVector3D::dotProduct(L,L) - tca*tca;
     if(d2 > radius * radius) return false;
-    auto thc = std::sqrt(radius * radius - d2);
+    auto thc = sqrt(radius * radius - d2);
     auto t0 = tca - thc;
     auto t1 = tca + thc;
 
