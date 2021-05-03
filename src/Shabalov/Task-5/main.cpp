@@ -64,7 +64,7 @@ bool scene_intersect(const Ray &ray, const std::vector<Sphere> &spheres, const s
             planes_dist = dist_i;
             hit = ray.origin + ray.direction * dist_i;
             normal = plane.normal;
-            material.diffuseColor = (int(.5*hit.x()+10.) + int(.5*hit.z())) & 1 ? QVector3D(.9, .9, .9) : QVector3D(.0, .0, .0);
+            material.diffuseColor = (int(.5*hit.x()+10.) + int(.5*hit.z())) & 1 ? QVector3D(.9f, .9f, .9f) : QVector3D(.0f, .0f, .0f);
         }
     }
     return std::min(spheres_dist, planes_dist)<1000.f;
@@ -82,7 +82,7 @@ QVector3D cast_ray(const Ray &ray, const std::vector<Sphere> &spheres, const std
     QVector3D reflect_direction = reflect(ray.direction, normal).normalized();
     QVector3D refract_direction = refract(ray.direction, normal, material.refractiveIndex).normalized();
     QVector3D reflect_origin = QVector3D::dotProduct(reflect_direction, normal) < 0 ? point - normal*1e-3f : point + normal*1e-3f;
-    QVector3D refract_origin = QVector3D::dotProduct(refract_direction, normal) < 0 ? point - normal*1e-3 : point + normal*1e-3;
+    QVector3D refract_origin = QVector3D::dotProduct(refract_direction, normal) < 0 ? point - normal*1e-3f : point + normal*1e-3f;
     QVector3D reflect_color = cast_ray(Ray(reflect_origin, reflect_direction), spheres, planes, lights, depth + 1);
     QVector3D refract_color = cast_ray(Ray(refract_origin, refract_direction), spheres, planes, lights, depth + 1);
 
@@ -91,7 +91,7 @@ QVector3D cast_ray(const Ray &ray, const std::vector<Sphere> &spheres, const std
     for(auto light : lights) {
         QVector3D light_direction = (light.position - point).normalized();
         auto light_distance = (light.position - point).length();
-        QVector3D shadow_origin = QVector3D::dotProduct(light_direction, normal) < 0 ? point - normal*1e-3 : point + normal*1e-3;
+        QVector3D shadow_origin = QVector3D::dotProduct(light_direction, normal) < 0 ? point - normal*1e-3f : point + normal*1e-3f;
         QVector3D shadow_point;
         QVector3D shadow_normal;
         Material tmpmaterial;
@@ -110,10 +110,10 @@ QVector3D cast_ray(const Ray &ray, const std::vector<Sphere> &spheres, const std
 
 
 int main(){
-    Material ivory(QVector3D(0.4f, 0.4f, 0.3f), 50., 1.0, QVector4D(0.6,  0.3, 0.1, 0.0));
-    Material rubber(QVector3D(0.1f, 0.1f, 0.3f),10.,1.0, QVector4D(0.9,  0.1,0.0,0.0));
-    Material mirror(QVector3D(1.0f, 1.0f, 1.0f),1425.,1.0, QVector4D(0.0,  1.0,0.8, 0.0));
-    Material glass(QVector3D(0.6f, 0.7f, 0.8f),125.,1.5, QVector4D(0.0,  0.5,0.1, 0.8));
+    Material ivory(QVector3D(0.4, 0.4, 0.3), 50.f, 1.0, QVector4D(0.6,  0.3, 0.1, 0.0));
+    Material rubber(QVector3D(0.1, 0.1, 0.3),10.,1.0f, QVector4D(0.9,  0.1,0.0,0.0));
+    Material mirror(QVector3D(1.0, 1.0, 1.0),1425.,1.0, QVector4D(0.0f,  1.0f,0.8f, 0.0f));
+    Material glass(QVector3D(0.6, 0.7, 0.8),125.,1.5, QVector4D(0.0,  0.5,0.1, 0.8));
     QImage mars_tex = QImage(":/textures/mars.jpg");
     Material mars(mars_tex);
     QImage earth_tex = QImage(":/textures/earth.jpg");
