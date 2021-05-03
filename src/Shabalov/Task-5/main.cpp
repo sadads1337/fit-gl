@@ -81,7 +81,7 @@ QVector3D cast_ray(const Ray &ray, const std::vector<Sphere> &spheres, const std
     }
     QVector3D reflect_direction = reflect(ray.direction, normal).normalized();
     QVector3D refract_direction = refract(ray.direction, normal, material.refractiveIndex).normalized();
-    QVector3D reflect_origin = QVector3D::dotProduct(reflect_direction, normal) < 0 ? point - normal*1e-3 : point + normal*1e-3;
+    QVector3D reflect_origin = QVector3D::dotProduct(reflect_direction, normal) < 0 ? point - normal*1e-3f : point + normal*1e-3f;
     QVector3D refract_origin = QVector3D::dotProduct(refract_direction, normal) < 0 ? point - normal*1e-3 : point + normal*1e-3;
     QVector3D reflect_color = cast_ray(Ray(reflect_origin, reflect_direction), spheres, planes, lights, depth + 1);
     QVector3D refract_color = cast_ray(Ray(refract_origin, refract_direction), spheres, planes, lights, depth + 1);
@@ -110,10 +110,10 @@ QVector3D cast_ray(const Ray &ray, const std::vector<Sphere> &spheres, const std
 
 
 int main(){
-    Material ivory(QVector3D(0.4, 0.4, 0.3), 50., 1.0, QVector4D(0.6,  0.3, 0.1, 0.0));
-    Material rubber(QVector3D(0.1, 0.1, 0.3),10.,1.0, QVector4D(0.9,  0.1,0.0,0.0));
-    Material mirror(QVector3D(1.0, 1.0, 1.0),1425.,1.0, QVector4D(0.0,  1.0,0.8, 0.0));
-    Material glass(QVector3D(0.6, 0.7, 0.8),125.,1.5, QVector4D(0.0,  0.5,0.1, 0.8));
+    Material ivory(QVector3D(0.4f, 0.4f, 0.3f), 50., 1.0, QVector4D(0.6,  0.3, 0.1, 0.0));
+    Material rubber(QVector3D(0.1f, 0.1f, 0.3f),10.,1.0, QVector4D(0.9,  0.1,0.0,0.0));
+    Material mirror(QVector3D(1.0f, 1.0f, 1.0f),1425.,1.0, QVector4D(0.0,  1.0,0.8, 0.0));
+    Material glass(QVector3D(0.6f, 0.7f, 0.8f),125.,1.5, QVector4D(0.0,  0.5,0.1, 0.8));
     QImage mars_tex = QImage(":/textures/mars.jpg");
     Material mars(mars_tex);
     QImage earth_tex = QImage(":/textures/earth.jpg");
