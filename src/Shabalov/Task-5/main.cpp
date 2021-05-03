@@ -13,12 +13,11 @@
     #define M_PI 3.14159265358979323846
 #endif
 
-const auto WIDTH = 1280;
-const auto HEIGHT = 960;
-const auto FOV = M_PI/3.;
-const auto MAX_REFLECTIONS = 4;
-
-QVector3D BACKGROUND_COLOR = QVector3D(0.2, 0.7, 0.8);
+constexpr auto WIDTH = 1280;
+constexpr auto HEIGHT = 960;
+constexpr auto FOV = M_PI/3.;
+constexpr auto MAX_REFLECTIONS = 4;
+constexpr auto BACKGROUND_COLOR = QVector3D(0.2, 0.7, 0.8);
 
 
 QVector3D mix(const QVector3D &a, const QVector3D &b, const float k){
