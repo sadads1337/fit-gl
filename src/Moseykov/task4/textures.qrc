@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Texture/almaz.png</file>
+        <file>Texture/almaz-map.png</file>
+        <file>Texture/raccon.jpg</file>
+        <file>Texture/raccon-map.jpg</file>
+    </qresource>
+</RCC>
