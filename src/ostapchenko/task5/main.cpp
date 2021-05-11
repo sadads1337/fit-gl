@@ -7,9 +7,12 @@
 #include <memory>
 #include "Plane.h"
 
+#include "QCoreApplication"
+#include <QCommandLineParser>
 
-constexpr int WIDTH = 640;
-constexpr int HEIGHT = 480;
+
+int WIDTH = 640;
+int HEIGHT = 480;
 
 constexpr float PI = 3.141592F;
 
@@ -56,13 +59,13 @@ QVector3D trace(const Ray& r, const std::vector<std::shared_ptr<Hittable>> &obje
      float light_distance = (LIGHT_POS - rec.p).length();
      QVector3D reflect_dir = reflect(r.direction(), rec.p).normalized();
      QVector3D refract_dir = refract(r.direction(), rec.normal, rec.material.refractiveIndex).normalized();
-     QVector3D reflect_orig = QVector3D::dotProduct(reflect_dir,rec.normal) < 0 ? rec.p - rec.normal*1e-3 : rec.p + rec.normal*1e-3;
-     QVector3D refract_orig = QVector3D::dotProduct(refract_dir, rec.normal) < 0 ? rec.p - rec.normal*1e-3 : rec.p + rec.normal*1e-3;
+     QVector3D reflect_orig = QVector3D::dotProduct(reflect_dir,rec.normal) < 0 ? rec.p - rec.normal*1e-3f : rec.p + rec.normal*1e-3f;
+     QVector3D refract_orig = QVector3D::dotProduct(refract_dir, rec.normal) < 0 ? rec.p - rec.normal*1e-3f : rec.p + rec.normal*1e-3f;
      QVector3D reflect_color = trace(Ray(reflect_orig, reflect_dir), objects, reflection_depth-1);
      QVector3D refract_color = trace(Ray(refract_orig, refract_dir), objects, reflection_depth-1);
 
 
-       QVector3D shadow_orig = QVector3D::dotProduct(light_dir,rec.normal) < 0 ? rec.p - rec.normal*1e-3 : rec.p + rec.normal*1e-3;
+       QVector3D shadow_orig = QVector3D::dotProduct(light_dir,rec.normal) < 0 ? rec.p - rec.normal*1e-3f : rec.p + rec.normal*1e-3f;
        if(!(o->hit(Ray(shadow_orig, light_dir), rec)) || rec.t > light_distance){
           diffuse_light_intensity = std::max(0.f, QVector3D::dotProduct(light_dir,rec.normal));
           specular_light_intensity = std::pow(std::max(0.f, QVector3D::dotProduct(reflect(light_dir, rec.normal),r.direction())), rec.material.specularFactor)*LIGHT_INTENSITY;
@@ -77,9 +80,47 @@ QVector3D trace(const Ray& r, const std::vector<std::shared_ptr<Hittable>> &obje
   return BACKGROUND_COLOR;
 }
 
-int main(){
 
-  QImage plane_tex = QImage(":/textures/165.jpg");
+
+int main(int argc, char *argv[]){
+
+  QString filter = "nearest";
+
+  QCoreApplication app(argc, argv);
+  QCoreApplication::setApplicationName("Ray-tracing");
+  QCoreApplication::setApplicationVersion("1.0");
+
+  QCommandLineParser parser;
+  parser.setApplicationDescription("Getting parametrs");
+  parser.addHelpOption();
+  parser.addVersionOption();
+
+  QCommandLineOption WidthOption(QStringList() << "width" << "width-value",
+                                           QCoreApplication::translate("main", "Picture width"),
+                                           QCoreApplication::translate("main", "Picture width value"));
+  parser.addOption(WidthOption);
+
+  QCommandLineOption HeightOption(QStringList() << "height" << "height-value",
+                                 QCoreApplication::translate("main", "Picture height"),
+                                 QCoreApplication::translate("main", "Picture height value"));
+  parser.addOption(HeightOption);
+
+  QCommandLineOption FilterOption(QStringList() << "filter" << "filter-value",
+                                  QCoreApplication::translate("main", "Filter"),
+                                  QCoreApplication::translate("main", "Filter value"));
+  parser.addOption(FilterOption);
+
+  parser.process(app);
+  //if there are arguments, they will be set, if not, then by default
+  if(parser.isSet(WidthOption) && parser.isSet(HeightOption) && parser.isSet(FilterOption) ) {
+    WIDTH = parser.value(WidthOption).toInt();
+    HEIGHT = parser.value(HeightOption).toInt();
+    filter = parser.value(FilterOption);
+    if(filter != "nearest" && filter != "linear"){
+      throw std::invalid_argument("The filter can be either nearest or linear");
+    }
+  }
+
 
   Material ivory( 50., 1.0, QVector4D(0.6f, 0.3f, 0.1f, 0.0f));
   Material rubber(10., 1.0, QVector4D(0.9f, 0.1f, 0.0f, 0.0f));
@@ -87,13 +128,12 @@ int main(){
   Material glass( 125., 1.5, QVector4D(0.0f, 0.5f, 0.1f, 0.8f));
 
   std::vector<std::shared_ptr<Hittable>> objects;
-  objects.emplace_back(std::make_shared<Sphere>(QVector3D(-2.2,0.5,0), 0.5, ivory, QVector3D(1.0f, 1.0f, 0.0f)));
-  objects.emplace_back(std::make_shared<Sphere>(QVector3D(1.2,0.5,0), 0.5, rubber,QVector3D  (0.1f, 0.1f, 0.3f)));
-  objects.emplace_back(std::make_shared<Sphere>(QVector3D(0,0.5,0), 0.5, mirror, QVector3D(1.0f, 1.0f, 1.0f)));
-  objects.emplace_back(std::make_shared<Sphere>(QVector3D(-1.1,0.5,0), 0.5, glass, QVector3D(0.6, 0.7, 0.8)));
+  objects.emplace_back(std::make_shared<Sphere>(QVector3D(-2.2f,0.5f,0.0f), 0.5, ivory, QVector3D(1.0f, 1.0f, 0.0f)));
+  objects.emplace_back(std::make_shared<Sphere>(QVector3D(1.2f,0.5f,0.0f), 0.5, rubber,QVector3D  (0.1f, 0.1f, 0.3f)));
+  objects.emplace_back(std::make_shared<Sphere>(QVector3D(0.0f,0.5f,0.0f), 0.5, mirror, QVector3D(1.0f, 1.0f, 1.0f)));
+  objects.emplace_back(std::make_shared<Sphere>(QVector3D(-1.1f,0.5f,0.0f), 0.5, glass, QVector3D(0.6f, 0.7f, 0.8f)));
 
   objects.emplace_back(std::make_shared<Plane>(QVector3D(),QVector3D(0, 1, 0)));
-
 
 
   QImage result(WIDTH * 2, HEIGHT * 2, QImage::Format_ARGB32);
@@ -111,9 +151,15 @@ int main(){
     }
   }
 
-  // Shrink and save image
-  result.scaled(WIDTH, HEIGHT, Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
+
+  if(filter == "nearest"){
+  result.scaled(WIDTH, HEIGHT, Qt::IgnoreAspectRatio, Qt::FastTransformation)
       .save("result.png");
+  }
+  else{
+    result.scaled(WIDTH, HEIGHT, Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
+        .save("result.png");
+  }
 
   return 0;
 }
