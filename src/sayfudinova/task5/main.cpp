@@ -7,12 +7,12 @@
 #include <QCoreApplication>
 #include <QImage>
 
-constexpr float PI = 3.141592F;
+constexpr float PI = 3.141592f;
 auto WIDTH = 640;
 auto HEIGHT = 480;
 constexpr auto MAX_REFLECTIONS = 4;
 constexpr QVector3D BACKGROUND_COLOR = QVector3D(0.6f, 0.4f, 0.0f);
-constexpr QVector3D LIGHT_COLOR{1.0F, 1.0F, 1.0F};
+constexpr QVector3D LIGHT_COLOR{1.0f, 1.0f, 1.0f};
 
 inline QVector3D mix(const QVector3D &a, const QVector3D &b, const float k) {
   return a * k + b * (1 - k);
@@ -171,30 +171,26 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  Material ivory(1.0, QVector4D(0.6, 0.3, 0.1, 0.0), QVector3D(0.4, 0.4, 0.3),
-                 50.);
-  Material glass(1.5, QVector4D(0.0, 0.5, 0.1, 0.8), QVector3D(0.6, 0.7, 0.8),
-                 125.);
-  Material rubber(1.0, QVector4D(0.9, 0.1, 0.0, 0.0), QVector3D(0.1, 0.0, 0.3),
-                  10.);
-  Material mirror(1.0, QVector4D(0.0, 10.0, 0.8, 0.0), QVector3D(1.0, 1.0, 1.0),
-                  1425.);
+  Material ivory(1.0f, QVector4D(0.6f, 0.3f, 0.1f, 0.0f), QVector3D(0.4f, 0.4f, 0.3f),50.f);
+  Material glass(1.5, QVector4D(0.0f, 0.5f, 0.1f, 0.8f), QVector3D(0.6f, 0.7f, 0.8f), 125.f);
+  Material rubber(1.0f, QVector4D(0.9f, 0.1f, 0.0f, 0.0f), QVector3D(0.1f, 0.0f, 0.3f),10.f);
+  Material mirror(1.0, QVector4D(0.0f, 10.0f, 0.8f, 0.0f), QVector3D(1.0f, 1.0f, 1.0f),1425.f);
   Material plane_mater;
 
   std::vector<Sphere> spheres;
-  spheres.emplace_back(Sphere(QVector3D(-3, 0, -16), 2, ivory));
-  spheres.emplace_back(Sphere(QVector3D(-1.0, -1.5, -12), 2, glass));
-  spheres.emplace_back(Sphere(QVector3D(1.5, -0.5, -18), 3, rubber));
-  spheres.emplace_back(Sphere(QVector3D(7, 5, -18), 4, mirror));
+  spheres.emplace_back(Sphere(QVector3D(-3.f, 0.f, -16.f), 2.f, ivory));
+  spheres.emplace_back(Sphere(QVector3D(-1.0f, -1.5f, -12.f), 2.f, glass));
+  spheres.emplace_back(Sphere(QVector3D(1.5f, -0.5f, -18.f), 3.f, rubber));
+  spheres.emplace_back(Sphere(QVector3D(7.f, 5.f, -18.f), 4.f, mirror));
 
   std::vector<Plane> planes;
   planes.emplace_back(
-      Plane(QVector3D(0, -4, 0), QVector3D(0, 1, 0), plane_mater));
+      Plane(QVector3D(0.f, -4.f, 0.f), QVector3D(0.f, 1.f, 0.f), plane_mater));
 
   std::vector<Light> lights;
-  lights.emplace_back(Light(QVector3D( 20, 30, -25), 1.5));
-  lights.emplace_back(Light(QVector3D( 20, 20,  20), 2));
-  lights.emplace_back(Light(QVector3D(0, 20,  0), 2.5));
+  lights.emplace_back(Light(QVector3D( 20.f, 30.f, -25.f), 1.5f));
+  lights.emplace_back(Light(QVector3D( 20.f, 20.f,  20.f), 2.f));
+  lights.emplace_back(Light(QVector3D(0.f, 20.f,  0.f), 2.5f));
 
   QImage result(WIDTH, HEIGHT, QImage::Format_RGB32);
 
@@ -204,7 +200,7 @@ int main(int argc, char *argv[]) {
       auto dir_x = (x + 0.5f) - result.width() / 2.f;
       auto dir_y = -(y + 0.5f) + result.height() / 2.f;
       auto dir_z = -result.height() / (2.f * std::tan(PI / 3 / 2.f));
-      Ray ray(QVector3D(0, 0, 0), QVector3D(dir_x, dir_y, dir_z).normalized());
+      Ray ray(QVector3D(0.f, 0.f, 0.f), QVector3D(dir_x, dir_y, dir_z).normalized());
       resColor = cast_ray(ray, spheres, planes, lights);
       result.setPixel(x, y,
                       qRgb(std::min(int(resColor.x() * 255), 255),
