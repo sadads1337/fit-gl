@@ -1,11 +1,12 @@
 set(SRCS
         main.cpp
-        CubeWindow.cpp
-        CubeWindow.h
-
-        shaders.qrc
-        Shaders/quad.fs
-        Shaders/quad.vs
+        Sphere.cpp
+        Sphere.h
+        Material.h
+        Ray.h
+        Light.h
+        Plane.cpp
+        Plane.h
         )
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
