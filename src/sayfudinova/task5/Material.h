@@ -12,8 +12,8 @@ struct Material {
   Material()
       : refractiveIndex(1), albedo(1., 0., 0., 0.), diffuseColor(),
         specularFactor(1) {}
-  Material(const float r, const QVector4D &a, const QVector3D &color,
+  Material(const float refract, const QVector4D &a, const QVector3D &color,
            const float spec)
-      : refractiveIndex(r), albedo(a), diffuseColor(color),
+      : refractiveIndex(refract), albedo(a), diffuseColor(color),
         specularFactor(spec) {}
 };
