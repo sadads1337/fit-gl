@@ -175,13 +175,16 @@ int main(int argc, char *argv[]) {
   Material glass(1.5, QVector4D(0.0f, 0.5f, 0.1f, 0.8f), QVector3D(0.6f, 0.7f, 0.8f), 125.f);
   Material rubber(1.0f, QVector4D(0.9f, 0.1f, 0.0f, 0.0f), QVector3D(0.1f, 0.0f, 0.3f),10.f);
   Material mirror(1.0, QVector4D(0.0f, 10.0f, 0.8f, 0.0f), QVector3D(1.0f, 1.0f, 1.0f),1425.f);
+  Material metal(1.0, QVector4D(-0.3f, 10.0f, 0.8f, 0.0f), QVector3D(1.f, 1.f, 1.f),1000.f);
   Material plane_mater;
 
   std::vector<Sphere> spheres;
-  spheres.emplace_back(Sphere(QVector3D(-3.f, 0.f, -16.f), 2.f, ivory));
+  spheres.emplace_back(Sphere(QVector3D(-4.f, -1.5f, -16.f), 2.f, ivory));
   spheres.emplace_back(Sphere(QVector3D(-1.0f, -1.5f, -12.f), 2.f, glass));
   spheres.emplace_back(Sphere(QVector3D(1.5f, -0.5f, -18.f), 3.f, rubber));
   spheres.emplace_back(Sphere(QVector3D(7.f, 5.f, -18.f), 4.f, mirror));
+  spheres.emplace_back(Sphere(QVector3D(-9.f, 3.5f, -24.f), 2.5f, metal));
+
 
   std::vector<Plane> planes;
   planes.emplace_back(
