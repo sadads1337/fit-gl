@@ -8,10 +8,11 @@
 #include <QImage>
 
 constexpr float PI = 3.141592f;
-auto WIDTH = 640;
-auto HEIGHT = 480;
-constexpr auto MAX_REFLECTIONS = 4;
-constexpr QVector3D BACKGROUND_COLOR = QVector3D(0.6f, 0.4f, 0.0f);
+constexpr float FOV = PI / 3; // field of view angle
+auto WIDTH = 1024;
+auto HEIGHT = 720;
+constexpr auto REFLECTION_DEPTH = 4;
+constexpr QVector3D BACKGROUND_COLOR = QVector3D(0.9f, 0.9f, 0.9f);
 constexpr QVector3D LIGHT_COLOR{1.0f, 1.0f, 1.0f};
 
 inline QVector3D mix(const QVector3D &a, const QVector3D &b, const float k) {
@@ -22,6 +23,7 @@ QVector3D reflect(const QVector3D &incident, const QVector3D &normal) {
   return incident - 2.f * normal * (QVector3D::dotProduct(incident, normal));
 }
 
+// Snell's law
 QVector3D refract(const QVector3D &incident, const QVector3D &normal, const float n_1, const float n_2 = 1.f) {
   auto cos_1 = -std::max(-1.f, std::min(1.f, QVector3D::dotProduct(incident, normal)));
   if (cos_1 < 0.f)
@@ -31,7 +33,7 @@ QVector3D refract(const QVector3D &incident, const QVector3D &normal, const floa
   return ratio * incident + (ratio * cos_1 - cos_2) * normal;
 }
 
-bool scene_intersect(const Ray &ray, const std::vector<Sphere> &spheres, QVector3D &hit, const std::vector<Plane> &planes, QVector3D &normal, Material &material) {
+bool scene_intersect(const Ray &ray, const std::vector<Sphere> &spheres, const std::vector<Plane> &planes, QVector3D &hit, QVector3D &normal, Material &material) {
   auto spheres_dist = std::numeric_limits<float>::max();
   for (size_t i = 0; i < spheres.size(); i++) {
     auto dist_i = std::numeric_limits<float>::max();
@@ -51,7 +53,7 @@ bool scene_intersect(const Ray &ray, const std::vector<Sphere> &spheres, QVector
       hit = ray.origin + ray.direction * dist_i;
       normal = planes[i].normal;
       material.diffuseColor = (int(.5 * hit.x() + 10.) + int(.5 * hit.z())) & 1
-                                  ? QVector3D(.9f, .9f, .9f)
+                                  ? QVector3D(.3f, .0f, .5f)
                                   : QVector3D(.0f, .0f, .0f);
     }
   }
@@ -65,7 +67,7 @@ QVector3D cast_ray(const Ray &ray, const std::vector<Sphere> &spheres,
   QVector3D normal;
   Material material;
 
-  if (depth > MAX_REFLECTIONS || !scene_intersect(ray, spheres, point, planes, normal, material)) {
+  if (depth > REFLECTION_DEPTH || !scene_intersect(ray, spheres, planes, point, normal, material)) {
     return BACKGROUND_COLOR;
   }
 
@@ -93,7 +95,7 @@ QVector3D cast_ray(const Ray &ray, const std::vector<Sphere> &spheres,
     QVector3D shadow_normal;
     Material tmpmaterial;
 
-    if (scene_intersect(Ray(shadow_origin, light_direction), spheres,shadow_point, planes, shadow_normal,
+    if (scene_intersect(Ray(shadow_origin, light_direction), spheres, planes, shadow_point, shadow_normal,
                         tmpmaterial) && (shadow_point - shadow_origin).length() < light_distance)
       continue;
 
@@ -112,7 +114,7 @@ int main(int argc, char *argv[]) {
   QString filter = "nearest";
 
   QCoreApplication app(argc, argv);
-  QCoreApplication::setApplicationName("Ray-tracing");
+  QCoreApplication::setApplicationName("task5");
   QCoreApplication::setApplicationVersion("1.0");
 
   QCommandLineParser parser;
@@ -120,27 +122,23 @@ int main(int argc, char *argv[]) {
   parser.addHelpOption();
   parser.addVersionOption();
 
-  QCommandLineOption WidthOption(
-      QStringList() << "width" << "width-value",
-      QCoreApplication::translate("main", "Picture width"),
+  QCommandLineOption WidthOption("W",
+      QCoreApplication::translate("main", "Width."),
       QCoreApplication::translate("main", "Picture width value"));
   parser.addOption(WidthOption);
 
-  QCommandLineOption HeightOption(
-      QStringList() << "height" << "height-value",
-      QCoreApplication::translate("main", "Picture height"),
+  QCommandLineOption HeightOption("H",
+      QCoreApplication::translate("main", "Height."),
       QCoreApplication::translate("main", "Picture height value"));
   parser.addOption(HeightOption);
 
-  QCommandLineOption FilterOption(
-      QStringList() << "filter" << "filter-value",
-      QCoreApplication::translate("main", "Filter"),
+  QCommandLineOption FilterOption("F",
+      QCoreApplication::translate("main", "Filter."),
       QCoreApplication::translate("main", "Filter value"));
   parser.addOption(FilterOption);
 
   parser.process(app);
-  if (parser.isSet(WidthOption) && parser.isSet(HeightOption) &&
-      parser.isSet(FilterOption)) {
+  if (parser.isSet(WidthOption) && parser.isSet(HeightOption) && parser.isSet(FilterOption)) {
     WIDTH = parser.value(WidthOption).toInt();
     HEIGHT = parser.value(HeightOption).toInt();
     filter = parser.value(FilterOption);
@@ -149,11 +147,11 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  Material ivory(1.0f, QVector4D(0.6f, 0.3f, 0.1f, 0.0f), QVector3D(0.4f, 0.4f, 0.3f),50.f);
+  Material ivory(1.0f, QVector4D(0.6f, 0.3f, 0.0f, 0.0f), QVector3D(0.4f, 0.4f, 0.3f),50.f);
   Material glass(1.5, QVector4D(0.0f, 0.5f, 0.1f, 0.8f), QVector3D(0.6f, 0.7f, 0.8f), 125.f);
   Material rubber(1.0f, QVector4D(0.9f, 0.1f, 0.0f, 0.0f), QVector3D(0.1f, 0.0f, 0.3f),10.f);
   Material mirror(1.0f, QVector4D(0.0f, 10.0f, 0.8f, 0.0f), QVector3D(1.0f, 1.0f, 1.0f),1425.f);
-  Material metal(1.f, QVector4D(0.3f, 9.0f, 0.1f, 0.0f), QVector3D(0.5f, 0.0f, 0.3f),1000.f);
+  Material metal(1.0f, QVector4D(0.3f, 0.3f, 0.09f, 0.0f), QVector3D(0.5f, 0.5f, 0.5f),100.f);
   Material plane_mater;
 
   std::vector<Sphere> spheres;
@@ -179,7 +177,7 @@ int main(int argc, char *argv[]) {
     for (auto x = 0; x < result.width(); x++) {
       auto dir_x = (x + 0.5f) - result.width() / 2.f;
       auto dir_y = -(y + 0.5f) + result.height() / 2.f;
-      auto dir_z = -result.height() / (2.f * std::tan(PI / 3 / 2.f));
+      auto dir_z = -result.height() / (2.f * std::tan(FOV / 2.f));
       Ray ray(QVector3D(0.f, 0.f, 0.f), QVector3D(dir_x, dir_y, dir_z).normalized());
       resColor = cast_ray(ray, spheres, planes, lights);
       result.setPixel(x, y,qRgb(std::min(int(resColor.x() * 255), 255),
@@ -187,13 +185,11 @@ int main(int argc, char *argv[]) {
                            std::min(int(resColor.z() * 255), 255)));
     }
   }
-  result.save("result.png");
 
-  if (filter == "nearest") {
+  if (filter == "nearest")
     result.scaled(WIDTH, HEIGHT, Qt::IgnoreAspectRatio, Qt::FastTransformation).save("result.png");
-  } else {
+  else
     result.scaled(WIDTH, HEIGHT, Qt::IgnoreAspectRatio, Qt::SmoothTransformation).save("result.png");
-  }
 
   return 0;
 }
