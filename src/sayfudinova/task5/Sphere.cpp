@@ -4,13 +4,13 @@ Sphere::Sphere(const QVector3D &c, const float r, Material m)
     : center(c), radius(r), material(m) {}
 
 bool Sphere::ray_intersect(const Ray &ray, float &t0) const {
-  QVector3D L = center - ray.origin;
-  auto tca = QVector3D::dotProduct(L, ray.direction);
-  auto d2 = QVector3D::dotProduct(L, L) - tca * tca;
-  if (d2 > radius * radius) return false;
-  auto thc = sqrtf(radius * radius - d2);
-  t0 = tca - thc;
-  float t1 = tca + thc;
+  QVector3D to_sphere = center - ray.origin;
+  auto dir_projection = QVector3D::dotProduct(to_sphere, ray.direction);
+  auto D = QVector3D::dotProduct(to_sphere, to_sphere) - powf(dir_projection, 2);
+  if (D > radius * radius) return false;
+  auto sqrt_tmp = sqrtf(radius * radius - D);
+  t0 = dir_projection - sqrt_tmp;
+  auto t1 = dir_projection + sqrt_tmp;
   if (t0 < 0) t0 = t1;
   if (t0 < 0) return false;
   return true;
