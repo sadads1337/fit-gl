@@ -20,13 +20,6 @@ uniform highp vec3 viewPos;
 uniform highp vec3 lightColor;
 
 void main() {
-    //TEXTURE
-    textureCoord = textureAttr;
-
-    vec3 N = normalize(vec3(model_matrix * vec4(normAttr, 0.0)));
-    vec3 T = normalize(vec3(model_matrix * vec4(tangentAttr, 0.0)));
-    vec3 B = cross(N, T);
-    TBN = mat3(T, B, N);
 
     // LIGHT
     fragmentPos = vec3(model_matrix * posAttr);
@@ -43,7 +36,16 @@ void main() {
 
     float morphed_r = morph*r + (1 - morph)*r_n;
 
-    vec4 morphed_pos = vec4(morphed_r*sin(theta)*cos(phi), morphed_r*sin(theta)*sin(phi), morphed_r*cos(theta), 1.0 );
+    vec3 morphed_norm = morph*normAttr + (1 - morph)*vec3(r_n*sin(theta)*cos(phi), r_n*sin(theta)*sin(phi), r_n*cos(theta));
+    vec4 morphed_pos = vec4(morphed_r*sin(theta)*cos(phi), morphed_r*sin(theta)*sin(phi), morphed_r*cos(theta), 1.0);
 
     gl_Position = projection_matrix * view_matrix * model_matrix * morphed_pos;
+
+    //TEXTURE
+    textureCoord = textureAttr;
+
+    vec3 N = normalize(vec3(model_matrix * vec4(morphed_norm, 0.0)));
+    vec3 T = normalize(vec3(model_matrix * vec4(tangentAttr, 0.0)));
+    vec3 B = cross(N, T);
+    TBN = mat3(T, B, N);
 }
