@@ -4,8 +4,10 @@ add_executable(MoseykovTask3
         main.cpp
         SquareWindow.hpp
         SquareWindow.cpp
-        Shaders/square.fs
-        Shaders/square.vs
+        Shaders/guro.fs
+        Shaders/guro.vs
+        Shaders/phong.fs
+        Shaders/phong.vs
         shaders.qrc
         MyWidget.h
         MyWidget.cpp)

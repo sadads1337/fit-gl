@@ -1,8 +1,8 @@
 
-#include "MyWidget.h"
-#include "SquareWindow.hpp"
 #include <QApplication>
 #include <QSurfaceFormat>
+#include "MyWidget.h"
+#include "SquareWindow.hpp"
 
 int main(int argc, char **argv) {
   QApplication app(argc, argv);
@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
   format.setVersion(2, 1);
 
   auto window = new MyWidget();
-  window->setMaximumSize(1280, 1024);
+  window->setMaximumSize(1280,1024);
   window->showMaximized();
 
   return app.exec();
