@@ -1,17 +1,15 @@
 #pragma once
 #include "SquareWindow.hpp"
-#include <type_traits>
+#include <QColorDialog>
+#include <QLabel>
 #include <QSlider>
 #include <QVBoxLayout>
-#include <QLabel>
 #include <QWidget>
-#include <QColorDialog>
+#include <type_traits>
 
-class MyWidget: public QWidget {
+class MyWidget : public QWidget {
   Q_OBJECT
 
 public:
   MyWidget();
 };
-
-

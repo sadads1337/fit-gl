@@ -13,8 +13,8 @@ add_executable(MoseykovTask3
         MyWidget.cpp)
 
 target_link_libraries(MoseykovTask3
-    PRIVATE
+        PRIVATE
         Qt5::Widgets
         FGL::Base
-)
+        )
 
