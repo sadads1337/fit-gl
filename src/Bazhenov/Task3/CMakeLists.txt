@@ -10,8 +10,10 @@ add_executable(BazhenovTask3
     InputController/InputController.cpp
 
     shaders.qrc
-    Shaders/vertex.glsl
-    Shaders/fragment.glsl
+    Shaders/phong_vertex.glsl
+    Shaders/phong_fragment.glsl
+    Shaders/gouraud_vertex.glsl
+    Shaders/gouraud_fragment.glsl
 )
 
 target_link_libraries(BazhenovTask3
