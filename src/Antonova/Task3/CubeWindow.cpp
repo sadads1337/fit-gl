@@ -116,8 +116,8 @@ void CubeWindow::init() {
   // init one cube
   makeCube(cube_side_size, 20);
 
-  //glEnable(GL_DEPTH_TEST);
-  //glEnable(GL_CULL_FACE);
+  // glEnable(GL_DEPTH_TEST);
+  // glEnable(GL_CULL_FACE);
 
   timer.start(7, this);
 }
@@ -170,7 +170,8 @@ void CubeWindow::render() {
                                    sizeof(VertexData));
 
       // render primitives from array data
-      glDrawElements(GL_TRIANGLES, indexBuffer.size(), GL_UNSIGNED_INT, nullptr);
+      glDrawElements(GL_TRIANGLES, indexBuffer.size(), GL_UNSIGNED_INT,
+                     nullptr);
 
       program_->disableAttributeArray(posAttr_);
     }
