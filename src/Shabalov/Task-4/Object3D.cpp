@@ -4,8 +4,10 @@
 #include <QOpenGLTexture>
 
 Object3D::Object3D(const std::vector<VertexData> &vertData,
-                   const std::vector<GLuint> &indexes, const QImage &texture, const QImage &normalMap)
-    : m_indexBuffer(QOpenGLBuffer::IndexBuffer), m_texture(nullptr), m_normalMap(nullptr), m_scale(1.0f){
+                   const std::vector<GLuint> &indexes, const QImage &texture,
+                   const QImage &normalMap)
+    : m_indexBuffer(QOpenGLBuffer::IndexBuffer), m_texture(nullptr),
+      m_normalMap(nullptr), m_scale(1.0f) {
   m_scale = 1.0f;
   if (m_vertexBuffer.isCreated())
     m_vertexBuffer.destroy();
@@ -72,17 +74,17 @@ void Object3D::draw(QOpenGLShaderProgram *program,
   program->enableAttributeArray(normLoc);
   program->setAttributeBuffer(normLoc, GL_FLOAT, offset, 3, sizeof(VertexData));
 
-    offset += sizeof(QVector3D);
+  offset += sizeof(QVector3D);
 
-    auto tgLoc = program->attributeLocation("a_tangent");
-    program->enableAttributeArray(tgLoc);
-    program->setAttributeBuffer(tgLoc, GL_FLOAT, offset, 3, sizeof(VertexData));
+  auto tgLoc = program->attributeLocation("a_tangent");
+  program->enableAttributeArray(tgLoc);
+  program->setAttributeBuffer(tgLoc, GL_FLOAT, offset, 3, sizeof(VertexData));
 
-    offset += sizeof(QVector3D);
+  offset += sizeof(QVector3D);
 
-    auto btgLoc = program->attributeLocation("a_bitangent");
-    program->enableAttributeArray(btgLoc);
-    program->setAttributeBuffer(btgLoc, GL_FLOAT, offset, 3, sizeof(VertexData));
+  auto btgLoc = program->attributeLocation("a_bitangent");
+  program->enableAttributeArray(btgLoc);
+  program->setAttributeBuffer(btgLoc, GL_FLOAT, offset, 3, sizeof(VertexData));
 
   m_indexBuffer.bind();
 
