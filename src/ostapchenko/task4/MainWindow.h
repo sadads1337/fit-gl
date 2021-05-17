@@ -1,48 +1,48 @@
 #pragma once
 
+#include <Base/GLWindow.hpp>
 #include <QBasicTimer>
 #include <QMouseEvent>
-#include <Base/GLWindow.hpp>
 
-#include <QOpenGLWidget>
 #include <QOpenGLTexture>
+#include <QOpenGLWidget>
 
-#include <QOpenGLShaderProgram>
+#include <QMatrix4x4>
 #include <QOpenGLBuffer>
 #include <QOpenGLFunctions>
-#include <QMatrix4x4>
+#include <QOpenGLShaderProgram>
 #include <QQuaternion>
 #include <QVector3D>
 
 namespace fgl {
 
-struct VertexData{
-  VertexData(QVector3D p, QVector3D n, QVector2D t, QVector3D tng, QVector3D btg) :
-      position(p), normal(n), textcoord(t), tangent(tng), bitangent(btg) { }
+struct VertexData {
+  VertexData(QVector3D p, QVector3D n, QVector2D t, QVector3D tng,
+             QVector3D btg)
+      : position(p), normal(n), textcoord(t), tangent(tng), bitangent(btg) {}
   QVector3D position;
   QVector3D normal;
   QVector2D textcoord;
   QVector3D tangent;
   QVector3D bitangent;
-
 };
-class MainWindow :  public QOpenGLWidget, protected QOpenGLFunctions {
-Q_OBJECT
+class MainWindow : public QOpenGLWidget, protected QOpenGLFunctions {
+  Q_OBJECT
 
 public:
   explicit MainWindow(QWidget *parent = nullptr);
   ~MainWindow() override;
   void initializeGL() override;
-  void resizeGL(const int w,const  int h) override;
-  void  paintGL() override;
+  void resizeGL(const int w, const int h) override;
+  void paintGL() override;
 
 protected:
   void mousePressEvent(QMouseEvent *e) override;
   void mouseReleaseEvent(QMouseEvent *e) override;
   void timerEvent(QTimerEvent *e) override;
 
-  //generating cubes
-  void initCube(const float width,const int N);
+  // generating cubes
+  void initCube(const float width, const int N);
 
   void initTextures();
 
@@ -56,7 +56,7 @@ private:
 
   QMatrix4x4 projection_matrix;
 
-  //buffers
+  // buffers
   QOpenGLBuffer vertexBuffer;
   QOpenGLBuffer indexBuffer{QOpenGLBuffer::IndexBuffer};
 
@@ -74,7 +74,6 @@ private:
 
   std::shared_ptr<QOpenGLTexture> texture = nullptr;
   std::shared_ptr<QOpenGLTexture> normal_map = nullptr;
-
 };
 
 } // namespace fgl
