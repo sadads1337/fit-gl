@@ -9,7 +9,8 @@
 #include <memory>
 
 struct VertexData {
-  VertexData(const QVector3D p, const QVector2D t, const QVector3D n, const QVector3D tg, const QVector3D btg)
+  VertexData(const QVector3D p, const QVector2D t, const QVector3D n,
+             const QVector3D tg, const QVector3D btg)
       : position(p), texCoord(t), normal(n), tangent(tg), bitangent(btg) {}
   QVector3D position;
   QVector2D texCoord;
@@ -21,8 +22,9 @@ struct VertexData {
 class Object3D {
 
 public:
-  Object3D(const std::vector<VertexData> &vertData, const std::vector<GLuint> &indexes,
-           const QImage &texture, const QImage &normalMap);
+  Object3D(const std::vector<VertexData> &vertData,
+           const std::vector<GLuint> &indexes, const QImage &texture,
+           const QImage &normalMap);
   void draw(QOpenGLShaderProgram *program, QOpenGLFunctions *functions);
   void rotate(const QQuaternion &r);
   void translate(const QVector3D &t);

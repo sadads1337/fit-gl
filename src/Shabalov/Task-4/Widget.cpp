@@ -4,7 +4,9 @@
 #include <QtMath>
 #include <stdexcept>
 
-Widget::Widget(QWidget *parent) : QOpenGLWidget(parent), x_rot(0.5f), y_rot(0.5f), z_rot(0.5f), m_z(-5.0f), angleObject(M_PI){}
+Widget::Widget(QWidget *parent)
+    : QOpenGLWidget(parent), x_rot(0.5f), y_rot(0.5f), z_rot(0.5f), m_z(-5.0f),
+      angleObject(M_PI) {}
 
 void Widget::initializeGL() {
   initializeOpenGLFunctions();
@@ -57,8 +59,9 @@ void Widget::initShaders() {
 }
 
 void Widget::initCube(const float width, const int N) {
-  if(N < 2) {
-    throw std::invalid_argument("The number of partitions must be greater than 1");
+  if (N < 2) {
+    throw std::invalid_argument(
+        "The number of partitions must be greater than 1");
   }
   auto half_width = width / 2.0f;
   auto part_width = width / float(N - 1);
@@ -69,8 +72,10 @@ void Widget::initCube(const float width, const int N) {
     for (auto y = 0; y < N; y++) {
       for (auto x = 0; x < N; x++) {
         vertexes.emplace_back(VertexData(
-                        QVector3D(z*(-half_width +  x * part_width), -half_width + y * part_width, z * half_width),
-                        QVector2D(x*tex_part_width, y*tex_part_width), QVector3D(0.0, 0.0, z), QVector3D(z,0,0), QVector3D(0,1,0)));
+            QVector3D(z * (-half_width + x * part_width),
+                      -half_width + y * part_width, z * half_width),
+            QVector2D(x * tex_part_width, y * tex_part_width),
+            QVector3D(0.0, 0.0, z), QVector3D(z, 0, 0), QVector3D(0, 1, 0)));
       }
     }
   }
@@ -78,8 +83,10 @@ void Widget::initCube(const float width, const int N) {
     for (auto z = 0; z < N; z++) {
       for (auto y = 0; y < N; y++) {
         vertexes.emplace_back(VertexData(
-                        QVector3D(x * half_width, -half_width + y * part_width, x*(-half_width + z * part_width)),
-                        QVector2D(y*tex_part_width, z*tex_part_width), QVector3D(x, 0.0, 0.0), QVector3D(0,1,0), QVector3D(0,0,x)));
+            QVector3D(x * half_width, -half_width + y * part_width,
+                      x * (-half_width + z * part_width)),
+            QVector2D(y * tex_part_width, z * tex_part_width),
+            QVector3D(x, 0.0, 0.0), QVector3D(0, 1, 0), QVector3D(0, 0, x)));
       }
     }
   }
@@ -87,8 +94,10 @@ void Widget::initCube(const float width, const int N) {
     for (auto x = 0; x < N; x++) {
       for (auto z = 0; z < N; z++) {
         vertexes.emplace_back(VertexData(
-                        QVector3D(-half_width + x * part_width, y * half_width, y*(-half_width + z * part_width)),
-                        QVector2D(z*tex_part_width, x*tex_part_width), QVector3D(0.0, y, 0.0), QVector3D(0,0,y), QVector3D(1,0,0)));
+            QVector3D(-half_width + x * part_width, y * half_width,
+                      y * (-half_width + z * part_width)),
+            QVector2D(z * tex_part_width, x * tex_part_width),
+            QVector3D(0.0, y, 0.0), QVector3D(0, 0, y), QVector3D(1, 0, 0)));
       }
     }
   }
@@ -108,7 +117,8 @@ void Widget::initCube(const float width, const int N) {
     }
   }
   m_objects.append(std::make_shared<Object3D>(vertexes, indexes,
-                                              QImage(":/textures/cube.jpeg"), QImage(":/textures/cube.jpeg")));
+                                              QImage(":/textures/cube.jpeg"),
+                                              QImage(":/textures/cube.jpeg")));
 }
 
 void Widget::mousePressEvent(QMouseEvent *event) {
