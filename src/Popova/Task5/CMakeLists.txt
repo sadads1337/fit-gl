@@ -6,6 +6,7 @@ set(POPOVA_TASK5_SRCS
     Types.hpp
     Sphere.hpp
     Sphere.cpp
+    textures.qrc
 )
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
