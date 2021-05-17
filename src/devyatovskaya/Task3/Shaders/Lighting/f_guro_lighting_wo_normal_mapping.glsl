@@ -11,9 +11,9 @@ out vec4 FragColor;
 
 void main()
 {
-    if(wireframe_enabled) {
+    if (wireframe_enabled) {
         FragColor = vec4(1, 0.682, 0, 1.0f);
     } else {
         FragColor = vec4(PhongColor, 1.0f);
-    } 
+    }
 }

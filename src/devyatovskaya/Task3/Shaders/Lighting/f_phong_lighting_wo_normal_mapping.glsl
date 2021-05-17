@@ -11,14 +11,14 @@ uniform Material material;
 struct DirectedLightSource
 {
     vec3 direction;
-    vec4 color;   
+    vec4 color;
     float intensity;
 };
 
 struct PointLightSource
 {
     vec3 position;
-    vec4 color;   
+    vec4 color;
     float intensity;
 };
 
@@ -52,7 +52,7 @@ in vec2 TexCoords;
 
 float attenuation(float dist)
 {
-   return 1.0f / (1.0f + 0.01f * dist + 0.01f * dist * dist);
+    return 1.0f / (1.0f + 0.01f * dist + 0.01f * dist * dist);
 }
 
 vec3 process_directed_lights(vec3 norm, vec3 viewDir)
@@ -97,7 +97,7 @@ vec3 process_spot_lights(vec3 norm, vec3 viewDir)
     vec3 result = vec3(0);
     for (int i = 0; i < spot_lightsCount; ++i) {
         vec3 lightDir = normalize(spot_lights[i].position - FragPos);
-        
+
         // Составляющая рассеивания
         float diff = max(dot(norm, lightDir), 0.f);
         vec3 diffuse = vec3(spot_lights[i].color) * (diff * vec3(material.diffuse));
@@ -107,7 +107,7 @@ vec3 process_spot_lights(vec3 norm, vec3 viewDir)
         vec3 specular = vec3(material.specular) * (spec * material.shininess);
 
         // Расчёты для прожектора
-        float theta = dot(lightDir, normalize(-spot_lights[i].direction)); 
+        float theta = dot(lightDir, normalize(-spot_lights[i].direction));
         float epsilon = (spot_lights[i].cutOff - spot_lights[i].outerCutOff);
         float intensity = clamp((theta - spot_lights[i].outerCutOff) / epsilon, 0.0, 1.0);
         diffuse  *= intensity;
@@ -123,7 +123,7 @@ vec3 calculate_lighting()
 {
     vec3 viewDir = normalize(cameraPos - FragPos);
     vec3 norm = normalize(Normal);
-    
+
     // Фоновая составляющая
     vec3 ambient = 0.089f * vec3(material.ambient);
     vec3 result = ambient;
@@ -140,7 +140,7 @@ uniform bool wireframe_enabled;
 
 void main()
 {
-    if(wireframe_enabled) {
+    if (wireframe_enabled) {
         FragColor = vec4(1, 0.682, 0, 1.0f);
     } else {
         vec3 PhongColor = calculate_lighting();

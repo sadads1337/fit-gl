@@ -8,8 +8,8 @@ out vec4 FragColor;
 
 void main()
 {
-    if(wireframe_enabled) {
-	    FragColor = vec4(1, 0.682, 0, 1.0f);
+    if (wireframe_enabled) {
+        FragColor = vec4(1, 0.682, 0, 1.0f);
     }
     else {
         FragColor = col;

@@ -15,8 +15,8 @@ out vec4 col;
 
 void main()
 {
-    vec4 newPos = vec4(posAttr * (1 - morphFactor ) + morphFactor * normalize(posAttr), 1.f);
+    vec4 newPos = vec4(posAttr * (1 - morphFactor) + morphFactor * normalize(posAttr), 1.f);
     col = colAttr;
-    TexCoords = textureAttr;           
+    TexCoords = textureAttr;
     gl_Position = projection * view * model * newPos;
 }

@@ -11,13 +11,13 @@ uniform Material material;
 struct DirectedLightSource
 {
     vec3 direction;
-    vec4 color;   
+    vec4 color;
     float intensity;
 };
 struct PointLightSource
 {
     vec3 position;
-    vec4 color;   
+    vec4 color;
     float intensity;
 };
 struct SpotLightSource
@@ -46,7 +46,7 @@ uniform vec3 cameraPos;
 in vec3 posAttr;
 in vec4 colAttr;
 in vec3 normalAttr;
-in vec2 textureAttr; 
+in vec2 textureAttr;
 
 out vec3 FragPos;
 out vec3 Normal;
@@ -55,7 +55,7 @@ out vec2 TexCoords;
 
 float attenuation(float dist)
 {
-   return 1.0f / (1.0f + 0.01f * dist + 0.01f * dist * dist);
+    return 1.0f / (1.0f + 0.01f * dist + 0.01f * dist * dist);
 }
 
 vec3 process_directed_lights(vec3 norm, vec3 viewDir)
@@ -101,7 +101,7 @@ vec3 process_spot_lights(vec3 norm, vec3 viewDir)
     vec3 result = vec3(0);
     for (int i = 0; i < spot_lightsCount; ++i) {
         vec3 lightDir = normalize(spot_lights[i].position - FragPos);
-        
+
         // Составляющая рассеивания
         float diff = max(dot(norm, lightDir), 0.f);
         vec3 diffuse = vec3(spot_lights[i].color) * (diff * vec3(material.diffuse));
@@ -111,7 +111,7 @@ vec3 process_spot_lights(vec3 norm, vec3 viewDir)
         vec3 specular = vec3(material.specular) * (spec * material.shininess);
 
         // Расчёты для прожектора
-        float theta = dot(lightDir, normalize(-spot_lights[i].direction)); 
+        float theta = dot(lightDir, normalize(-spot_lights[i].direction));
         float epsilon = (spot_lights[i].cutOff - spot_lights[i].outerCutOff);
         float intensity = clamp((theta - spot_lights[i].outerCutOff) / epsilon, 0.0, 1.0);
         diffuse  *= intensity;

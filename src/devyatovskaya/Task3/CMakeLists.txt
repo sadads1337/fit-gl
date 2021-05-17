@@ -73,7 +73,7 @@ set(Task3_SRSC
         Shaders/Lighting/f_phong_lighting_wo_normal_mapping.glsl
         Shaders/Lighting/v_guro_lighting_wo_normal_mapping.glsl
         Shaders/Lighting/f_guro_lighting_wo_normal_mapping.glsl
-)
+        )
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
