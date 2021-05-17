@@ -1,19 +1,17 @@
-#ifndef FIT_GL_MYWIDGET_H
-#define FIT_GL_MYWIDGET_H
-
+#pragma once
 #include "SquareWindow.hpp"
-#include <QColorDialog>
-#include <QLabel>
+#include <type_traits>
 #include <QSlider>
 #include <QVBoxLayout>
+#include <QLabel>
 #include <QWidget>
-#include <type_traits>
+#include <QColorDialog>
 
-class MyWidget : public QWidget {
+class MyWidget: public QWidget {
   Q_OBJECT
 
 public:
   MyWidget();
 };
 
-#endif // FIT_GL_MYWIDGET_H
+

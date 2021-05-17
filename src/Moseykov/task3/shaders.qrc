@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/">
-        <file>Shaders/square.fs</file>
-        <file>Shaders/square.vs</file>
+        <file>Shaders/guro.fs</file>
+        <file>Shaders/guro.vs</file>
+        <file>Shaders/phong.fs</file>
+        <file>Shaders/phong.vs</file>
     </qresource>
 </RCC>

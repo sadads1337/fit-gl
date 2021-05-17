@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Base/GLWindow.hpp>
-#include <QBasicTimer>
 #include <QColor>
 #include <QColorDialog>
 #include <QKeyEvent>
@@ -9,28 +8,34 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLWidget>
 #include <QVector3D>
+#include <QBasicTimer>
 #include <memory>
 
 namespace fgl {
 
-struct VertexData {
+struct VertexData{
+  VertexData(){ }
+  VertexData(QVector3D p, QVector3D n) :
+      position(p), normal(n) { }
   QVector3D position;
   QVector3D normal;
 };
 
-class SquareWindow : public QOpenGLWidget, protected QOpenGLFunctions {
+class SquareWindow :  public QOpenGLWidget, protected QOpenGLFunctions {
 
-  Q_OBJECT
+Q_OBJECT
 
 public:
   explicit SquareWindow(QWidget *parent = nullptr);
   void initializeGL() override;
   void resizeGL(int w, int h) override;
-  void paintGL() override;
+  void  paintGL() override;
   void change_morph_param(float value);
   void change_type_of_light_model(float value);
 
+
 private:
+
   void mousePressEvent(QMouseEvent *e) override;
   void mouseReleaseEvent(QMouseEvent *e) override;
   void timerEvent(QTimerEvent *e) override;
@@ -53,6 +58,7 @@ private:
 
   // Frame counter for animation.
   int frame_ = 0;
+
 
   QVector2D mousePressPosition{0., 0.};
   QVector3D rotationAxis{0., 0., 1.};
