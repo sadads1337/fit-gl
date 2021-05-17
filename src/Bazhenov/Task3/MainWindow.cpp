@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <cmath>
 
 #include <QOpenGLShader>
 #include <QVector4D>
@@ -24,7 +25,7 @@ constexpr GLfloat FAR_PLANE = 100.0F;
 
 constexpr QVector4D CLEAR_COLOR(0.25F, 0.25F, 0.375F, 1.0F);
 
-void initCube(GLfloat halfWidth, std::uint32_t factor = 1U) {
+void initCube(QVector3D offset, GLfloat halfWidth, std::uint32_t factor = 1U) {
   Q_ASSERT(halfWidth >= 0);
   Q_ASSERT(factor >= 1U);
 
@@ -48,13 +49,13 @@ void initCube(GLfloat halfWidth, std::uint32_t factor = 1U) {
             (y * 2.0F / factor - 1.0F) * halfWidth * normal[constCoord];
 
         auto color = QColor{};
-        color.setRedF((x % 5 + y % 5 + face) % 4 / 3.0F);
-        color.setGreenF((x % 5 + y % 5 + face + 3) % 4 / 3.0F);
-        color.setBlueF((x % 5 + y % 5 + face + 6) % 4 / 3.0F);
+        color.setRedF(0.5F);
+        color.setGreenF(0.5F);
+        color.setBlueF(0.5F);
 
-        vertices.push_back(position.x());
-        vertices.push_back(position.y());
-        vertices.push_back(position.z());
+        vertices.push_back(position.x() + offset.x());
+        vertices.push_back(position.y() + offset.y());
+        vertices.push_back(position.z() + offset.z());
         vertices.push_back(normal.x());
         vertices.push_back(normal.y());
         vertices.push_back(normal.z());
@@ -84,6 +85,28 @@ void initCube(GLfloat halfWidth, std::uint32_t factor = 1U) {
 
 namespace Bazhenov {
 
+void MainWindow::initShaders() {
+  program_->removeAllShaders();
+
+  if (inputController_->getShader() == InputController::SHADER_PHONG) {
+    if (!program_->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/Shaders/phong_vertex.glsl"))
+      close();
+    if (!program_->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/Shaders/phong_fragment.glsl"))
+      close();
+  }
+  else if (inputController_->getShader() == InputController::SHADER_GOURAUD) {
+    if (!program_->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/Shaders/gouraud_vertex.glsl"))
+      close();
+    if (!program_->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/Shaders/gouraud_fragment.glsl"))
+      close();
+  }
+
+  if (!program_->link())
+    close();
+  if (!program_->bind())
+    close();
+}
+
 void MainWindow::init() {
   // Configure OpenGL
   glEnable(GL_DEPTH_TEST);
@@ -94,7 +117,7 @@ void MainWindow::init() {
                CLEAR_COLOR.w());
 
   // Configure VBOs
-  initCube(1.0F, VERTEX_MULTIPLICATION_FACTOR);
+  initCube({0.0F, 0.0F, 0.0F}, 0.5F, VERTEX_MULTIPLICATION_FACTOR);
 
   arrayBuf_.create();
   indexBuf_.create();
@@ -107,25 +130,17 @@ void MainWindow::init() {
   indexBuf_.allocate(indices.data(), static_cast<std::int32_t>(indices.size() *
                                                                sizeof(GLuint)));
 
-  // Configure shaders
+  // Configure program engines
   program_ = std::make_unique<QOpenGLShaderProgram>(this);
+  inputController_ = std::make_shared<InputController>();
 
-  program_->addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                    ":/Shaders/vertex.glsl");
-  program_->addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                    ":/Shaders/fragment.glsl");
-
-  program_->link();
+  // Configure shaders
+  initShaders();
 
   // Configure attributes and uniforms
-  posAttr_ = program_->attributeLocation("vertex_position");
-  normalAttr_ = program_->attributeLocation("vertex_normal");
-  colAttr_ = program_->attributeLocation("vertex_color");
-
-  matrixUniform_ = program_->uniformLocation("mvp_matrix");
-  colFactorUniform_ = program_->uniformLocation("fragment_color_factor");
-  offsetFromFaceUniform_ = program_->uniformLocation("offset_from_face");
-  morphParamUniform_ = program_->uniformLocation("t");
+  const auto posAttr_ = program_->attributeLocation("vertex_position");
+  const auto normalAttr_ = program_->attributeLocation("vertex_normal");
+  const auto colAttr_ = program_->attributeLocation("vertex_color");
 
   program_->setAttributeBuffer(posAttr_, GL_FLOAT, VERTEX_POSITION_OFFSET, 3,
                                STRIDE * sizeof(GLfloat));
@@ -133,9 +148,6 @@ void MainWindow::init() {
                                STRIDE * sizeof(GLfloat));
   program_->setAttributeBuffer(colAttr_, GL_FLOAT, VERTEX_COLOR_OFFSET, 3,
                                STRIDE * sizeof(GLfloat));
-
-  // Configure program engines
-  inputController_ = std::make_shared<InputController>();
 }
 
 void MainWindow::render() {
@@ -170,18 +182,40 @@ void MainWindow::render() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // Configure shaders, then launch rendering
-  program_->bind();
+  initShaders();
 
-  QMatrix4x4 mvp_matrix;
-  mvp_matrix.perspective(VERTICAL_ANGLE, (GLfloat)width() / height(),
+  QMatrix4x4 view_matrix;
+  view_matrix.translate(0.0F, 0.0F, -5.0F);
+  view_matrix.rotate(inputController_->getRotation());
+  program_->setUniformValue("view_matrix", view_matrix);
+
+  QMatrix4x4 projection_matrix;
+  projection_matrix.perspective(VERTICAL_ANGLE, (GLfloat)width() / height(),
                          NEAR_PLANE, FAR_PLANE);
-  mvp_matrix.translate(0.0F, 0.0F, -5.0F);
-  mvp_matrix.rotate(inputController_->getRotation());
+  program_->setUniformValue("projection_matrix", projection_matrix);
 
-  program_->setUniformValue(matrixUniform_, mvp_matrix);
-  program_->setUniformValue(offsetFromFaceUniform_, 0.0F);
-  program_->setUniformValue(colFactorUniform_, QMatrix4x4{});
-  program_->setUniformValue(morphParamUniform_, static_cast<GLfloat>(frame_));
+  program_->setUniformValue("offset_from_face", 0.0F);
+  program_->setUniformValue("fragment_color_factor", 1.0F);
+
+  auto time = static_cast<GLfloat>(frame_);
+  if (inputController_->morphingIsOn())
+    program_->setUniformValue("t", time);
+  else
+    program_->setUniformValue("t", 0.0F);
+
+  if (inputController_->lightIsOrbiting()) {
+    auto light_position = QVector3D{9.0F * std::sin(time / 150.0F), 0.0F,
+                                    -5.0F + 9.0F * std::cos(time / 150.0F)};
+    program_->setUniformValue("light_position", light_position);
+  }
+  else
+    program_->setUniformValue("light_position", QVector3D{6.5F, 0.0F, 1.5F});
+
+  program_->setUniformValue("light_power", 1.0F);
+
+  const auto posAttr_ = program_->attributeLocation("vertex_position");
+  const auto normalAttr_ = program_->attributeLocation("vertex_normal");
+  const auto colAttr_ = program_->attributeLocation("vertex_color");
 
   program_->setAttributeArray(
       posAttr_, GL_FLOAT,
@@ -200,19 +234,21 @@ void MainWindow::render() {
   program_->enableAttributeArray(normalAttr_);
   program_->enableAttributeArray(colAttr_);
 
-  glDrawElements(GL_QUAD_STRIP, static_cast<GLsizei>(indices.size()),
-                 GL_UNSIGNED_INT, nullptr);
+  for (int x = -1; x <= 1; ++x) {
+    for (int y = -1; y <= 1; ++y) {
+      for (int z = -1; z <= 1; ++z) {
+        arrayBuf_.bind();
+        indexBuf_.bind();
 
-  // Draw black lines
+        QMatrix4x4 model_matrix;
+        model_matrix.translate(x * 1.5F, y * 1.5F, z * 1.5F);
+        program_->setUniformValue("model_matrix", model_matrix);
 
-  arrayBuf_.bind();
-  indexBuf_.bind();
-
-  program_->setUniformValue(offsetFromFaceUniform_, 1.0e-3F);
-  program_->setUniformValue(colFactorUniform_, QMatrix4x4{} * 0);
-
-  glDrawElements(GL_LINE_STRIP, static_cast<GLsizei>(indices.size()),
-                 GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_QUAD_STRIP, static_cast<GLsizei>(indices.size()),
+                       GL_UNSIGNED_INT, nullptr);
+      }
+    }
+  }
 
   program_->disableAttributeArray(colAttr_);
   program_->disableAttributeArray(normalAttr_);

@@ -14,8 +14,13 @@ namespace Bazhenov {
 
 class InputController {
 public:
+  enum Shader { SHADER_PHONG, SHADER_GOURAUD };
+
   [[nodiscard]] QQuaternion getRotation() const noexcept;
   [[nodiscard]] QColor getColor() const noexcept;
+  [[nodiscard]] Shader getShader() const noexcept;
+  [[nodiscard]] bool morphingIsOn() const noexcept;
+  [[nodiscard]] bool lightIsOrbiting() const noexcept;
 
   void mousePressEvent(QMouseEvent *event);
   void mouseMoveEvent(QMouseEvent *event);
@@ -29,6 +34,10 @@ public:
 
 private:
   void handleMove(QPoint newPosition);
+
+  Shader currentShader_ = SHADER_PHONG;
+  bool morphingOn_ = true;
+  bool orbitingOn_ = true;
 
   Qt::MouseButtons pressedMouseButtons_;
   QPoint mousePosition_;

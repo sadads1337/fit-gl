@@ -10,6 +10,18 @@ QColor InputController::getColor() const noexcept {
   return color_;
 }
 
+InputController::Shader InputController::getShader() const noexcept {
+  return currentShader_;
+}
+
+bool InputController::morphingIsOn() const noexcept {
+  return morphingOn_;
+}
+
+bool InputController::lightIsOrbiting() const noexcept {
+  return orbitingOn_;
+}
+
 void InputController::mousePressEvent(QMouseEvent *event){
   mousePosition_ = event->pos();
 
@@ -40,7 +52,8 @@ void InputController::keyReleaseEvent(QKeyEvent *event){
 
 void InputController::update() {
   if (!!pressedKeys_.count(Qt::Key::Key_Space)) {
-    const auto color = QColorDialog::getColor(Qt::black, nullptr, "Select color");
+    const auto color =
+        QColorDialog::getColor(Qt::black, nullptr, "Select color");
 
     if (color.isValid()) {
       color_ = color;
@@ -48,6 +61,26 @@ void InputController::update() {
     }
 
     pressedKeys_.erase(Qt::Key::Key_Space);
+  }
+
+  if (!!pressedKeys_.count(Qt::Key::Key_G)) {
+    currentShader_ = SHADER_GOURAUD;
+    pressedKeys_.erase(Qt::Key::Key_G);
+  }
+
+  if (!!pressedKeys_.count(Qt::Key::Key_P)) {
+    currentShader_ = SHADER_PHONG;
+    pressedKeys_.erase(Qt::Key::Key_P);
+  }
+
+  if (!!pressedKeys_.count(Qt::Key::Key_M)) {
+    morphingOn_ = !morphingOn_;
+    pressedKeys_.erase(Qt::Key::Key_M);
+  }
+
+  if (!!pressedKeys_.count(Qt::Key::Key_O)) {
+    orbitingOn_ = !orbitingOn_;
+    pressedKeys_.erase(Qt::Key::Key_O);
   }
 }
 

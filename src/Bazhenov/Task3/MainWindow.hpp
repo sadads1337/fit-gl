@@ -16,6 +16,8 @@ public:
   void render() override;
 
 protected:
+  void initShaders();
+
   void mousePressEvent(QMouseEvent *event) override;
   void mouseMoveEvent(QMouseEvent *event) override;
   void mouseReleaseEvent(QMouseEvent *event) override;
@@ -25,14 +27,6 @@ protected:
 
 private:
   std::unique_ptr<QOpenGLShaderProgram> program_;
-
-  GLint posAttr_ = 0;
-  GLint normalAttr_ = 0;
-  GLint colAttr_ = 0;
-  GLint colFactorUniform_ = 0;
-  GLint offsetFromFaceUniform_ = 0;
-  GLint matrixUniform_ = 0;
-  GLint morphParamUniform_ = 0;
 
   QOpenGLBuffer arrayBuf_;
   QOpenGLBuffer indexBuf_{QOpenGLBuffer::IndexBuffer};
