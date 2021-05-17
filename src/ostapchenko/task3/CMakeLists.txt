@@ -13,6 +13,6 @@ add_executable(ostapchenkotask3
 
 target_link_libraries(ostapchenkotask3
         PRIVATE
-            Qt5::Widgets
-            FGL::Base
+        Qt5::Widgets
+        FGL::Base
         )
