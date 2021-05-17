@@ -4,7 +4,7 @@
 #include <QtMath>
 #include <stdexcept>
 
-Widget::Widget(QWidget *parent) : QOpenGLWidget(parent), m_z(-5.0f), x_rot(0.5f), y_rot(0.5f), z_rot(0.5f), angleObject(M_PI){}
+Widget::Widget(QWidget *parent) : QOpenGLWidget(parent), x_rot(0.5f), y_rot(0.5f), z_rot(0.5f), m_z(-5.0f), angleObject(M_PI){}
 
 void Widget::initializeGL() {
   initializeOpenGLFunctions();
