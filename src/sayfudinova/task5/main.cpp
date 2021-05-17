@@ -7,6 +7,8 @@
 #include <QCoreApplication>
 #include <QImage>
 
+
+constexpr auto offset = 1e-3f;
 constexpr float PI = 3.141592f;
 constexpr float FOV = PI / 3; // field of view angle
 auto WIDTH = 1024;
@@ -15,11 +17,11 @@ constexpr auto REFLECTION_DEPTH = 4;
 constexpr QVector3D BACKGROUND_COLOR = QVector3D(0.9f, 0.9f, 0.9f);
 constexpr QVector3D LIGHT_COLOR{1.0f, 1.0f, 1.0f};
 
-inline QVector3D mix(const QVector3D &a, const QVector3D &b, const float k) {
-  return a * k + b * (1 - k);
+auto mix(const QVector3D &a, const QVector3D &b, const float k) {
+  return a * k + b * (1.0f - k);
 }
 
-QVector3D reflect(const QVector3D &incident, const QVector3D &normal) {
+auto reflect(const QVector3D &incident, const QVector3D &normal) {
   return incident - 2.f * normal * (QVector3D::dotProduct(incident, normal));
 }
 
@@ -33,11 +35,34 @@ QVector3D refract(const QVector3D &incident, const QVector3D &normal, const floa
   return ratio * incident + (ratio * cos_1 - cos_2) * normal;
 }
 
+bool ray_intersect_sphere(const Ray &ray, const Sphere &sphere, float &t0) {
+  QVector3D to_sphere = sphere.center - ray.origin;
+  auto dir_projection = QVector3D::dotProduct(to_sphere, ray.direction);
+  auto D = QVector3D::dotProduct(to_sphere, to_sphere) - powf(dir_projection, 2);
+  if (D > powf(sphere.radius, 2)) return false;
+  auto sqrt_tmp = sqrtf(powf(sphere.radius, 2) - D);
+  t0 = dir_projection - sqrt_tmp;
+  auto t1 = dir_projection + sqrt_tmp;
+  if (t0 < 0) t0 = t1;
+  if (t0 < 0) return false;
+  return true;
+}
+
+bool ray_intersect_plane(const Ray &ray, const Plane &plane, float &t) {
+  auto denom = QVector3D::dotProduct(-plane.normal, ray.direction);
+  if (std::abs(denom) > 1e-6) {
+    QVector3D dist = plane.position - ray.origin;
+    t = QVector3D::dotProduct(dist, -plane.normal) / denom;
+    return (t >= 0);
+  }
+  return false;
+}
+
 bool scene_intersect(const Ray &ray, const std::vector<Sphere> &spheres, const std::vector<Plane> &planes, QVector3D &hit, QVector3D &normal, Material &material) {
   auto spheres_dist = std::numeric_limits<float>::max();
   for (size_t i = 0; i < spheres.size(); i++) {
     auto dist_i = std::numeric_limits<float>::max();
-    if (spheres[i].ray_intersect(ray, dist_i) && dist_i < spheres_dist) {
+    if (ray_intersect_sphere(ray, spheres[i], dist_i) && dist_i < spheres_dist) {
       spheres_dist = dist_i;
       hit = ray.origin + ray.direction * dist_i;
       normal = (hit - spheres[i].center).normalized();
@@ -48,7 +73,7 @@ bool scene_intersect(const Ray &ray, const std::vector<Sphere> &spheres, const s
   auto checkerboard_dist = std::numeric_limits<float>::max();
   for (size_t i = 0; i < planes.size(); i++) {
     auto dist_i = std::numeric_limits<float>::max();
-    if (planes[i].ray_intersect(ray, dist_i) && dist_i < spheres_dist) {
+    if (ray_intersect_plane(ray, planes[i], dist_i) && dist_i < spheres_dist) {
       checkerboard_dist = dist_i;
       hit = ray.origin + ray.direction * dist_i;
       normal = planes[i].normal;
@@ -71,26 +96,26 @@ QVector3D cast_ray(const Ray &ray, const std::vector<Sphere> &spheres,
     return BACKGROUND_COLOR;
   }
 
-  QVector3D reflect_direction = reflect(ray.direction, normal).normalized();
-  QVector3D refract_direction = refract(ray.direction, normal, material.refractiveIndex).normalized();
-  QVector3D reflect_origin = QVector3D::dotProduct(reflect_direction, normal) < 0 // offset the original point to avoid occlusion by the object itself
-          ? point - normal * 1e-3f
-          : point + normal * 1e-3f;
-  QVector3D refract_origin = QVector3D::dotProduct(refract_direction, normal) < 0
-          ? point - normal * 1e-3f
-          : point + normal * 1e-3f;
-  QVector3D reflect_color = cast_ray(Ray(reflect_origin, reflect_direction), spheres, planes, lights, depth + 1);
-  QVector3D refract_color = cast_ray(Ray(refract_origin, refract_direction), spheres, planes, lights, depth + 1);
+  const auto reflect_direction = reflect(ray.direction, normal).normalized();
+  const auto refract_direction = refract(ray.direction, normal, material.refractiveIndex).normalized();
+  auto reflect_origin = QVector3D::dotProduct(reflect_direction, normal) < 0 // offset the original point to avoid occlusion by the object itself
+          ? point - normal * offset
+          : point + normal * offset;
+  auto refract_origin = QVector3D::dotProduct(refract_direction, normal) < 0
+          ? point - normal * offset
+          : point + normal * offset;
+  const auto reflect_color = cast_ray(Ray(reflect_origin, reflect_direction), spheres, planes, lights, depth + 1);
+  const auto refract_color = cast_ray(Ray(refract_origin, refract_direction), spheres, planes, lights, depth + 1);
 
   auto diffuse_light_intensity = 0.f;
   auto specular_light_intensity = 0.f;
   for (size_t i = 0; i < lights.size(); i++) {
-    QVector3D light_direction = (lights[i].position - point).normalized();
+    auto light_direction = (lights[i].position - point).normalized();
     auto light_distance = (lights[i].position - point).length();
 
-    QVector3D shadow_origin = QVector3D::dotProduct(light_direction, normal) < 0 // checking if the point lies in the shadow of the lights[i]
-            ? point - normal * 1e-3f
-            : point + normal * 1e-3f;
+    const auto shadow_origin = QVector3D::dotProduct(light_direction, normal) < 0 // checking if the point lies in the shadow of the lights[i]
+            ? point - normal * offset
+            : point + normal * offset;
     QVector3D shadow_point;
     QVector3D shadow_normal;
     Material tmpmaterial;
@@ -151,7 +176,7 @@ int main(int argc, char *argv[]) {
   Material glass(1.5, QVector4D(0.0f, 0.5f, 0.1f, 0.8f), QVector3D(0.6f, 0.7f, 0.8f), 125.f);
   Material rubber(1.0f, QVector4D(0.9f, 0.1f, 0.0f, 0.0f), QVector3D(0.1f, 0.0f, 0.3f),10.f);
   Material mirror(1.0f, QVector4D(0.0f, 10.0f, 0.8f, 0.0f), QVector3D(1.0f, 1.0f, 1.0f),1425.f);
-  Material metal(1.0f, QVector4D(0.3f, 0.3f, 0.09f, 0.0f), QVector3D(0.5f, 0.5f, 0.5f),100.f);
+  Material metal(1.0f, QVector4D(0.3f, 0.3f, 0.09f, 0.0f), QVector3D(0.5f, 0.5f, 0.5f),40.f);
   Material plane_mater;
 
   std::vector<Sphere> spheres;
@@ -186,10 +211,10 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  if (filter == "nearest")
-    result.scaled(WIDTH, HEIGHT, Qt::IgnoreAspectRatio, Qt::FastTransformation).save("result.png");
-  else
-    result.scaled(WIDTH, HEIGHT, Qt::IgnoreAspectRatio, Qt::SmoothTransformation).save("result.png");
+  const auto filter_type = filter == "nearest"
+                               ? Qt::FastTransformation
+                               : Qt::SmoothTransformation;
+  result.scaled(WIDTH, HEIGHT, Qt::IgnoreAspectRatio, filter_type).save("result.png");
 
   return 0;
 }

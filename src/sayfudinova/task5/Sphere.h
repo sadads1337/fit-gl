@@ -10,5 +10,4 @@ public:
   Material material;
 
   Sphere(const QVector3D &c, const float r, Material m);
-  bool ray_intersect(const Ray &ray, float &t0) const;
 };
