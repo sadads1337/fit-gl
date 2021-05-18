@@ -29,11 +29,11 @@ return incident - 2.f * normal * (QVector3D::dotProduct(incident, normal));
 }
 
  QVector3D refract(const QVector3D &incident, const QVector3D &normal, const float n_1, const float n_2=1.f) {
-    auto cos_1 = - std::max(-1.f, std::min(1.f, QVector3D::dotProduct(incident, normal)));
+    const auto cos_1 = - std::max(-1.f, std::min(1.f, QVector3D::dotProduct(incident, normal)));
     if (cos_1 < 0.f) return refract(incident, -normal, n_2, n_1);
-    auto ratio = n_2 / n_1;
-    auto cos_2 = sqrtf(1 - ratio * ratio * (1 - cos_1 * cos_1));
-    auto result = ratio * incident + (ratio * cos_1 - cos_2) * normal;
+    const auto ratio = n_2 / n_1;
+    const auto cos_2 = sqrtf(1 - ratio * ratio * (1 - cos_1 * cos_1));
+    const auto result = ratio * incident + (ratio * cos_1 - cos_2) * normal;
     return  result;
 }
 
@@ -89,7 +89,7 @@ QVector3D cast_ray(const Ray &ray, const std::vector<Sphere> &spheres, const std
     auto diffuse_light_intensity = 0.f;
     auto specular_light_intensity = 0.f;
     QVector3D light_direction = (LIGHT_POS - point).normalized();
-    auto light_distance = (LIGHT_POS - point).length();
+    const auto light_distance = (LIGHT_POS - point).length();
     QVector3D shadow_origin = QVector3D::dotProduct(light_direction, normal) < 0 ? point - normal*1e-3f : point + normal*1e-3f;
     QVector3D shadow_point;
     QVector3D shadow_normal;
