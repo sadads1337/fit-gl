@@ -4,6 +4,7 @@
 #include "Ray.h"
 #include <QVector4D>
 #include <utility>
+#include <optional>
 
 struct Material{
   float specularFactor;
