@@ -11,7 +11,7 @@ struct VertexData
   QVector3D color;
 };
 
-std::array<VertexData, 8u> vertices{
+constexpr std::array<VertexData, 8u> vertices{
     // front dots
     VertexData{{0.5f, 0.5, 0.5f}, {1.0f, 0.0f, 0.0f}},
     VertexData{{-0.5f, 0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
@@ -23,7 +23,7 @@ std::array<VertexData, 8u> vertices{
     VertexData{{0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}},
     VertexData{{-0.5f, -0.5f, -0.5f}, {0.5f, 0.5f, 0.5f}},
 };
-std::array<GLushort, 26u> indices{0, 1, 2, 3,  // front face
+constexpr std::array<GLushort, 26u> indices{0, 1, 2, 3,  // front face
                                   3, 7, 2, 6, // bottom face
                                   6, 7, 4, 5, // back face
                                   5, 1, 4, 0,  // upper face
@@ -33,13 +33,13 @@ std::array<GLushort, 26u> indices{0, 1, 2, 3,  // front face
 } // namespace
 
 
-void QuadWindow::init() 
+void MainWindow::init()
 {
   program_ = std::make_unique<QOpenGLShaderProgram>(this);
   program_->addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                    ":/Shaders/triangle.vs");
+                                    ":/Shaders/cube.vs");
   program_->addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                    ":/Shaders/triangle.fs");
+                                    ":/Shaders/cube.fs");
   program_->link();
 
 
@@ -50,8 +50,8 @@ void QuadWindow::init()
   VBO.bind();
   IBO.bind();
   
-  VBO.allocate(vertices.data(), int(vertices.size() * sizeof(VertexData)));
-  IBO.allocate(indices.data(), int(indices.size() * sizeof(GLushort)));
+  VBO.allocate(vertices.data(), static_cast<int>(vertices.size() * sizeof(VertexData)));
+  IBO.allocate(indices.data(), static_cast<int>(indices.size() * sizeof(GLushort)));
 
   posAttr_ = program_->attributeLocation("posAttr");
   assert(posAttr_ != -1);
@@ -64,19 +64,18 @@ void QuadWindow::init()
     // Enable back face culling
     glEnable(GL_CULL_FACE);
 
-    glEnable(GL_STENCIL_TEST);
     }
 
 
 
-void QuadWindow::render() {
+void MainWindow::render() {
   const auto retinaScale = devicePixelRatio();
   glViewport(0, 0, width() * retinaScale, height() * retinaScale);
 
   VBO.bind();
   IBO.bind();
 
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   program_->bind();
 
@@ -104,18 +103,18 @@ void QuadWindow::render() {
   ++frame_;
 }
 
-void QuadWindow::mouseDoubleClickEvent(QMouseEvent *) {
-  QColor color = QColorDialog::getColor();
+void MainWindow::mouseDoubleClickEvent(QMouseEvent *) {
+  const auto color = QColorDialog::getColor();
   additional_color = QVector4D(color.red() / 255.0, color.green() / 255.0,
                            color.blue() / 255.0, 1.0);
 }
 
-void QuadWindow::mousePressEvent(QMouseEvent *event) {
+void MainWindow::mousePressEvent(QMouseEvent *event) {
   // Save mouse press position
   lastPos = QVector2D(event->localPos());
 }
 
-void QuadWindow::mouseMoveEvent(QMouseEvent *event) {
+void MainWindow::mouseMoveEvent(QMouseEvent *event) {
   const auto diff = QVector2D(event->localPos()) - lastPos;
   if (event->buttons() == Qt::LeftButton) {
     rotationAxis = QVector3D(diff.y(),diff.x(), 0.0);
