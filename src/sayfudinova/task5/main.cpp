@@ -35,34 +35,11 @@ QVector3D refract(const QVector3D &incident, const QVector3D &normal, const floa
   return ratio * incident + (ratio * cos_1 - cos_2) * normal;
 }
 
-bool ray_intersect_sphere(const Ray &ray, const Sphere &sphere, float &t0) {
-  QVector3D to_sphere = sphere.center - ray.origin;
-  auto dir_projection = QVector3D::dotProduct(to_sphere, ray.direction);
-  auto D = QVector3D::dotProduct(to_sphere, to_sphere) - powf(dir_projection, 2);
-  if (D > powf(sphere.radius, 2)) return false;
-  auto sqrt_tmp = sqrtf(powf(sphere.radius, 2) - D);
-  t0 = dir_projection - sqrt_tmp;
-  auto t1 = dir_projection + sqrt_tmp;
-  if (t0 < 0) t0 = t1;
-  if (t0 < 0) return false;
-  return true;
-}
-
-bool ray_intersect_plane(const Ray &ray, const Plane &plane, float &t) {
-  auto denom = QVector3D::dotProduct(-plane.normal, ray.direction);
-  if (std::abs(denom) > 1e-6) {
-    QVector3D dist = plane.position - ray.origin;
-    t = QVector3D::dotProduct(dist, -plane.normal) / denom;
-    return (t >= 0);
-  }
-  return false;
-}
-
 bool scene_intersect(const Ray &ray, const std::vector<Sphere> &spheres, const std::vector<Plane> &planes, QVector3D &hit, QVector3D &normal, Material &material) {
   auto spheres_dist = std::numeric_limits<float>::max();
   for (size_t i = 0; i < spheres.size(); i++) {
     auto dist_i = std::numeric_limits<float>::max();
-    if (ray_intersect_sphere(ray, spheres[i], dist_i) && dist_i < spheres_dist) {
+    if (spheres[i].ray_intersect(ray, dist_i) && dist_i < spheres_dist) {
       spheres_dist = dist_i;
       hit = ray.origin + ray.direction * dist_i;
       normal = (hit - spheres[i].center).normalized();
@@ -73,7 +50,7 @@ bool scene_intersect(const Ray &ray, const std::vector<Sphere> &spheres, const s
   auto checkerboard_dist = std::numeric_limits<float>::max();
   for (size_t i = 0; i < planes.size(); i++) {
     auto dist_i = std::numeric_limits<float>::max();
-    if (ray_intersect_plane(ray, planes[i], dist_i) && dist_i < spheres_dist) {
+    if (planes[i].ray_intersect(ray, dist_i) && dist_i < spheres_dist) {
       checkerboard_dist = dist_i;
       hit = ray.origin + ray.direction * dist_i;
       normal = planes[i].normal;
@@ -186,28 +163,29 @@ int main(int argc, char *argv[]) {
   spheres.emplace_back(Sphere(QVector3D(7.f, 5.f, -18.f), 4.f, mirror));
   spheres.emplace_back(Sphere(QVector3D(-9.f, 3.5f, -24.f), 2.5f, metal));
 
-
   std::vector<Plane> planes;
   planes.emplace_back(Plane(QVector3D(0.f, -4.f, 0.f), QVector3D(0.f, 1.f, 0.f), plane_mater));
 
   std::vector<Light> lights;
-  lights.emplace_back(Light(QVector3D( 20.f, 30.f, -25.f), 1.5f));
-  lights.emplace_back(Light(QVector3D( 20.f, 20.f,  20.f), 2.f));
-  lights.emplace_back(Light(QVector3D(0.f, 20.f,  0.f), 2.5f));
+  lights.emplace_back();
+  lights.emplace_back(Light{QVector3D(20.f, 20.f,  20.f), 2.f});
+  lights.emplace_back(Light{QVector3D(0.f, 20.f,  0.f), 2.5f});
 
   QImage result(WIDTH, HEIGHT, QImage::Format_RGB32);
 
   QVector3D resColor;
   for (auto y = 0; y < result.height(); y++) {
     for (auto x = 0; x < result.width(); x++) {
-      auto dir_x = (x + 0.5f) - result.width() / 2.f;
-      auto dir_y = -(y + 0.5f) + result.height() / 2.f;
-      auto dir_z = -result.height() / (2.f * std::tan(FOV / 2.f));
-      Ray ray(QVector3D(0.f, 0.f, 0.f), QVector3D(dir_x, dir_y, dir_z).normalized());
-      resColor = cast_ray(ray, spheres, planes, lights);
-      result.setPixel(x, y,qRgb(std::min(int(resColor.x() * 255), 255),
-                           std::min(int(resColor.y() * 255), 255),
-                           std::min(int(resColor.z() * 255), 255)));
+        auto dir_x = (x + 0.5f) - result.width() / 2.f;
+        auto dir_y = -(y + 0.5f) + result.height() / 2.f;
+        auto dir_z = -result.height() / (2.f * std::tan(FOV / 2.f));
+        Ray ray(QVector3D(0.f, 0.f, 0.f),
+                QVector3D(dir_x, dir_y, dir_z).normalized());
+        resColor = cast_ray(ray, spheres, planes, lights);
+        result.setPixel(x, y,
+                        qRgb(std::min(int(resColor.x() * 255), 255),
+                             std::min(int(resColor.y() * 255), 255),
+                             std::min(int(resColor.z() * 255), 255)));
     }
   }
 

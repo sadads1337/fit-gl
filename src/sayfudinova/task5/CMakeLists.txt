@@ -7,7 +7,7 @@ set(SRCS
         Light.h
         Plane.cpp
         Plane.h
-        )
+        Interface.h)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
