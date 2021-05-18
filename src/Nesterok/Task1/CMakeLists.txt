@@ -4,8 +4,8 @@ set(Task1_SRCS
         QuadWindow.hpp
 
         shaders.qrc
-        Shaders/triangle.fs
-        Shaders/triangle.vs
+        Shaders/cube.fs
+        Shaders/cube.vs
         )
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)

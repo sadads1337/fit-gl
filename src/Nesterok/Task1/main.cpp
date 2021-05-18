@@ -11,7 +11,7 @@ int main(int argc, char **argv) {
   format.setSamples(16);
   format.setVersion(2, 1);
 
-  QuadWindow window;
+  MainWindow window;
   window.setFormat(format);
   window.resize(640, 480);
   window.show();

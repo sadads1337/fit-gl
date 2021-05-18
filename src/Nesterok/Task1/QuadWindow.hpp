@@ -1,10 +1,10 @@
 #pragma once
 
-#include "./Base/GLWindow.hpp"
+#include "Base/GLWindow.hpp"
 #include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
 
-class QuadWindow final : public fgl::GLWindow{
+class MainWindow final : public fgl::GLWindow{
 public:
   void init() override;
   void render() override;
