@@ -2,22 +2,19 @@
 #include <cmath>
 #include "Sphere.hpp"
 
-Sphere::Sphere(const QVector3D &center, const float r, Material m)
-: center(center), radius(r), material(std::move(m)){}
-
 bool Sphere::intersect(const Ray &ray, float &p) const {
     QVector3D dist =  ray.origin - center;
-    auto b = QVector3D::dotProduct(ray.direction, dist);
-    auto a = ray.direction.lengthSquared();
-    auto c = dist.lengthSquared() - pow(radius, 2);
+    const auto product = QVector3D::dotProduct(ray.direction, dist);
+    const auto squared_length = ray.direction.lengthSquared();
+    const auto dist_squared = dist.lengthSquared() - pow(radius, 2);
 
-    auto deskriminant = pow(b,2) - a*c;
+    const auto deskriminant = pow(product, 2) - squared_length * dist_squared;
     //Ray passes mime sphere
     if(deskriminant < 0) 
         return false;
-    auto sqrt_deskriminant = sqrt(deskriminant);
-    auto root1 = (-b - sqrt_deskriminant)/a;
-    auto root2 = (-b + sqrt_deskriminant)/a;
+    const auto sqrt_deskriminant = sqrt(deskriminant);
+    auto root1 = (- product - sqrt_deskriminant) / squared_length;
+    auto root2 = (- product + sqrt_deskriminant) / squared_length;
 
     if(root1 < 0.0){
         root1 = root2;
