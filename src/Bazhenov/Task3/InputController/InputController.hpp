@@ -14,7 +14,7 @@ namespace Bazhenov {
 
 class InputController {
 public:
-  enum Shader { SHADER_PHONG, SHADER_GOURAUD };
+  enum class Shader { SHADER_PHONG, SHADER_GOURAUD };
 
   [[nodiscard]] QQuaternion getRotation() const noexcept;
   [[nodiscard]] QColor getColor() const noexcept;
@@ -35,7 +35,7 @@ public:
 private:
   void handleMove(QPoint newPosition);
 
-  Shader currentShader_ = SHADER_PHONG;
+  Shader currentShader_ = Shader::SHADER_PHONG;
   bool morphingOn_ = true;
   bool orbitingOn_ = true;
 

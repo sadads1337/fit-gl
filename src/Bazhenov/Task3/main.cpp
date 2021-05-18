@@ -9,7 +9,7 @@ constexpr int GL_VERSION_MINOR = 1;
 constexpr int Q_SURFACE_NUM_SAMPLES = 16;
 constexpr int Q_SURFACE_DEPTH_BUFFER_SIZE = 24;
 
-constexpr QSize WINDOW_SIZE(640, 480);
+constexpr QSize MY_WINDOW_SIZE(640, 480);
 
 int main(int argc, char **argv) {
   QApplication app(argc, argv);
@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
 
   Bazhenov::MainWindow mainWindow;
   mainWindow.setFormat(format);
-  mainWindow.resize(WINDOW_SIZE);
+  mainWindow.resize(MY_WINDOW_SIZE);
   mainWindow.show();
 
   mainWindow.setAnimated(true);
