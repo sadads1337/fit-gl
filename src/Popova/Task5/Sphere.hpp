@@ -5,7 +5,6 @@
 
 class Sphere {
 public:
-    Sphere(const QVector3D &c, float r, Material m);
     bool intersect(const Ray &ray, float &t) const;
 public:
     QVector3D center;
