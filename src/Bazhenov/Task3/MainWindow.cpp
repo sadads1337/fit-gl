@@ -88,13 +88,13 @@ namespace Bazhenov {
 void MainWindow::initShaders() {
   program_->removeAllShaders();
 
-  if (inputController_->getShader() == InputController::SHADER_PHONG) {
+  if (inputController_->getShader() == InputController::Shader::SHADER_PHONG) {
     if (!program_->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/Shaders/phong_vertex.glsl"))
       close();
     if (!program_->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/Shaders/phong_fragment.glsl"))
       close();
   }
-  else if (inputController_->getShader() == InputController::SHADER_GOURAUD) {
+  else if (inputController_->getShader() == InputController::Shader::SHADER_GOURAUD) {
     if (!program_->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/Shaders/gouraud_vertex.glsl"))
       close();
     if (!program_->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/Shaders/gouraud_fragment.glsl"))
@@ -217,17 +217,17 @@ void MainWindow::render() {
   const auto normalAttr_ = program_->attributeLocation("vertex_normal");
   const auto colAttr_ = program_->attributeLocation("vertex_color");
 
-  program_->setAttributeArray(
+  program_->setAttributeBuffer(
       posAttr_, GL_FLOAT,
-      reinterpret_cast<void *>(VERTEX_POSITION_OFFSET * sizeof(GLfloat)), 3,
+      VERTEX_POSITION_OFFSET * sizeof(GLfloat), 3,
       STRIDE * sizeof(GLfloat));
-  program_->setAttributeArray(
+  program_->setAttributeBuffer(
       normalAttr_, GL_FLOAT,
-      reinterpret_cast<void *>(VERTEX_NORMAL_OFFSET * sizeof(GLfloat)), 3,
+      VERTEX_NORMAL_OFFSET * sizeof(GLfloat), 3,
       STRIDE * sizeof(GLfloat));
-  program_->setAttributeArray(
+  program_->setAttributeBuffer(
       colAttr_, GL_FLOAT,
-      reinterpret_cast<void *>(VERTEX_COLOR_OFFSET * sizeof(GLfloat)), 3,
+      VERTEX_COLOR_OFFSET * sizeof(GLfloat), 3,
       STRIDE * sizeof(GLfloat));
 
   program_->enableAttributeArray(posAttr_);

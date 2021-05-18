@@ -64,12 +64,12 @@ void InputController::update() {
   }
 
   if (!!pressedKeys_.count(Qt::Key::Key_G)) {
-    currentShader_ = SHADER_GOURAUD;
+    currentShader_ = Shader::SHADER_GOURAUD;
     pressedKeys_.erase(Qt::Key::Key_G);
   }
 
   if (!!pressedKeys_.count(Qt::Key::Key_P)) {
-    currentShader_ = SHADER_PHONG;
+    currentShader_ = Shader::SHADER_PHONG;
     pressedKeys_.erase(Qt::Key::Key_P);
   }
 
