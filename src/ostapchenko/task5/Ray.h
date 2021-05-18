@@ -1,11 +1,10 @@
-#pragma once
-#include <QVector3D>
-
 #ifndef FIT_GL_RAY_H
 #define FIT_GL_RAY_H
+
+#include <QVector3D>
+
 class Ray {
 public:
-  Ray() {}
   Ray(const QVector3D& origin, const QVector3D& direction)
       : orig(origin), dir(direction)
   {}
