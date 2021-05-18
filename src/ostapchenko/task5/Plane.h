@@ -1,4 +1,3 @@
-#pragma once
 #ifndef FIT_GL_PLANE_H
 #define FIT_GL_PLANE_H
 #include "Hittable.h"
@@ -7,8 +6,9 @@
 class Plane : public Hittable {
 public:
   Plane(QVector3D p, QVector3D n) : position(p), normal(n) {};
+  virtual ~Plane() = default;
 
-  virtual bool hit(const Ray& r,  hit_record& rec) const override;
+  virtual std::optional<HitRecord> hit(const Ray& r) const override;
 
 public:
   QVector3D position;

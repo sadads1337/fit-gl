@@ -47,32 +47,34 @@ QVector3D trace(const Ray& r, const std::vector<std::shared_ptr<Hittable>> &obje
    if(reflection_depth == 0)
       return BACKGROUND_COLOR;
 
-  hit_record rec;
+
 
   QVector3D ambien_coeff = AMBIENT_COLOR*AMBIENT_STRENGTH;
 
   for(const auto &o : objects){
     float diffuse_light_intensity = 0.0F;
     float specular_light_intensity = 0.0F;
-    if(o->hit(r, rec)){
-      QVector3D light_dir = (LIGHT_POS - rec.p).normalized();
-     float light_distance = (LIGHT_POS - rec.p).length();
-     QVector3D reflect_dir = reflect(r.direction(), rec.p).normalized();
-     QVector3D refract_dir = refract(r.direction(), rec.normal, rec.material.refractiveIndex).normalized();
-     QVector3D reflect_orig = QVector3D::dotProduct(reflect_dir,rec.normal) < 0 ? rec.p - rec.normal*1e-3f : rec.p + rec.normal*1e-3f;
-     QVector3D refract_orig = QVector3D::dotProduct(refract_dir, rec.normal) < 0 ? rec.p - rec.normal*1e-3f : rec.p + rec.normal*1e-3f;
+    const auto rec = o->hit(r);
+    if(rec.has_value()){
+      QVector3D light_dir = (LIGHT_POS - rec->p).normalized();
+     float light_distance = (LIGHT_POS - rec->p).length();
+     QVector3D reflect_dir = reflect(r.direction(), rec->p).normalized();
+     QVector3D refract_dir = refract(r.direction(), rec->normal, rec->material.refractiveIndex).normalized();
+     QVector3D reflect_orig = QVector3D::dotProduct(reflect_dir,rec->normal) < 0 ? rec->p - rec->normal*1e-3f : rec->p + rec->normal*1e-3f;
+     QVector3D refract_orig = QVector3D::dotProduct(refract_dir, rec->normal) < 0 ? rec->p - rec->normal*1e-3f : rec->p + rec->normal*1e-3f;
      QVector3D reflect_color = trace(Ray(reflect_orig, reflect_dir), objects, reflection_depth-1);
      QVector3D refract_color = trace(Ray(refract_orig, refract_dir), objects, reflection_depth-1);
 
 
-       QVector3D shadow_orig = QVector3D::dotProduct(light_dir,rec.normal) < 0 ? rec.p - rec.normal*1e-3f : rec.p + rec.normal*1e-3f;
-       if(!(o->hit(Ray(shadow_orig, light_dir), rec)) || rec.t > light_distance){
-          diffuse_light_intensity = std::max(0.f, QVector3D::dotProduct(light_dir,rec.normal));
-          specular_light_intensity = std::pow(std::max(0.f, QVector3D::dotProduct(reflect(light_dir, rec.normal),r.direction())), rec.material.specularFactor)*LIGHT_INTENSITY;
+       QVector3D shadow_orig = QVector3D::dotProduct(light_dir,rec->normal) < 0 ? rec->p - rec->normal*1e-3f : rec->p + rec->normal*1e-3f;
+       const auto  shadow_rec = o->hit(Ray(shadow_orig, light_dir));
+       if(!(shadow_rec.has_value()) || shadow_rec->t > light_distance){
+          diffuse_light_intensity = std::max(0.f, QVector3D::dotProduct(light_dir,rec->normal));
+          specular_light_intensity = std::pow(std::max(0.f, QVector3D::dotProduct(reflect(light_dir, rec->normal),r.direction())), rec->material.specularFactor)*LIGHT_INTENSITY;
      }
-      auto k = std::exp(-(rec.p-r.origin()).length()/100.f);
-      auto resultColor = ambien_coeff*rec.color + rec.color * diffuse_light_intensity*rec.material.albedo.x()
-                         +  LIGHT_COLOR*specular_light_intensity * rec.color*rec.material.albedo.y() + reflect_color *  rec.color*rec.material.albedo.z() + refract_color*  rec.color * rec.material.albedo.w();
+      auto k = std::exp(-(rec->p-r.origin()).length()/100.f);
+      auto resultColor = ambien_coeff*rec->color + rec->color * diffuse_light_intensity*rec->material.albedo.x()
+                         +  LIGHT_COLOR*specular_light_intensity * rec->color*rec->material.albedo.y() + reflect_color *  rec->color*rec->material.albedo.z() + refract_color*  rec->color * rec->material.albedo.w();
           return mix(resultColor, BACKGROUND_COLOR, k );
 
       }
@@ -122,10 +124,11 @@ int main(int argc, char *argv[]){
   }
 
 
-  Material ivory( 50., 1.0, QVector4D(0.6f, 0.3f, 0.1f, 0.0f));
-  Material rubber(10., 1.0, QVector4D(0.9f, 0.1f, 0.0f, 0.0f));
-  Material mirror( 1425., 1.0, QVector4D(0.0f, 10.0f, 0.8f, 0.0f));
-  Material glass( 125., 1.5, QVector4D(0.0f, 0.5f, 0.1f, 0.8f));
+
+  Material ivory{ 50., 1.0, QVector4D(0.6f, 0.3f, 0.1f, 0.0f)};
+  Material rubber{10., 1.0, QVector4D(0.9f, 0.1f, 0.0f, 0.0f)};
+  Material mirror{ 1425., 1.0, QVector4D(0.0f, 10.0f, 0.8f, 0.0f)};
+  Material glass{ 125., 1.5, QVector4D(0.0f, 0.5f, 0.1f, 0.8f)};
 
   std::vector<std::shared_ptr<Hittable>> objects;
   objects.emplace_back(std::make_shared<Sphere>(QVector3D(-2.2f,0.5f,0.0f), 0.5, ivory, QVector3D(1.0f, 1.0f, 0.0f)));
