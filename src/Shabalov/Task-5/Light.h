@@ -2,7 +2,6 @@
 #include <QVector3D>
 
 struct Light{
-    Light(const QVector3D &p, const float i) : position(p), intensity(i){}
-    QVector3D position;
-    float intensity;
+    QVector3D position = QVector3D(0,0,0);
+    float intensity = 1.0;
 };
