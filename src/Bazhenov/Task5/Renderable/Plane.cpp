@@ -3,12 +3,15 @@
 
 namespace Bazhenov {
 
-Plane::Plane(float white_reflectivity, float black_reflectivity)
-    : white_reflectivity_(white_reflectivity), black_reflectivity_(black_reflectivity) {}
+Plane::Plane(float white_reflectivity, float black_reflectivity,
+             QVector3D position, QVector3D normal)
+    : white_reflectivity_(white_reflectivity),
+      black_reflectivity_(black_reflectivity),
+      position_(position),
+      normal_(normal.normalized()) {}
 
 std::optional<RayHit> Plane::getHit(const Ray &ray) const {
-  constexpr auto n = QVector3D(0.0F, 1.0F, 0.0F);
-  const auto t = plane_intersection(ray, QVector3D(), n);
+  const auto t = plane_intersection(ray, position_, normal_);
   if (!t.has_value()) {
     return std::nullopt;
   }
@@ -16,7 +19,7 @@ std::optional<RayHit> Plane::getHit(const Ray &ray) const {
   RayHit hit;
   hit.dist = t.value();
   hit.position = ray.origin + ray.direction * hit.dist;
-  hit.normal = n;
+  hit.normal = normal_;
   constexpr auto cell_size = 1.0F;
   const auto c = static_cast<int>(std::floor(hit.position.x() / cell_size)) +
                  static_cast<int>(std::floor(hit.position.z() / cell_size));

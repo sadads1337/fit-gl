@@ -109,6 +109,18 @@ Ray make_ray(const QVector3D &pos, const float hfov, const float vfov,
 int main() {
   std::vector<std::shared_ptr<Renderable>> objects;
 
+  objects.push_back(std::make_shared<Sphere>(PURPLE, QVector3D{-1.5F, 1.0F, 0.0F}, 1.0F, 0.0F));
+  objects.push_back(std::make_shared<Sphere>(GREEN, QVector3D{2.5F, 1.0F, 0.0F}, 1.0F, 0.85F));
+  objects.push_back(std::make_shared<Sphere>(GREEN, QVector3D{-1.0F, 2.0F, -8.0F}, 0.3F, 0.4F));
+  objects.push_back(std::make_shared<Sphere>(WHITE, QVector3D{-1.0F, 0.5F, 0.8F}, 0.5F, 0.4F));
+  objects.push_back(std::make_shared<Plane>(WHITE_REFLECTIVITY, BLACK_REFLECTIVITY));
+  objects.push_back(std::make_shared<Plane>(WHITE_REFLECTIVITY, BLACK_REFLECTIVITY,
+                                            QVector3D{0.0F, 4.0F, 0.0F},
+                                            QVector3D{0.0F, -1.0F, 0.0F}));
+  objects.push_back(std::make_shared<Plane>(WHITE_REFLECTIVITY, BLACK_REFLECTIVITY,
+                                            QVector3D{-4.0F, 4.0F, 0.0F},
+                                            QVector3D{1.0F, -1.0F, 0.0F}));
+
   constexpr auto hfov = 60.0F * DEG_TO_RAD;
   constexpr auto vfov = hfov * IMG_HEIGHT / IMG_WIDTH;
   
