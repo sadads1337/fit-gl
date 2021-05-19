@@ -4,16 +4,15 @@
 #include <utility>
 
 struct Material{
-    Material(const QVector3D &dC, const float sF, const float  rI, const QVector4D &p) : diffuseColor(dC), img(nullptr), specularFactor(sF), refractiveIndex(rI), proportion(p){}
-    explicit Material(QImage i) : img(std::move(i)), refractiveIndex(1), proportion(1., 0., 0., 0.){}
-    Material() : diffuseColor(), img(nullptr), specularFactor(), refractiveIndex(1), proportion(1., 0., 0., 0.){}
-    [[nodiscard]] bool isTexture() const {
-        if(img.isNull()) return false;
-        return true;
+    Material(const QVector3D &dC, const float sF, const float  rI, const QVector4D &p) : diffuseColor(dC), image(nullptr), specularFactor(sF), refractiveIndex(rI), proportion(p){}
+    explicit Material(QImage img) : diffuseColor(QVector3D(0,0,0)), specularFactor(0.0f), image(std::move(img)), refractiveIndex(1), proportion(1., 0., 0., 0.){}
+    Material() : diffuseColor(QVector3D(0,0,0)), image(nullptr), specularFactor(0.0f), refractiveIndex(1), proportion(1., 0., 0., 0.){}
+    [[nodiscard]] auto isTexture() const noexcept{
+        return !image.isNull();
     }
     QVector3D diffuseColor;
-    QImage img;
-    float specularFactor{};
+    QImage image;
+    float specularFactor;
     float refractiveIndex;
     QVector4D proportion;
 
