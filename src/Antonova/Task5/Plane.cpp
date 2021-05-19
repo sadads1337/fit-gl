@@ -29,7 +29,7 @@ std::optional<Hit> Plane::intersect(const Ray& ray) const{
         occurred_hit.material.refractiveIndex = 1;
     }
     else{
-        occurred_hit.color = QVector3D(1.0f, 0.0f, 0.0f);
+        occurred_hit.color = QVector3D(166.0f/255, 54.0f/255, 153.0f/255);
         occurred_hit.material.light_params = QVector4D(0.6f, 0.3f, 0.1f, 0.0f);
         occurred_hit.material.specularFactor = 50;
         occurred_hit.material.refractiveIndex = 1;
