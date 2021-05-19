@@ -12,9 +12,8 @@
 
 int WIDTH = 640;
 int HEIGHT = 480;
-QVector3D CAMERA_POS{0.0f, 1.1f, 5.0f};
+QVector3D CAMERA_POS{0.0f, 2.0f, 6.0f};
 float PI = 3.141592f;
-
 
 int main(int argc, char *argv[]){
 
@@ -26,7 +25,7 @@ int main(int argc, char *argv[]){
     QCoreApplication::setApplicationVersion("1.0");
 
     QCommandLineParser parser;
-    parser.setApplicationDescription("Getting parametrs");
+    parser.setApplicationDescription("Getting parameters");
     parser.addHelpOption();
     parser.addVersionOption();
 
@@ -58,24 +57,39 @@ int main(int argc, char *argv[]){
 
     // LIGHT
     LightConditions light_conditions;
-    light_conditions.background_color = QVector3D(0.0f,0.0f,0.3f);
+    light_conditions.background_color = QVector3D(0.0f/255, 0.0f/255, 0.0f/255);
     light_conditions.ambient_color = QVector3D(1.0f, 1.0f, 1.0f);
-    light_conditions.ambient_strength = 0.3f;
+    light_conditions.ambient_strength = 0.5f;
     light_conditions.light_color = QVector3D(1.0f, 1.0f, 1.0f);
     light_conditions.light_pos = QVector3D(0.0f, 6.0f, 0.0f);
     light_conditions.light_intensity = 1.5f;
 
     // OBJECTS
-    Material ivory{ 50., 1.0, QVector4D(0.6f, 0.3f, 0.1f, 0.0f)};
-    Material rubber{10., 1.0, QVector4D(0.9f, 0.1f, 0.0f, 0.0f)};
-    Material mirror{ 1425., 1.0, QVector4D(0.0f, 10.0f, 0.8f, 0.0f)};
-    Material glass{ 125., 1.5, QVector4D(0.0f, 0.5f, 0.1f, 0.8f)};
+    Material shiny{50., 1.0, QVector4D(0.6f, 1.0f, 0.1f, 0.0f)};
+    Material matt{10., 1.0, QVector4D(0.9f, 0.1f, 0.0f, 0.0f)};
+    Material mirror{1425., 1.0, QVector4D(0.0f, 10.0f, 0.8f, 0.0f)};
+    Material glass{125., 1.5, QVector4D(0.0f, 0.5f, 0.1f, 0.8f)};
 
     std::vector<std::shared_ptr<Hittable>> objects;
-    objects.emplace_back(std::make_shared<Sphere>(QVector3D(-2.2f,0.5f,0.0f), 0.5, ivory, QVector3D(1.0f, 1.0f, 0.0f)));
-    objects.emplace_back(std::make_shared<Sphere>(QVector3D(1.2f,0.5f,0.0f), 0.5, rubber,QVector3D(0.1f, 0.1f, 0.3f)));
-    objects.emplace_back(std::make_shared<Sphere>(QVector3D(0.0f,0.5f,0.0f), 0.5, mirror, QVector3D(1.0f, 1.0f, 1.0f)));
-    objects.emplace_back(std::make_shared<Sphere>(QVector3D(-1.1f,0.5f,0.0f), 0.5, glass, QVector3D(0.6f, 0.7f, 0.8f)));
+    objects.emplace_back(std::make_shared<Sphere>(QVector3D(-2.0f, 3.0f,-0.5f),
+                                                  1.0,
+                                                  shiny,
+                                                  QVector3D(150.0f/255, 153.0f/255, 250.0f/255)));
+
+    objects.emplace_back(std::make_shared<Sphere>(QVector3D(0.7f, 1.0f, 0.6f),
+                                                  0.5,
+                                                  matt,
+                                                  QVector3D(0.1f, 0.1f, 0.3f)));
+
+    objects.emplace_back(std::make_shared<Sphere>(QVector3D(-1.0f, 0.5f, 0.3f),
+                                                  0.7,
+                                                  mirror,
+                                                  QVector3D(1.0f, 1.0f, 1.0f)));
+
+    objects.emplace_back(std::make_shared<Sphere>(QVector3D(2.1f, 1.5f, -0.5f),
+                                                  0.8,
+                                                  glass,
+                                                  QVector3D(0.8f, 0.8f, 1.0f)));
 
     objects.emplace_back(std::make_shared<Plane>(QVector3D(), QVector3D(0, 1, 0)));
 
@@ -97,7 +111,6 @@ int main(int argc, char *argv[]){
                                             std::min(int(color.z()*255), 255)));
         }
     }
-
 
     if(filter == "nearest"){
         result.scaled(WIDTH, HEIGHT, Qt::IgnoreAspectRatio, Qt::FastTransformation)
