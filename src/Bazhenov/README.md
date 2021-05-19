@@ -26,3 +26,19 @@ You can do the following things:
 * Set up the Gouraud model with `G`
 * Set up the Phong model with `P`
 * Change the color of the cubes by pressing `Space` and selecting a color
+
+## Task 4
+
+This program displays a cube with ancient glyphs carved upon it.
+
+The controls are the same as in [Task 3](#task-3), 
+except you cannot change the color of the cube.
+
+You can see the difference between the disabled normal mapping (for the Gouraud model)
+and the enabled normal mapping (for the Phong model).
+
+## Task 5
+
+This program renders a scene. The scene contains three differently oriented checkered planes
+and four spheres of different color and reflectivity. The rendering results in saving
+an image titled `result.png`.
