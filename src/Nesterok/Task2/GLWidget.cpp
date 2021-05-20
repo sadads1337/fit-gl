@@ -4,19 +4,14 @@
 #include <QScreen>
 #include <array>
 #include <iostream>
-namespace {
+namespace {} // namespace
 
-} // namespace
-
-
-void GLWidget::initializeGL()
-{
+void GLWidget::initializeGL() {
   morphFactor = 0;
-  aspect = 4.0/3.0;
+  aspect = 4.0 / 3.0;
   initializeOpenGLFunctions();
   program_ = std::make_unique<QOpenGLShaderProgram>(this);
-  program_->addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                    ":/Shaders/cube.vs");
+  program_->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/Shaders/cube.vs");
   program_->addShaderFromSourceFile(QOpenGLShader::Fragment,
                                     ":/Shaders/cube.fs");
   program_->link();
@@ -28,17 +23,14 @@ void GLWidget::initializeGL()
   matrixUniform_ = program_->uniformLocation("matrix");
   assert(matrixUniform_ != -1);
 
-    // Enable Z-test    
-    glEnable(GL_DEPTH_TEST);
+  // Enable Z-test
+  glEnable(GL_DEPTH_TEST);
 
-    // Enable back face culling
-    glEnable(GL_CULL_FACE);
+  // Enable back face culling
+  glEnable(GL_CULL_FACE);
 
-
-    FPS_timer.start(1000.0/FPS_COUNT, this);
-    }
-
-
+  FPS_timer.start(1000.0 / FPS_COUNT, this);
+}
 
 void GLWidget::paintGL() {
 
@@ -55,7 +47,6 @@ void GLWidget::paintGL() {
   QMatrix4x4 perspective_matrix;
   perspective_matrix.perspective(60.0f, aspect, 0.1f, 100.0f);
   perspective_matrix.translate(0, 0, -2);
-  perspective_matrix.rotate(100.0 * frame_ / screen()->refreshRate(), rotationAxis);
   program_->setUniformValue(matrixUniform_, perspective_matrix);
 
   program_->setUniformValue("col", square_color);
@@ -64,8 +55,8 @@ void GLWidget::paintGL() {
   program_->setAttributeBuffer(posAttr_, GL_FLOAT, 0, 3);
   glEnableVertexAttribArray(posAttr_);
 
-
- glDrawElements(GL_LINE_STRIP, GLsizei(indices.size()), GL_UNSIGNED_SHORT, nullptr);
+  glDrawElements(GL_LINE_STRIP, GLsizei(indices.size()), GL_UNSIGNED_SHORT,
+                 nullptr);
 
   glDisableVertexAttribArray(posAttr_);
 
@@ -92,18 +83,16 @@ void GLWidget::mousePressEvent(QMouseEvent *event) {
 void GLWidget::mouseMoveEvent(QMouseEvent *event) {
   const auto diff = QVector2D(event->localPos()) - lastPos;
   if (event->buttons() == Qt::LeftButton) {
-    rotationAxis = QVector3D(diff.y(),diff.x(), 0.0);
+    rotationAxis = QVector3D(diff.y(), diff.x(), 0.0);
   }
-
 }
 void GLWidget::timerEvent(QTimerEvent *) { update(); }
 
 void GLWidget::initCube(GLfloat halfWidth, unsigned int N = 1) {
 
-
   // Add vertices
   Q_ASSERT(halfWidth >= 0);
-  Q_ASSERT(N>= 1U);
+  Q_ASSERT(N >= 1U);
 
   for (auto face = 0; face < 6; ++face) {
 
@@ -114,9 +103,11 @@ void GLWidget::initCube(GLfloat halfWidth, unsigned int N = 1) {
     for (auto y = 0U; y < N + 1; ++y) {
       for (auto x = 0U; x < N + 1; ++x) {
         auto position = QVector3D{0, 0, 0};
-        
-        if (face >=3) position[fixedPos] = halfWidth;
-        else  position[fixedPos] = -1 * halfWidth  ;
+
+        if (face >= 3)
+          position[fixedPos] = halfWidth;
+        else
+          position[fixedPos] = -1 * halfWidth;
         position[varPos1] = (x * 2.0F / N - 1.0F) * halfWidth;
         position[varPos2] = (y * 2.0F / N - 1.0F) * position[fixedPos];
 
@@ -126,7 +117,6 @@ void GLWidget::initCube(GLfloat halfWidth, unsigned int N = 1) {
     VBO.create();
     VBO.bind();
     VBO.allocate(vertices.data(), int(vertices.size() * sizeof(QVector3D)));
-
 
     // Add indices
     const auto faceOffset = face * (N + 1) * (N + 1);
@@ -143,7 +133,6 @@ void GLWidget::initCube(GLfloat halfWidth, unsigned int N = 1) {
   IBO.create();
   IBO.bind();
   IBO.allocate(indices.data(), int(indices.size() * sizeof(GLushort)));
-
 }
 void GLWidget::changeN(int N) {
   vertices.clear();
