@@ -10,8 +10,8 @@ add_executable(MoseykovTask4
         textures.qrc)
 
 target_link_libraries(MoseykovTask4
-    PRIVATE
+        PRIVATE
         Qt5::Widgets
         FGL::Base
-)
+        )
 
