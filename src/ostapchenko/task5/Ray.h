@@ -5,16 +5,13 @@
 
 class Ray {
 public:
-  Ray(const QVector3D& origin, const QVector3D& direction)
-      : orig(origin), dir(direction)
-  {}
+  Ray(const QVector3D &origin, const QVector3D &direction)
+      : orig(origin), dir(direction) {}
 
-  [[nodiscard]] QVector3D origin() const  { return orig; }
+  [[nodiscard]] QVector3D origin() const { return orig; }
   [[nodiscard]] QVector3D direction() const { return dir; }
 
-  [[nodiscard]] QVector3D at(double t) const {
-    return orig + t*dir;
-  }
+  [[nodiscard]] QVector3D at(double t) const { return orig + t * dir; }
 
 public:
   QVector3D orig;
