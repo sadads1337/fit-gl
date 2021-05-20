@@ -3,10 +3,10 @@
 
 #include "Ray.h"
 #include <QVector4D>
-#include <utility>
 #include <optional>
+#include <utility>
 
-struct Material{
+struct Material {
   float specularFactor;
   float refractiveIndex;
   QVector4D albedo;
@@ -20,9 +20,9 @@ struct HitRecord {
   double t;
   bool front_face;
 
-  inline void set_face_normal(const Ray& r, const QVector3D& outward_normal) {
+  inline void set_face_normal(const Ray &r, const QVector3D &outward_normal) {
     front_face = QVector3D::dotProduct(r.direction(), outward_normal) < 0.;
-    normal = front_face ? outward_normal :-outward_normal;
+    normal = front_face ? outward_normal : -outward_normal;
   }
 };
 
@@ -31,8 +31,7 @@ public:
   Hittable() = default;
   virtual ~Hittable() = default;
 
-
-  virtual std::optional<HitRecord> hit(const Ray& r) const = 0;
+  virtual std::optional<HitRecord> hit(const Ray &r) const = 0;
 };
 
 #endif // FIT_GL_HITTABLE_H
