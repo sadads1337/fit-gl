@@ -4,6 +4,7 @@
 #include <QScreen>
 #include <iostream>
 
+
 void GLWidget::initializeGL()
 {
   aspect = 4.0/3.0;
@@ -15,12 +16,13 @@ void GLWidget::initializeGL()
                                     ":/Shaders/fragmentShader.glsl");
   program_->link();
 
-  initCube(0.25, 3);
+  initCube(0.25, 20);
 
-  posAttr_ = program_->attributeLocation("posAttr");
+  posAttr_ = program_->attributeLocation("position");
+
+  normAttr_ =  program_->attributeLocation("normal");
   assert(posAttr_ != -1);
-  matrixUniform_ = program_->uniformLocation("matrix");
-  assert(matrixUniform_ != -1);
+
 
     // Enable Z-test    
     glEnable(GL_DEPTH_TEST);
@@ -48,21 +50,33 @@ void GLWidget::paintGL() {
   for (int i = 0; i < 3; i++)
     for (int j = 0; j < 3; j++)
     {
-  QMatrix4x4 perspective_matrix;
-  perspective_matrix.perspective(60.0f, aspect, 0.1f, 100.0f);
-  perspective_matrix.translate(-0.5+i/2., -0.5+j/2., -2);
-  perspective_matrix.rotate(100.0 * frame_ / screen()->refreshRate(), rotationAxis);
-  program_->setUniformValue(matrixUniform_, perspective_matrix);
+      QMatrix4x4 perspective_matrix;
+      perspective_matrix.perspective(60.0f, aspect, 0.1f, 100.0f);
+      program_->setUniformValue("projection", perspective_matrix);
+
+      QMatrix4x4 view_matrix;
+      view_matrix.setToIdentity();
+      program_->setUniformValue("view", view_matrix);
+
+      QMatrix4x4 model_matrix;
+      model_matrix.translate(-0.5+i/2., -0.5+j/2., -2);
+      model_matrix.rotate(100.0 * frame_ / screen()->refreshRate(), rotationAxis);
+      program_->setUniformValue("model", model_matrix);
+
+
 
   program_->setUniformValue("col", square_color);
 
-  program_->setAttributeBuffer(posAttr_, GL_FLOAT, 0, 3);
+  program_->setAttributeBuffer(posAttr_, GL_FLOAT, 0, 3, sizeof(VertexData));
   glEnableVertexAttribArray(posAttr_);
+  program_->setAttributeBuffer(normAttr_, GL_FLOAT, sizeof(QVector3D), 3,sizeof(VertexData));
+  glEnableVertexAttribArray(normAttr_);
 
 
  glDrawElements(GL_TRIANGLE_STRIP, GLsizei(indices.size()), GL_UNSIGNED_SHORT, nullptr);
     }
   glDisableVertexAttribArray(posAttr_);
+  glDisableVertexAttribArray(normAttr_);
 
   program_->release();
 
@@ -109,18 +123,21 @@ void GLWidget::initCube(GLfloat halfWidth, unsigned int N = 1) {
     for (auto y = 0U; y < N + 1; ++y) {
       for (auto x = 0U; x < N + 1; ++x) {
         auto position = QVector3D{0, 0, 0};
-        
-        if (face >=3) position[fixedPos] = halfWidth;
-        else  position[fixedPos] = -1 * halfWidth  ;
-        position[varPos1] = (x * 2.0F / N - 1.0F) * halfWidth;
-        position[varPos2] = (y * 2.0F / N - 1.0F) * position[fixedPos];
+        auto normal = QVector3D{0, 0, 0};
 
-        vertices.emplace_back(position);
+        normal[fixedPos] = static_cast<int>(face / 3 * 2) - 1;
+
+        position[fixedPos] = normal[fixedPos] * halfWidth;
+        position[varPos1] = (x * 2.0F / N - 1.0F) * halfWidth;
+        position[varPos2] =
+            (y * 2.0F / N - 1.0F) * halfWidth * normal[fixedPos];
+
+        vertices.emplace_back(VertexData{position, normal});
       }
     }
     VBO.create();
     VBO.bind();
-    VBO.allocate(vertices.data(), int(vertices.size() * sizeof(QVector3D)));
+    VBO.allocate(vertices.data(), int(vertices.size() * sizeof(VertexData)));
 
 
     // Add indices

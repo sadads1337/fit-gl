@@ -1,8 +1,12 @@
 #version 120
 
-attribute highp vec4 posAttr;
-uniform highp mat4 matrix;
+attribute highp vec3 position;
+attribute highp vec3 normal;
+
+uniform highp mat4 projection;
+uniform highp mat4 view;
+uniform highp mat4 model;
 
 void main() {
-    gl_Position = matrix * posAttr;
+    gl_Position = projection * view * model * vec4(position,1.0F);
 }

@@ -7,6 +7,12 @@
 #include <QBasicTimer>
 #include <vector>
 
+struct VertexData
+{
+  QVector3D position;
+  QVector3D color;
+};
+
 constexpr int FPS_COUNT = 60;
 
 class GLWidget final : public QOpenGLWidget, protected QOpenGLFunctions{
@@ -32,7 +38,7 @@ protected:
 private:
   // Attributes and uniforms handlers.
   GLint posAttr_ = 0;
-  GLint matrixUniform_ = 0;
+  GLint normAttr_ = 0;
   QVector4D square_color{0.5, 0.5, 0.5, 1.0};
 
   // Shader program handler.
@@ -53,7 +59,7 @@ private:
   double aspect;
   QBasicTimer FPS_timer; // refresh rate in ms
 
-  std::vector<QVector3D> vertices;
+  std::vector<VertexData> vertices;
   std::vector<GLushort> indices;
 
   GLushort lightMask = 0b0111;
