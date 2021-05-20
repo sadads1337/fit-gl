@@ -1,9 +1,9 @@
-#include <QWidget>
-#include <QSlider>
-#include <QLabel>
-#include <QHBoxLayout>
-#include <QSpinBox>
 #include "GLWidget.hpp"
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QSlider>
+#include <QSpinBox>
+#include <QWidget>
 
 #pragma once
 class WidgetUI : public QWidget {
@@ -16,8 +16,7 @@ private:
   auto createToolBar();
 
   QSpinBox *factorBox;
-  QSlider  *slider;
+  QSlider *slider;
   GLWidget *cube;
   QHBoxLayout *toolBar;
-
 };

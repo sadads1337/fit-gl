@@ -1,7 +1,7 @@
 
+#include "WidgetUI.h"
 #include <QApplication>
 #include <QSurfaceFormat>
-#include "WidgetUI.h"
 
 int main(int argc, char **argv) {
   QApplication app(argc, argv);
@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
   window.resize(640, 480);
   window.show();
 
-//  window.setAnimated(true);
+  //  window.setAnimated(true);
 
   return app.exec();
 }

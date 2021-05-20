@@ -1,6 +1,5 @@
 #include "WidgetUI.h"
 
-
 auto WidgetUI::createToolBar() {
   toolBar = new QHBoxLayout(this);
 
@@ -20,8 +19,8 @@ auto WidgetUI::createToolBar() {
   toolBar->addWidget(slider);
 }
 
-WidgetUI::WidgetUI(QWidget* parent):QWidget(parent){
-  QVBoxLayout* vbox = new QVBoxLayout(this);
+WidgetUI::WidgetUI(QWidget *parent) : QWidget(parent) {
+  QVBoxLayout *vbox = new QVBoxLayout(this);
 
   createToolBar();
   vbox->addLayout(toolBar);

@@ -1,15 +1,15 @@
 #pragma once
 
+#include <QBasicTimer>
 #include <QOpenGLBuffer>
+#include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLWidget>
-#include <QOpenGLFunctions>
-#include <QBasicTimer>
 #include <vector>
 
 constexpr int FPS_COUNT = 60;
 
-class GLWidget final : public QOpenGLWidget, protected QOpenGLFunctions{
+class GLWidget final : public QOpenGLWidget, protected QOpenGLFunctions {
 public:
   void initializeGL() override;
   void paintGL() override;
@@ -25,7 +25,6 @@ protected:
   void timerEvent(QTimerEvent *e) override;
   void initCube(GLfloat halfWidth, std::uint32_t N);
 
-
 private:
   // Attributes and uniforms handlers.
   GLint posAttr_ = 0;
@@ -40,7 +39,7 @@ private:
 
   QOpenGLShaderProgram program;
 
-   // Create 2 Buffer objects
+  // Create 2 Buffer objects
   QOpenGLBuffer IBO{QOpenGLBuffer::IndexBuffer};
   QOpenGLBuffer VBO{QOpenGLBuffer::VertexBuffer};
 
@@ -53,5 +52,4 @@ private:
   std::vector<QVector3D> vertices;
   std::vector<GLushort> indices;
   GLfloat morphFactor;
-
 };
