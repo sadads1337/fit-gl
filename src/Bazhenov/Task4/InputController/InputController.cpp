@@ -2,39 +2,31 @@
 
 namespace Bazhenov {
 
-QQuaternion InputController::getRotation() const noexcept {
-  return rotation_;
-}
+QQuaternion InputController::getRotation() const noexcept { return rotation_; }
 
-QColor InputController::getColor() const noexcept {
-  return color_;
-}
+QColor InputController::getColor() const noexcept { return color_; }
 
 InputController::Shader InputController::getShader() const noexcept {
   return currentShader_;
 }
 
-bool InputController::morphingIsOn() const noexcept {
-  return morphingOn_;
-}
+bool InputController::morphingIsOn() const noexcept { return morphingOn_; }
 
-bool InputController::lightIsOrbiting() const noexcept {
-  return orbitingOn_;
-}
+bool InputController::lightIsOrbiting() const noexcept { return orbitingOn_; }
 
-void InputController::mousePressEvent(QMouseEvent *event){
+void InputController::mousePressEvent(QMouseEvent *event) {
   mousePosition_ = event->pos();
 
   pressedMouseButtons_.setFlag(event->button(), true);
 }
 
-void InputController::mouseMoveEvent(QMouseEvent *event){
+void InputController::mouseMoveEvent(QMouseEvent *event) {
   if (pressedMouseButtons_.testFlag(Qt::LeftButton)) {
     handleMove(event->pos());
   }
 }
 
-void InputController::mouseReleaseEvent(QMouseEvent *event){
+void InputController::mouseReleaseEvent(QMouseEvent *event) {
   if (pressedMouseButtons_.testFlag(Qt::LeftButton)) {
     handleMove(event->pos());
   }
@@ -42,11 +34,11 @@ void InputController::mouseReleaseEvent(QMouseEvent *event){
   pressedMouseButtons_.setFlag(event->button(), false);
 }
 
-void InputController::keyPressEvent(QKeyEvent *event){
+void InputController::keyPressEvent(QKeyEvent *event) {
   pressedKeys_.insert(static_cast<Qt::Key>(event->key()));
 }
 
-void InputController::keyReleaseEvent(QKeyEvent *event){
+void InputController::keyReleaseEvent(QKeyEvent *event) {
   pressedKeys_.erase(static_cast<Qt::Key>(event->key()));
 }
 
@@ -89,4 +81,4 @@ void InputController::handleMove(QPoint newPosition) {
   mousePosition_ = newPosition;
 }
 
-}
+} // namespace Bazhenov

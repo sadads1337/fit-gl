@@ -1,14 +1,14 @@
 #pragma once
 
-#include <unordered_set>
 #include <memory>
+#include <unordered_set>
 
-#include <QMouseEvent>
-#include <QKeyEvent>
-#include <QQuaternion>
-#include <QPoint>
 #include <QColorDialog>
 #include <QFlags>
+#include <QKeyEvent>
+#include <QMouseEvent>
+#include <QPoint>
+#include <QQuaternion>
 
 namespace Bazhenov {
 
@@ -51,4 +51,4 @@ private:
   bool newColorSelected_ = false;
 };
 
-}
+} // namespace Bazhenov
