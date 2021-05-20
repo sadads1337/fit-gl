@@ -1,6 +1,6 @@
+#include "SquareWindow.hpp"
 #include <QApplication>
 #include <QSurfaceFormat>
-#include "SquareWindow.hpp"
 
 int main(int argc, char **argv) {
   QApplication app(argc, argv);
@@ -11,8 +11,8 @@ int main(int argc, char **argv) {
   format.setDepthBufferSize(24);
   QSurfaceFormat::setDefaultFormat(format);
 
-    auto const window = std::make_shared<fgl::SquareWindow>();
-    window->showNormal();
+  auto const window = std::make_shared<fgl::SquareWindow>();
+  window->showNormal();
 
   return app.exec();
 }
