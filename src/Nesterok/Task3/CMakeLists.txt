@@ -4,8 +4,8 @@ set(Task3_SRCS
         GLWidget.hpp
 
         shaders.qrc
-        Shaders/cube.fs
-        Shaders/cube.vs
+        Shaders/fragmentShader.glsl
+        Shaders/vertexShader.glsl
         WidgetUI.cpp WidgetUI.h)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)

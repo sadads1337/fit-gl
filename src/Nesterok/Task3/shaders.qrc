@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>Shaders/cube.fs</file>
-        <file>Shaders/cube.vs</file>
+        <file>Shaders/fragmentShader.glsl</file>
+        <file>Shaders/vertexShader.glsl</file>
     </qresource>
 </RCC>

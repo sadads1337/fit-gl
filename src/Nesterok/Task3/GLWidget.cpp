@@ -16,12 +16,12 @@ void GLWidget::initializeGL()
   initializeOpenGLFunctions();
   program_ = std::make_unique<QOpenGLShaderProgram>(this);
   program_->addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                    ":/Shaders/cube.vs");
+                                    ":/Shaders/vertexShader.glsl");
   program_->addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                    ":/Shaders/cube.fs");
+                                    ":/Shaders/fragmentShader.glsl");
   program_->link();
 
-  initCube(0.5, 3);
+  initCube(0.25, 3);
 
   posAttr_ = program_->attributeLocation("posAttr");
   assert(posAttr_ != -1);
@@ -50,23 +50,24 @@ void GLWidget::paintGL() {
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  program_->bind();
-
+ program_->bind();
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+    {
   QMatrix4x4 perspective_matrix;
   perspective_matrix.perspective(60.0f, aspect, 0.1f, 100.0f);
-  perspective_matrix.translate(0, 0, -2);
+  perspective_matrix.translate(-0.5+i/2., -0.5+j/2., -2);
   perspective_matrix.rotate(100.0 * frame_ / screen()->refreshRate(), rotationAxis);
   program_->setUniformValue(matrixUniform_, perspective_matrix);
 
   program_->setUniformValue("col", square_color);
-  program_->setUniformValue("morphFactor", morphFactor);
 
   program_->setAttributeBuffer(posAttr_, GL_FLOAT, 0, 3);
   glEnableVertexAttribArray(posAttr_);
 
 
- glDrawElements(GL_LINE_STRIP, GLsizei(indices.size()), GL_UNSIGNED_SHORT, nullptr);
-
+ glDrawElements(GL_TRIANGLE_STRIP, GLsizei(indices.size()), GL_UNSIGNED_SHORT, nullptr);
+    }
   glDisableVertexAttribArray(posAttr_);
 
   program_->release();
@@ -144,12 +145,4 @@ void GLWidget::initCube(GLfloat halfWidth, unsigned int N = 1) {
   IBO.bind();
   IBO.allocate(indices.data(), int(indices.size() * sizeof(GLushort)));
 
-}
-void GLWidget::changeN(int N) {
-  vertices.clear();
-  indices.clear();
-  initCube(0.5, N);
-}
-void GLWidget::changeFactor(int MF) {
-  morphFactor = static_cast<double>(MF) / 100.0;
 }

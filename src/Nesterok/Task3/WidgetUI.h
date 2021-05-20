@@ -1,8 +1,6 @@
 #include <QWidget>
-#include <QSlider>
-#include <QLabel>
 #include <QHBoxLayout>
-#include <QSpinBox>
+#include <QRadioButton>
 #include "GLWidget.hpp"
 
 #pragma once
@@ -14,10 +12,10 @@ public:
 
 private:
   auto createToolBar();
-
-  QSpinBox *factorBox;
-  QSlider  *slider;
-  GLWidget *cube;
   QHBoxLayout *toolBar;
+  QRadioButton* GouraundButton;
+  QRadioButton* PhongButton;
+  GLWidget* cube;
+
 
 };

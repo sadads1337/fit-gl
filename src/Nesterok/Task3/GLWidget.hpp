@@ -30,7 +30,7 @@ private:
   // Attributes and uniforms handlers.
   GLint posAttr_ = 0;
   GLint matrixUniform_ = 0;
-  QVector4D square_color{1.0, 1.0, 1.0, 1.0};
+  QVector4D square_color{0.5, 0.5, 0.5, 1.0};
 
   // Shader program handler.
   std::unique_ptr<QOpenGLShaderProgram> program_ = nullptr;

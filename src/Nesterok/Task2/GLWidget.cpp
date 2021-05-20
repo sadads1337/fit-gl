@@ -16,9 +16,9 @@ void GLWidget::initializeGL()
   initializeOpenGLFunctions();
   program_ = std::make_unique<QOpenGLShaderProgram>(this);
   program_->addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                    ":/Shaders/cube.vs");
+                                    ":/Shaders/vertexShader.glsl");
   program_->addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                    ":/Shaders/cube.fs");
+                                    ":/Shaders/fragmentShader.glsl");
   program_->link();
 
   initCube(0.5, 3);
