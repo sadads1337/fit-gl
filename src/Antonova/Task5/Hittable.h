@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Ray.h"
 #include "Hit.h"
-#include <utility>
-#include <optional>
+#include "Ray.h"
 #include <QVector4D>
+#include <optional>
+#include <utility>
 
 class Hittable {
 public:
-    Hittable() = default;
-    virtual ~Hittable() = default;
-    virtual std::optional<Hit> intersect(const Ray& ray) const = 0;
+  Hittable() = default;
+  virtual ~Hittable() = default;
+  virtual std::optional<Hit> intersect(const Ray &ray) const = 0;
 };
