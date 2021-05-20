@@ -7,10 +7,10 @@
 #include <QKeyEvent>
 #include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
+#include <QOpenGLTexture>
 #include <QVector2D>
 #include <QVector3D>
 #include <memory>
-#include <QOpenGLTexture>
 
 namespace fgl {
 
