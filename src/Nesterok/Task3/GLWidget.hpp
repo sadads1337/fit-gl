@@ -55,7 +55,7 @@ private:
 
   // Variables for rotation
   QVector2D lastPos{0., 0.};
-  QVector3D rotationAxis{0., 0., 1.};
+  QVector3D rotationAxis{0.5, 0.5, 0};
   double aspect;
   QBasicTimer FPS_timer; // refresh rate in ms
 

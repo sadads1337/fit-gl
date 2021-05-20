@@ -63,17 +63,18 @@ void GLWidget::paintGL() {
       model_matrix.rotate(100.0 * frame_ / screen()->refreshRate(), rotationAxis);
       program_->setUniformValue("model", model_matrix);
 
+      program_->setUniformValue("col", square_color);
+      program_->setUniformValue("mask", lightMask);
+      program_->setUniformValue("lightPos", QVector3D(0.0, 0.0, 0.0));
+      program_->setUniformValue("normal_matrix", model_matrix.normalMatrix());
+
+      program_->setAttributeBuffer(posAttr_, GL_FLOAT, 0, 3, sizeof(VertexData));
+      glEnableVertexAttribArray(posAttr_);
+      program_->setAttributeBuffer(normAttr_, GL_FLOAT, sizeof(QVector3D), 3,sizeof(VertexData));
+      glEnableVertexAttribArray(normAttr_);
 
 
-  program_->setUniformValue("col", square_color);
-
-  program_->setAttributeBuffer(posAttr_, GL_FLOAT, 0, 3, sizeof(VertexData));
-  glEnableVertexAttribArray(posAttr_);
-  program_->setAttributeBuffer(normAttr_, GL_FLOAT, sizeof(QVector3D), 3,sizeof(VertexData));
-  glEnableVertexAttribArray(normAttr_);
-
-
- glDrawElements(GL_TRIANGLE_STRIP, GLsizei(indices.size()), GL_UNSIGNED_SHORT, nullptr);
+      glDrawElements(GL_TRIANGLE_STRIP, GLsizei(indices.size()), GL_UNSIGNED_SHORT, nullptr);
     }
   glDisableVertexAttribArray(posAttr_);
   glDisableVertexAttribArray(normAttr_);
