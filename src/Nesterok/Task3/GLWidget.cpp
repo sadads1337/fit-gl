@@ -67,6 +67,7 @@ void GLWidget::paintGL() {
       program_->setUniformValue("mask", lightMask);
       program_->setUniformValue("lightPos", QVector3D(0.0, 0.0, 0.0));
       program_->setUniformValue("normal_matrix", model_matrix.normalMatrix());
+      program_->setUniformValue("viewPos", QVector3D(-1, 0.0, 0.0));
 
       program_->setAttributeBuffer(posAttr_, GL_FLOAT, 0, 3, sizeof(VertexData));
       glEnableVertexAttribArray(posAttr_);
