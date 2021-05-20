@@ -2,16 +2,10 @@
 #include <QColorDialog>
 #include <QMouseEvent>
 #include <QScreen>
-#include <array>
 #include <iostream>
-namespace {
-
-} // namespace
-
 
 void GLWidget::initializeGL()
 {
-  morphFactor = 0;
   aspect = 4.0/3.0;
   initializeOpenGLFunctions();
   program_ = std::make_unique<QOpenGLShaderProgram>(this);
@@ -146,3 +140,12 @@ void GLWidget::initCube(GLfloat halfWidth, unsigned int N = 1) {
   IBO.allocate(indices.data(), int(indices.size() * sizeof(GLushort)));
 
 }
+void GLWidget::changeMask(bool state, unsigned short N) {
+  if (state) lightMask |= (1 << N);
+  else lightMask &= ~(1 << N);
+  std::cout << lightMask << '\n';
+}
+void GLWidget::changeType(bool state) {changeMask (state, 3);}
+void GLWidget::changeAmbient(bool state) {changeMask (state, 2);}
+void GLWidget::changeDiffuse(bool state) {changeMask (state, 1);}
+void GLWidget::changeSpecular(bool state) {changeMask (state, 0);}

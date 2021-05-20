@@ -15,8 +15,10 @@ public:
   void paintGL() override;
   void resizeGL(int width, int height) override;
 
-  void changeN(int N);
-  void changeFactor(int N);
+  void changeType(bool state);
+  void changeAmbient(bool state);
+  void changeDiffuse(bool state);
+  void changeSpecular(bool state);
 
 protected:
   void mousePressEvent(QMouseEvent *event) override;
@@ -24,6 +26,7 @@ protected:
   void mouseMoveEvent(QMouseEvent *event) override;
   void timerEvent(QTimerEvent *e) override;
   void initCube(GLfloat halfWidth, std::uint32_t N);
+  void changeMask(bool state, unsigned short N);
 
 
 private:
@@ -52,6 +55,7 @@ private:
 
   std::vector<QVector3D> vertices;
   std::vector<GLushort> indices;
-  GLfloat morphFactor;
+
+  GLushort lightMask = 0b0111;
 
 };

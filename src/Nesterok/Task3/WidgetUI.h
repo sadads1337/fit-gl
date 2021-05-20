@@ -1,6 +1,7 @@
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QRadioButton>
+#include <QCheckBox>
 #include "GLWidget.hpp"
 
 #pragma once
@@ -15,6 +16,11 @@ private:
   QHBoxLayout *toolBar;
   QRadioButton* GouraundButton;
   QRadioButton* PhongButton;
+
+  QCheckBox* ambientBox;
+  QCheckBox* diffuseBox;
+  QCheckBox* specularBox;
+
   GLWidget* cube;
 
 
