@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Textures/glyphs.jpg</file>
+        <file>Textures/glyphs-normal.jpg</file>
+    </qresource>
+</RCC>
