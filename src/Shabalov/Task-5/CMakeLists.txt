@@ -8,7 +8,7 @@ add_executable(ShabalovTask5
         textures.qrc
         Plane.cpp
         Plane.h
-)
+        )
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
