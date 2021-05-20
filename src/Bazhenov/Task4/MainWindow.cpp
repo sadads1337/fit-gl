@@ -1,8 +1,8 @@
 #include "MainWindow.hpp"
 
 #include <algorithm>
-#include <vector>
 #include <cmath>
+#include <vector>
 
 #include <QOpenGLShader>
 #include <QVector4D>
@@ -72,13 +72,13 @@ void MainWindow::initCube(GLfloat halfWidth, std::uint32_t factor) {
         indices.append(faceIndexOffset + rowIndexOffset + x);
         indices.append(faceIndexOffset + rowIndexOffset + x + (factor + 1));
       }
-      indices.append(faceIndexOffset + rowIndexOffset + factor +
-                        (factor + 1));
+      indices.append(faceIndexOffset + rowIndexOffset + factor + (factor + 1));
     }
   }
 
   arrayBuf_.bind();
-  arrayBuf_.allocate(vertices.constData(), vertices.size() * sizeof(VertexData));
+  arrayBuf_.allocate(vertices.constData(),
+                     vertices.size() * sizeof(VertexData));
 
   indexBuf_.bind();
   indexBuf_.allocate(indices.constData(), indices.size() * sizeof(GLuint));
@@ -88,15 +88,19 @@ void MainWindow::initShaders() {
   program_->removeAllShaders();
 
   if (inputController_->getShader() == InputController::Shader::SHADER_PHONG) {
-    if (!program_->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/Shaders/phong_vertex.glsl"))
+    if (!program_->addShaderFromSourceFile(QOpenGLShader::Vertex,
+                                           ":/Shaders/phong_vertex.glsl"))
       close();
-    if (!program_->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/Shaders/phong_fragment.glsl"))
+    if (!program_->addShaderFromSourceFile(QOpenGLShader::Fragment,
+                                           ":/Shaders/phong_fragment.glsl"))
       close();
-  }
-  else if (inputController_->getShader() == InputController::Shader::SHADER_GOURAUD) {
-    if (!program_->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/Shaders/gouraud_vertex.glsl"))
+  } else if (inputController_->getShader() ==
+             InputController::Shader::SHADER_GOURAUD) {
+    if (!program_->addShaderFromSourceFile(QOpenGLShader::Vertex,
+                                           ":/Shaders/gouraud_vertex.glsl"))
       close();
-    if (!program_->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/Shaders/gouraud_fragment.glsl"))
+    if (!program_->addShaderFromSourceFile(QOpenGLShader::Fragment,
+                                           ":/Shaders/gouraud_fragment.glsl"))
       close();
   }
 
@@ -107,8 +111,10 @@ void MainWindow::initShaders() {
 }
 
 void MainWindow::initTextures() {
-  texture_ = std::make_unique<QOpenGLTexture>(QImage(":/Textures/glyphs.jpg").mirrored());
-  normalMap_ = std::make_unique<QOpenGLTexture>(QImage(":/Textures/glyphs-normal.jpg").mirrored());
+  texture_ = std::make_unique<QOpenGLTexture>(
+      QImage(":/Textures/glyphs.jpg").mirrored());
+  normalMap_ = std::make_unique<QOpenGLTexture>(
+      QImage(":/Textures/glyphs-normal.jpg").mirrored());
 
   texture_->setMinificationFilter(QOpenGLTexture::Nearest);
   normalMap_->setMinificationFilter(QOpenGLTexture::Nearest);
@@ -173,7 +179,7 @@ void MainWindow::render() {
 
   QMatrix4x4 projection_matrix;
   projection_matrix.perspective(VERTICAL_ANGLE, (GLfloat)width() / height(),
-                         NEAR_PLANE, FAR_PLANE);
+                                NEAR_PLANE, FAR_PLANE);
   program_->setUniformValue("projection_matrix", projection_matrix);
 
   auto time = static_cast<GLfloat>(frame_);
@@ -186,8 +192,7 @@ void MainWindow::render() {
     auto light_position = QVector3D{9.0F * std::sin(time / 150.0F), 0.0F,
                                     -5.0F + 9.0F * std::cos(time / 150.0F)};
     program_->setUniformValue("light_position", light_position);
-  }
-  else
+  } else
     program_->setUniformValue("light_position", QVector3D{6.5F, 0.0F, 1.5F});
 
   program_->setUniformValue("light_power", 1.0F);
@@ -201,27 +206,32 @@ void MainWindow::render() {
   int offset = 0;
   auto vertex_position = program_->attributeLocation("vertex_position");
   program_->enableAttributeArray(vertex_position);
-  program_->setAttributeBuffer(vertex_position, GL_FLOAT, offset, 3, sizeof(VertexData));
+  program_->setAttributeBuffer(vertex_position, GL_FLOAT, offset, 3,
+                               sizeof(VertexData));
 
   offset += sizeof(QVector3D);
   auto vertex_normal = program_->attributeLocation("vertex_normal");
   program_->enableAttributeArray(vertex_normal);
-  program_->setAttributeBuffer(vertex_normal, GL_FLOAT, offset, 3, sizeof(VertexData));
+  program_->setAttributeBuffer(vertex_normal, GL_FLOAT, offset, 3,
+                               sizeof(VertexData));
 
   offset += sizeof(QVector3D);
   auto vertex_texture = program_->attributeLocation("vertex_texture");
   program_->enableAttributeArray(vertex_texture);
-  program_->setAttributeBuffer(vertex_texture, GL_FLOAT, offset, 2, sizeof(VertexData));
+  program_->setAttributeBuffer(vertex_texture, GL_FLOAT, offset, 2,
+                               sizeof(VertexData));
 
   offset += sizeof(QVector2D);
   auto vertex_tangent = program_->attributeLocation("vertex_tangent");
   program_->enableAttributeArray(vertex_tangent);
-  program_->setAttributeBuffer(vertex_tangent, GL_FLOAT, offset, 3, sizeof(VertexData));
+  program_->setAttributeBuffer(vertex_tangent, GL_FLOAT, offset, 3,
+                               sizeof(VertexData));
 
   offset += sizeof(QVector3D);
   auto vertex_bitangent = program_->attributeLocation("vertex_bitangent");
   program_->enableAttributeArray(vertex_bitangent);
-  program_->setAttributeBuffer(vertex_bitangent, GL_FLOAT, offset, 3, sizeof(VertexData));
+  program_->setAttributeBuffer(vertex_bitangent, GL_FLOAT, offset, 3,
+                               sizeof(VertexData));
 
   glDrawElements(GL_QUAD_STRIP, indexBuf_.size(), GL_UNSIGNED_INT, nullptr);
 
