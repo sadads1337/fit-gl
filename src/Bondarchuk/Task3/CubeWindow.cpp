@@ -54,7 +54,7 @@ std::array<VertexData, 24u> vertices{{
     VertexData{{0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
     VertexData{{0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
 }};
-std::array<GLushort, 36u> indexes{
+constexpr std::array<GLushort, 36u> indexes{
     {0,  3,  6,  6,  3,  9, 2,  7,  13, 13, 7,  23, 4,  1,  17, 17, 1,  14,
      19, 10, 16, 16, 10, 5, 18, 15, 21, 21, 15, 12, 11, 20, 8,  8,  20, 22}};
 
