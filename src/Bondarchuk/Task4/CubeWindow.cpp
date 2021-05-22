@@ -178,7 +178,7 @@ constexpr std::array<VertexData, 24u> vertices{{
     }
 };
 
-std::array<GLushort, 36u> indixes{
+constexpr std::array<GLushort, 36u> indixes{
     {0,  3,  6,  6,  3,  9, 2,  7,  13, 13, 7,  23, 4,  1,  17, 17, 1,  14,
      19, 10, 16, 16, 10, 5, 18, 15, 21, 21, 15, 12, 11, 20, 8,  8,  20, 22}
 };
