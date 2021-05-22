@@ -23,7 +23,7 @@ struct VertexData {
   QVector3D bitangent;
 };
 
-std::array<VertexData, 24u> vertices{{
+constexpr std::array<VertexData, 24u> vertices{{
     VertexData{{0.5f, 0.5f, 0.5f},
                {1.0f, 0.0f, 1.0f},
                {0.0f, 0.0f, 1.0f},
