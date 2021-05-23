@@ -1,10 +1,10 @@
 #version 120
 
-attribute highp vec4 posAttr;
-attribute highp vec3 norm;
+attribute vec4 posAttr;
+attribute vec3 norm;
 
-uniform highp mat4 matrix;
-uniform highp int lightModel;
+uniform mat4 matrix;
+uniform int lightModel;
 uniform highp mat4 model;
 uniform highp mat3 normal_matrix;
 uniform highp vec3 lightColor = vec3(1.0f, 1.0f, 1.0f);
