@@ -44,8 +44,8 @@ private:
   GLint textCoord_ = 0;
   GLint matrixUniform_ = 0;
   GLint matrixUniform2_ = 0;
-  QOpenGLTexture *texture = nullptr;
-  QOpenGLTexture *normal_map = nullptr;
+  std::shared_ptr<QOpenGLTexture> texture = nullptr;
+  std::shared_ptr<QOpenGLTexture> normal_map = nullptr;
 
   // Shader program handler.
   std::unique_ptr<QOpenGLShaderProgram> program_ = nullptr;
