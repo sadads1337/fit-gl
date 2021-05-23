@@ -32,10 +32,10 @@ void main() {
         vec4 diffuse = diffuseAngle * lightColor;
 
         // Specular
-        float specularStrength = 0.5;
+        float specularStrength = 1.0;
         vec3 viewDir = normalize(viewPos - v_position);
         vec3 reflectDir = reflect(-lightDir, v_normal);
-        float specularAngle = pow(max(dot(viewDir, reflectDir), 0.0), 8192);
+        float specularAngle = pow(max(dot(viewDir, reflectDir), 0.0), 2048);
         vec4 specular = specularStrength * specularAngle * lightColor;
 
         gl_FragColor = (ambient + diffuse + specular) * qt_color_set;
