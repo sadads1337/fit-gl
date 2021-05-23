@@ -45,6 +45,6 @@ void main() {
         float specularAngle = pow(max(dot(viewDir, reflectDir), 0.0), 8192);
         vec4 specular = specularStrength * specularAngle * lightColor;
 
-        v_lightColor = ambient/* + diffuse*/ + specular;
+        v_lightColor = ambient + diffuse + specular;
     };
 }
