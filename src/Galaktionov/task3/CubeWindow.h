@@ -42,7 +42,6 @@ private:
   GLint vertex_location;
   GLint normal;
   GLint matrixUniform_;
-  GLint modelUniform_;
 
   QVector4D changeColor{1.0f, 1.0f, 0.0f, 1};
   QVector2D mousePressPosition_{0., 0.};
