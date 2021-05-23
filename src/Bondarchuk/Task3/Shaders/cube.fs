@@ -6,7 +6,7 @@ uniform vec4 res;
 uniform vec3 viewDir;
 uniform float spec;
 uniform vec3 specular;
-uniform highp int lightModel;
+uniform int lightModel;
 
 varying vec3 normal;
 varying vec3 fragPos; 
