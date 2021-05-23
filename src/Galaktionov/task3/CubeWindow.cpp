@@ -107,7 +107,7 @@ void CubeWindow::render()//paint
         QMatrix4x4 model_view_matrix;
         model_view_matrix.perspective(60.0f, (float)width() / height(), 0.1f, 100.0f);
         model_view_matrix.translate(cubes_arr[i]);
-        if (i == 9) model_view_matrix.rotate(40.0 * frame_ / screen()->refreshRate(), QVector3D(5.0f,-3.0f,1.0f).normalized());//center
+        if (i == 9) model_view_matrix.rotate(312.5, QVector3D(5.9f,-3.2f,1.0f).normalized());//center
         else model_view_matrix.rotate(10.0 * (i + 1) * frame_ / screen()->refreshRate(), (rotationAxis + QVector3D(1 + i, 2 - i, 3 + i).normalized()).normalized());//other
         model_view_matrix.scale(0.3f, 0.3f, 0.3f);
 
