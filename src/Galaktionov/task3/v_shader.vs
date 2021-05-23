@@ -39,10 +39,10 @@ void main() {
         vec4 diffuse = diffuseAngle * lightColor;
 
         // Specular
-        float specularStrength = 0.5;
+        float specularStrength = 1.0;
         vec3 viewDir = normalize(viewPos - position);
         vec3 reflectDir = reflect(-lightDir, normal);
-        float specularAngle = pow(max(dot(viewDir, reflectDir), 0.0), 8192);
+        float specularAngle = pow(max(dot(viewDir, reflectDir), 0.0), 4);
         vec4 specular = specularStrength * specularAngle * lightColor;
 
         v_lightColor = ambient + diffuse + specular;
