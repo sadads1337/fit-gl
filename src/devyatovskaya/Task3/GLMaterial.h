@@ -2,6 +2,7 @@
 #include "GLTexture.h"
 #include <QColor>
 #include <QOpenGLShaderProgram>
+#include <memory>
 #include <utility>
 
 struct GLMaterial {
