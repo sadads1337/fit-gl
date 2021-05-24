@@ -73,12 +73,12 @@ void CubeWindow::init()//called once
     //vertex buffer
     m_vertex_buffer.create();
     m_vertex_buffer.bind();
-    m_vertex_buffer.allocate(vertexes.data(), vertexes.size() * sizeof(Vertex_Data));
+    m_vertex_buffer.allocate(vertexes.data(), static_cast<std::int32_t>(vertexes.size() * sizeof(Vertex_Data)));
 
     //index buffer
     m_index_buffer.create();
     m_index_buffer.bind();
-    m_index_buffer.allocate(indexes.data(), indexes.size() * sizeof(GLuint));
+    m_index_buffer.allocate(indexes.data(), static_cast<std::int32_t>(indexes.size() * sizeof(GLuint)));
 
     //attributes and uniforms
     matrixUniform_ = m_shader_program.uniformLocation("qt_ModelViewProjectionMatrix");
