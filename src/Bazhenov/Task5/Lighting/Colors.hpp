@@ -16,6 +16,6 @@ inline constexpr QVector3D WHITE{1, 1, 1};
 inline constexpr QVector3D GRAY{0.5, 0.5, 0.5};
 inline constexpr QVector3D BLACK{0, 0, 0};
 
-}
+} // namespace Bazhenov
 
 #endif // FIT_GL_COLORS_HPP

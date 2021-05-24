@@ -1,8 +1,8 @@
 #ifndef FIT_GL_SPHERE_HPP
 #define FIT_GL_SPHERE_HPP
 
-#include "Renderable.hpp"
 #include "../Lighting/Ray.hpp"
+#include "Renderable.hpp"
 
 namespace Bazhenov {
 
@@ -19,6 +19,6 @@ public:
   [[nodiscard]] std::optional<RayHit> getHit(const Ray &ray) const override;
 };
 
-}
+} // namespace Bazhenov
 
 #endif // FIT_GL_SPHERE_HPP

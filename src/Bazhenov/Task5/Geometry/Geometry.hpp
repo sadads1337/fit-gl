@@ -25,6 +25,6 @@ std::optional<float> sphere_intersection(const Ray &ray,
 std::optional<float> plane_intersection(const Ray &ray, const QVector3D &p0,
                                         const QVector3D &n);
 
-}
+} // namespace Bazhenov
 
 #endif // FIT_GL_GEOMETRY_HPP

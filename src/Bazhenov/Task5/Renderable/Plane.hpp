@@ -21,6 +21,6 @@ public:
   [[nodiscard]] std::optional<RayHit> getHit(const Ray &ray) const override;
 };
 
-}
+} // namespace Bazhenov
 
 #endif // FIT_GL_PLANE_HPP

@@ -21,4 +21,4 @@ QVector3D specular(const QVector3D normal, const QVector3D light_dir,
   return strength * spec * light_color;
 }
 
-}
+} // namespace Bazhenov

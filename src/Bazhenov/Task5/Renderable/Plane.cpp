@@ -6,8 +6,7 @@ namespace Bazhenov {
 Plane::Plane(float white_reflectivity, float black_reflectivity,
              QVector3D position, QVector3D normal)
     : white_reflectivity_(white_reflectivity),
-      black_reflectivity_(black_reflectivity),
-      position_(position),
+      black_reflectivity_(black_reflectivity), position_(position),
       normal_(normal.normalized()) {}
 
 std::optional<RayHit> Plane::getHit(const Ray &ray) const {
@@ -28,4 +27,4 @@ std::optional<RayHit> Plane::getHit(const Ray &ray) const {
   return hit;
 }
 
-}
+} // namespace Bazhenov

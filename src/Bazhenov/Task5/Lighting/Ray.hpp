@@ -18,6 +18,6 @@ struct Ray {
   QVector3D direction;
 };
 
-}
+} // namespace Bazhenov
 
 #endif // FIT_GL_RAY_HPP

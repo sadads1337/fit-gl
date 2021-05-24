@@ -1,18 +1,18 @@
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
 add_executable(BazhenovTask5
-    main.cpp
+        main.cpp
 
-    Geometry/Geometry.cpp
-    Geometry/Geometry.hpp
+        Geometry/Geometry.cpp
+        Geometry/Geometry.hpp
 
-    Lighting/Ray.hpp
-    Lighting/Colors.hpp
+        Lighting/Ray.hpp
+        Lighting/Colors.hpp
 
-    Lighting/Light.cpp
-    Lighting/Light.hpp
+        Lighting/Light.cpp
+        Lighting/Light.hpp
 
-    Renderable/Renderable.hpp
+        Renderable/Renderable.hpp
         Renderable/Plane.cpp
         Renderable/Plane.hpp
 
@@ -20,7 +20,7 @@ add_executable(BazhenovTask5
         Renderable/Sphere.hpp)
 
 target_link_libraries(BazhenovTask5
-    PRIVATE
+        PRIVATE
         Qt5::Widgets
         Base
-)
+        )
