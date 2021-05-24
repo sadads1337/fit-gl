@@ -5,12 +5,12 @@
 #include <QImage>
 #include <QPainter>
 
-#include "Lighting/Colors.hpp"
 #include "Geometry/Geometry.hpp"
-#include "Lighting/Ray.hpp"
+#include "Lighting/Colors.hpp"
 #include "Lighting/Light.hpp"
-#include "Renderable/Renderable.hpp"
+#include "Lighting/Ray.hpp"
 #include "Renderable/Plane.hpp"
+#include "Renderable/Renderable.hpp"
 #include "Renderable/Sphere.hpp"
 
 using namespace Bazhenov;
@@ -87,8 +87,8 @@ QVector3D trace(const std::vector<std::shared_ptr<Renderable>> &objects,
   const auto light_dir = (LIGHT_POSITION - hit.position).normalized();
   const auto view_dir = -ray.direction;
   const auto light_color = test_light(objects, {hit.position, light_dir})
-                           ? LIGHT_COLOR
-                           : QVector3D();
+                               ? LIGHT_COLOR
+                               : QVector3D();
   const auto d = diffuse(hit.normal, light_dir, light_color);
   const auto s = specular(hit.normal, light_dir, view_dir, SPECULAR_STRENGTH,
                           SPECULAR_POWER, light_color);
@@ -109,32 +109,41 @@ Ray make_ray(const QVector3D &pos, const float hfov, const float vfov,
 int main() {
   std::vector<std::shared_ptr<Renderable>> objects;
 
-  objects.push_back(std::make_shared<Sphere>(PURPLE, QVector3D{-1.5F, 1.0F, 0.0F}, 1.0F, 0.0F));
-  objects.push_back(std::make_shared<Sphere>(GREEN, QVector3D{2.5F, 1.0F, 0.0F}, 1.0F, 0.85F));
-  objects.push_back(std::make_shared<Sphere>(GREEN, QVector3D{-1.0F, 2.0F, -8.0F}, 0.3F, 0.4F));
-  objects.push_back(std::make_shared<Sphere>(WHITE, QVector3D{-1.0F, 0.5F, 0.8F}, 0.5F, 0.4F));
-  objects.push_back(std::make_shared<Plane>(WHITE_REFLECTIVITY, BLACK_REFLECTIVITY));
-  objects.push_back(std::make_shared<Plane>(WHITE_REFLECTIVITY, BLACK_REFLECTIVITY,
-                                            QVector3D{0.0F, 4.0F, 0.0F},
-                                            QVector3D{0.0F, -1.0F, 0.0F}));
-  objects.push_back(std::make_shared<Plane>(WHITE_REFLECTIVITY, BLACK_REFLECTIVITY,
-                                            QVector3D{-4.0F, 4.0F, 0.0F},
-                                            QVector3D{1.0F, -1.0F, 0.0F}));
+  objects.push_back(std::make_shared<Sphere>(
+      PURPLE, QVector3D{-1.5F, 1.0F, 0.0F}, 1.0F, 0.0F));
+  objects.push_back(std::make_shared<Sphere>(GREEN, QVector3D{2.5F, 1.0F, 0.0F},
+                                             1.0F, 0.85F));
+  objects.push_back(std::make_shared<Sphere>(
+      GREEN, QVector3D{-1.0F, 2.0F, -8.0F}, 0.3F, 0.4F));
+  objects.push_back(std::make_shared<Sphere>(
+      WHITE, QVector3D{-1.0F, 0.5F, 0.8F}, 0.5F, 0.4F));
+  objects.push_back(
+      std::make_shared<Plane>(WHITE_REFLECTIVITY, BLACK_REFLECTIVITY));
+  objects.push_back(std::make_shared<Plane>(
+      WHITE_REFLECTIVITY, BLACK_REFLECTIVITY, QVector3D{0.0F, 4.0F, 0.0F},
+      QVector3D{0.0F, -1.0F, 0.0F}));
+  objects.push_back(std::make_shared<Plane>(
+      WHITE_REFLECTIVITY, BLACK_REFLECTIVITY, QVector3D{-4.0F, 4.0F, 0.0F},
+      QVector3D{1.0F, -1.0F, 0.0F}));
 
   constexpr auto hfov = 60.0F * DEG_TO_RAD;
   constexpr auto vfov = hfov * IMG_HEIGHT / IMG_WIDTH;
-  
+
   QImage result(IMG_WIDTH * 2, IMG_HEIGHT * 2, QImage::Format_ARGB32);
   for (int y = 0; y < result.height(); ++y) {
     for (int x = 0; x < result.width(); ++x) {
-      const auto ray = make_ray(CAMERA_POSITION, hfov, vfov, x, y, result.width(), result.height());
+      const auto ray = make_ray(CAMERA_POSITION, hfov, vfov, x, y,
+                                result.width(), result.height());
       QVector3D color = trace(objects, ray, MAX_REFLECTIONS);
-      result.setPixelColor(x, y, QColor::fromRgbF(color.x(), color.y(), color.z()));
+      result.setPixelColor(x, y,
+                           QColor::fromRgbF(color.x(), color.y(), color.z()));
     }
   }
-  
-  result.scaled(IMG_WIDTH, IMG_HEIGHT, Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
-    .save("result.png");
-  
+
+  result
+      .scaled(IMG_WIDTH, IMG_HEIGHT, Qt::IgnoreAspectRatio,
+              Qt::SmoothTransformation)
+      .save("result.png");
+
   return 0;
 }

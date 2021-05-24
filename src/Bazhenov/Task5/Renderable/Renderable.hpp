@@ -19,6 +19,6 @@ public:
   [[nodiscard]] virtual std::optional<RayHit> getHit(const Ray &ray) const = 0;
 };
 
-}
+} // namespace Bazhenov
 
 #endif // FIT_GL_RENDERABLE_HPP

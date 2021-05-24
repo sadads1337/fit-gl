@@ -40,4 +40,4 @@ std::optional<float> plane_intersection(const Ray &ray, const QVector3D &p0,
   return res;
 }
 
-}
+} // namespace Bazhenov

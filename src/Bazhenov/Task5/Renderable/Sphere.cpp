@@ -23,4 +23,4 @@ std::optional<RayHit> Sphere::getHit(const Ray &ray) const {
   return hit;
 }
 
-}
+} // namespace Bazhenov
