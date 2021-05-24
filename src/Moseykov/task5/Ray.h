@@ -3,14 +3,13 @@
 #include <QVector3D>
 
 class Ray {
-    
+
 public:
-  Ray(const QVector3D& origin, const QVector3D& direction) : orig(origin), direct(direction)  {}
-  [[nodiscard]] QVector3D origin() const  { return orig; }
+  Ray(const QVector3D &origin, const QVector3D &direction)
+      : orig(origin), direct(direction) {}
+  [[nodiscard]] QVector3D origin() const { return orig; }
   [[nodiscard]] QVector3D direction() const { return direct; }
-  [[nodiscard]] QVector3D at(double t) const {
-    return orig + t * direct;
-  }
+  [[nodiscard]] QVector3D at(double t) const { return orig + t * direct; }
 
 private:
   QVector3D orig;
