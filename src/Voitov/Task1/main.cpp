@@ -7,8 +7,9 @@ int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
 
-    geometry::Cube *cube = new geometry::Cube();
-    cube->init(1.0f);
+    geometry::Cube *cubeObject= new geometry::Cube();
+    cubeObject->init(1.0f);
+    std::unique_ptr<geometry::figure> cube(cubeObject);
 
     QSurfaceFormat format;
     format.setSamples(16);
@@ -21,8 +22,5 @@ int main(int argc, char **argv)
     window.show();
 
     window.setAnimated(true);
-
-    app.exec();
-    delete cube;
-    return 0;
+    return app.exec();
 }

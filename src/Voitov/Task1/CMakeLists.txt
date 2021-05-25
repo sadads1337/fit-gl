@@ -1,22 +1,21 @@
-set(SRC
+set(SRC1
     main.cpp
-    figure.cpp
     figure.hpp
     uiwindow.cpp
     uiwindow.h
     cube.cpp
     cube.hpp
+    figureinformation.h
+    figureinformation.cpp
 
     shaders.qrc
-    Shaders/vshader.vs
-    Shaders/fshader.fs
 )
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-add_executable(EXE ${SRC})
+add_executable(VoitovTask1 ${SRC1})
 
-target_link_libraries(EXE
+target_link_libraries(VoitovTask1
     PRIVATE
         Qt5::Widgets
         FGL::Base

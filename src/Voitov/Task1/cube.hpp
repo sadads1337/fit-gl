@@ -1,11 +1,9 @@
 #pragma once
-#include "figure.hpp"
+#include "figureinformation.h"
 
 namespace geometry{
 
-class Cube final: public figure {
-public:
-    //Cube();
+class Cube final: public FigureInformation {
 public:
     void init(float width);
 private:
