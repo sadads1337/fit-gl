@@ -11,23 +11,14 @@ class figure
 public:
     virtual ~figure() = default;
 
-    QVector<QVector3D> getVertexes();
-    QVector<GLint> getIndexes();
+    virtual QVector<QVector3D> getVertexes() const noexcept = 0;
+    virtual QVector<GLint> getIndexes() const noexcept = 0;
 
-    void setColor(QVector3D rgb);
-    QVector4D getColor();
+    virtual void setColor(const QVector3D rgb) = 0;
+    [[nodiscard]] virtual QVector4D getColor() const noexcept = 0;
 
-    QVector3D getRotationAxis();
+    [[nodiscard]] virtual QVector3D getRotationAxis() const noexcept = 0;
 
-    void setRotationAxis(QVector3D rAxis);
-protected:
-    QVector<QVector3D> gVertexes;
-    QVector<GLint> gIndexes;
-
-    QOpenGLBuffer vBuf;
-    QOpenGLBuffer indBuf{QOpenGLBuffer::IndexBuffer};
-
-    QVector4D Color{0.0, 1.0, 0.0, 1};
-    QVector3D rotationAxis{0., 1., 0.};
+    virtual void setRotationAxis(const QVector3D rAxis) = 0;
 };
 }

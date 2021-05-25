@@ -21,7 +21,7 @@ void geometry::Cube::init(GLfloat width, GLuint N)
               auto position = QVector3D{0, 0, 0};
               auto normal = QVector3D{0, 0, 0};
 
-              normal[coord] = int(side / 3 * 2) - 1;
+              normal[coord] = static_cast<int>(side / 3 * 2) - 1;
 
               position[coord] = normal[coord] * this->width ;
               position[coord1] = (x * 2.0f / N - 1.0f) * this->width;
