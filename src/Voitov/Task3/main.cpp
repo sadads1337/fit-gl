@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 
     app.exec();
 
-    for(unsigned int i = cubePosition.size() - 1; i >= 1; --i)
+    for(unsigned int i = 0; i < cubePosition.size(); i++)
     {
         delete cube[i];
     }
