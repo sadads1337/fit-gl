@@ -6,18 +6,18 @@ void geometry::Cube::init(float width)
     this->vBuf.create();
     this->indBuf.create();
 
-    this->width = width / 2.0f;
+    this->half_width = width / 2.0f;
 
     //initialize block
     {
-    gVertexes.append(QVector3D(-this->width, -this->width, this->width));
-    gVertexes.append(QVector3D(this->width,  -this->width, this->width));
-    gVertexes.append(QVector3D(-this->width,  this->width, this->width));
-    gVertexes.append(QVector3D(this->width,   this->width, this->width));
-    gVertexes.append(QVector3D(this->width,  -this->width,-this->width));
-    gVertexes.append(QVector3D(this->width,   this->width,-this->width));
-    gVertexes.append(QVector3D(-this->width, -this->width,-this->width));
-    gVertexes.append(QVector3D(-this->width,  this->width,-this->width));
+    gVertexes.append(QVector3D(-this->half_width, -this->half_width, this->half_width));
+    gVertexes.append(QVector3D(this->half_width,  -this->half_width, this->half_width));
+    gVertexes.append(QVector3D(-this->half_width,  this->half_width, this->half_width));
+    gVertexes.append(QVector3D(this->half_width,   this->half_width, this->half_width));
+    gVertexes.append(QVector3D(this->half_width,  -this->half_width,-this->half_width));
+    gVertexes.append(QVector3D(this->half_width,   this->half_width,-this->half_width));
+    gVertexes.append(QVector3D(-this->half_width, -this->half_width,-this->half_width));
+    gVertexes.append(QVector3D(-this->half_width,  this->half_width,-this->half_width));
 
     gIndexes.append(0);
     gIndexes.append(1);
