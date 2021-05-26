@@ -7,7 +7,7 @@ void geometry::Cube::init(GLfloat width, GLuint N)
     this->indBuf.create();
 
     this->num_of_vertixes = N;
-    this->width = width / 2.0f;
+    this->half_width = width / 2.0f;
 
     //initialize block
    {
@@ -23,9 +23,9 @@ void geometry::Cube::init(GLfloat width, GLuint N)
 
               normal[coord] = static_cast<int>(side / 3 * 2) - 1;
 
-              position[coord] = normal[coord] * this->width ;
-              position[coord1] = (x * 2.0f / N - 1.0f) * this->width;
-              position[coord2] = (y * 2.0f / N - 1.0f) * this->width  * normal[coord];
+              position[coord] = normal[coord] * this->half_width ;
+              position[coord1] = (x * 2.0f / N - 1.0f) * this->half_width;
+              position[coord2] = (y * 2.0f / N - 1.0f) * this->half_width  * normal[coord];
 
               this->gVertexes.append(QVector3D{position.x(), position.y(), position.z()});
             }
