@@ -65,10 +65,11 @@ void CubeWindow::init()//called once
     glEnable(GL_DEPTH_TEST);//depth buffer
     glEnable(GL_CULL_FACE);//clipping back faces
 
-    //shader
-    m_shader_program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/v_shader.vs");
-    m_shader_program.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/f_shader.fs");
-    m_shader_program.link();
+    //shaders
+    m_shader_program = std::make_unique<QOpenGLShaderProgram>(this);
+    m_shader_program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/v_shader.vs");
+    m_shader_program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/f_shader.fs");
+    m_shader_program->link();
 
     //vertex buffer
     m_vertex_buffer.create();
@@ -81,15 +82,15 @@ void CubeWindow::init()//called once
     m_index_buffer.allocate(indexes.data(), static_cast<std::int32_t>(indexes.size() * sizeof(GLuint)));
 
     //attributes and uniforms
-    matrixUniform_ = m_shader_program.uniformLocation("qt_ModelViewProjectionMatrix");
-    vertex_location = m_shader_program.attributeLocation("qt_Vertex");
-    normal = m_shader_program.attributeLocation("qt_Normal");
+    matrixUniform_ = m_shader_program->uniformLocation("qt_ModelViewProjectionMatrix");
+    vertex_location = m_shader_program->attributeLocation("qt_Vertex");
+    normal = m_shader_program->attributeLocation("qt_Normal");
 
     //set attribute buffers
     int offset = 0;
-    m_shader_program.setAttributeBuffer(vertex_location, GL_FLOAT, offset, 3, sizeof(Vertex_Data));
+    m_shader_program->setAttributeBuffer(vertex_location, GL_FLOAT, offset, 3, sizeof(Vertex_Data));
     offset += sizeof(QVector3D);
-    m_shader_program.setAttributeBuffer(normal, GL_FLOAT, offset, 3, sizeof(Vertex_Data));
+    m_shader_program->setAttributeBuffer(normal, GL_FLOAT, offset, 3, sizeof(Vertex_Data));
 }
 
 void CubeWindow::render()//paint
@@ -100,7 +101,7 @@ void CubeWindow::render()//paint
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//clear buffers
 
-    m_shader_program.bind();//bind shader
+    m_shader_program->bind();//bind shader
 
     for (int i = 0; i < int(cubes_arr.size()); i++) {
         //model view projection matrix
@@ -112,22 +113,21 @@ void CubeWindow::render()//paint
         model_view_matrix.scale(0.3f, 0.3f, 0.3f);
 
         //set uniforms
-        m_shader_program.setUniformValue(matrixUniform_, model_view_matrix);
-        m_shader_program.setUniformValue("qt_NormalMatrix", model_view_matrix.normalMatrix());
-        m_shader_program.setUniformValue("qt_color_set", changeColor);
-        m_shader_program.setUniformValue("qt_ModeChange", 1);//GOURAUD -> 0 or PHONG -> 1
+        m_shader_program->setUniformValue(matrixUniform_, model_view_matrix);
+        m_shader_program->setUniformValue("qt_NormalMatrix", model_view_matrix.normalMatrix());
+        m_shader_program->setUniformValue("qt_color_set", changeColor);
+        m_shader_program->setUniformValue("qt_ModeChange", 1);//GOURAUD -> 0 or PHONG -> 1
 
         //enable attribute array
-        m_shader_program.enableAttributeArray(normal);
-        m_shader_program.enableAttributeArray(vertex_location);
+        m_shader_program->enableAttributeArray(normal);
+        m_shader_program->enableAttributeArray(vertex_location);
 
-        glDrawElements(GL_TRIANGLES, m_index_buffer.size(), GL_UNSIGNED_INT, 0);//draw triangles
+        glDrawElements(GL_TRIANGLES, m_index_buffer.size(), GL_UNSIGNED_INT, nullptr);//draw triangles
 
         //disable attribute array
-        m_shader_program.disableAttributeArray(vertex_location);
-        m_shader_program.disableAttributeArray(normal);
+        m_shader_program->disableAttributeArray(vertex_location);
+        m_shader_program->disableAttributeArray(normal);
     }
-    m_shader_program.release();
     ++frame_;//counter
 }
 

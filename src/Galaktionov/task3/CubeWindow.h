@@ -33,7 +33,7 @@ protected:
   void keyPressEvent(QKeyEvent *event) override;
 
 private:
-  QOpenGLShaderProgram m_shader_program;
+  std::unique_ptr<QOpenGLShaderProgram> m_shader_program;
 
   QOpenGLBuffer m_vertex_buffer;
   QOpenGLBuffer m_index_buffer{QOpenGLBuffer::Type::IndexBuffer};
@@ -43,7 +43,7 @@ private:
   GLint normal;
   GLint matrixUniform_;
 
-  QVector4D changeColor{1.0f, 1.0f, 0.0f, 1};
-  QVector2D mousePressPosition_{0., 0.};
-  QVector3D rotationAxis{0.0f, 1.0f, 0.0f};
+  QVector4D changeColor{1.0f, 1.0f, 0.0f, 1.0f};
+  QVector2D mousePressPosition_{0.0f, 0.0f};
+  QVector3D rotationAxis{0.0f, 0.0f, 0.0f};
 };
