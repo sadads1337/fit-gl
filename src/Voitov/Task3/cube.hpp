@@ -7,6 +7,6 @@ class Cube final: public FigureInformation {
 public:
     void init(GLfloat width, QVector3D center);
 private:
-    GLfloat width = 1.0;
+    GLfloat half_width = 1.0;
 };
 }
