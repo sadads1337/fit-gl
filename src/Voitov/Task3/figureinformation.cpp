@@ -15,6 +15,6 @@ QVector3D geometry::FigureInformation::getRotationAxis() const noexcept{
 
 QVector3D FigureInformation::getCenter() const noexcept
 {
-    return this->center;
+    return this->center_;
 }
 }
