@@ -10,14 +10,14 @@ void geometry::Cube::init(float width)
 
     //initialize block
     {
-    gVertexes.append(QVector3D(-width/2, -width/2, width/2));
-    gVertexes.append(QVector3D(width/2,  -width/2, width/2));
-    gVertexes.append(QVector3D(-width/2,  width/2, width/2));
-    gVertexes.append(QVector3D(width/2,   width/2, width/2));
-    gVertexes.append(QVector3D(width/2,  -width/2,-width/2));
-    gVertexes.append(QVector3D(width/2,   width/2,-width/2));
-    gVertexes.append(QVector3D(-width/2,- width/2,-width/2));
-    gVertexes.append(QVector3D(-width/2,  width/2,-width/2));
+    gVertexes.append(QVector3D(-this->width, -this->width, this->width));
+    gVertexes.append(QVector3D(this->width,  -this->width, this->width));
+    gVertexes.append(QVector3D(-this->width,  this->width, this->width));
+    gVertexes.append(QVector3D(this->width,   this->width, this->width));
+    gVertexes.append(QVector3D(this->width,  -this->width,-this->width));
+    gVertexes.append(QVector3D(this->width,   this->width,-this->width));
+    gVertexes.append(QVector3D(-this->width, -this->width,-this->width));
+    gVertexes.append(QVector3D(-this->width,  this->width,-this->width));
 
     gIndexes.append(0);
     gIndexes.append(1);
