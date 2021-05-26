@@ -7,6 +7,6 @@ class Cube final: public FigureInformation {
 public:
     void init(float width);
 private:
-    float width = 1.0;
+    float half_width = 1.0;
 };
 }
