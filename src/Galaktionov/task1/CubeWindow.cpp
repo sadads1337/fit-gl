@@ -1,7 +1,7 @@
 #include "CubeWindow.h"
 
 CubeWindow::CubeWindow(QWindow *parent)
-    : fgl::GLWindow(parent), m_shader_texture(0), m_index_buffer(QOpenGLBuffer::IndexBuffer)
+    : fgl::GLWindow(parent), m_shader_texture(nullptr), m_index_buffer(QOpenGLBuffer::IndexBuffer)
 {
 }
 
@@ -65,7 +65,7 @@ void CubeWindow::render()//paint
     m_vertex_buffer.bind();
     m_index_buffer.bind();
 
-    glDrawElements(GL_TRIANGLES, m_index_buffer.size(), GL_UNSIGNED_INT, 0);//draw triangles
+    glDrawElements(GL_TRIANGLES, m_index_buffer.size(), GL_UNSIGNED_INT, nullptr);//draw triangles
 
     ++frame_;
 }
