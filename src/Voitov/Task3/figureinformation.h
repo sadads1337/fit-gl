@@ -21,7 +21,7 @@ protected:
     QOpenGLBuffer vBuf;
     QOpenGLBuffer indBuf{QOpenGLBuffer::IndexBuffer};
 
-    QVector3D center = {0.0, 0.0, 0.0};
+    QVector3D center_ = {0.0, 0.0, 0.0};
     QVector3D rotationAxis{0., 1., 0.};
 };
 }
