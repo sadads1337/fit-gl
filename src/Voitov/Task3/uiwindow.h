@@ -9,6 +9,8 @@
 
 #include "cube.hpp"
 
+#include <memory>//std::unique_ptr
+
 class UIWindow final: public fgl::GLWindow
 {
 public:
@@ -17,7 +19,7 @@ public:
     void init() override;
     void render() override;
 
-    void addObj(geometry::figure *f);
+    void addObj(geometry::figure *const f);
 private:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
@@ -30,7 +32,7 @@ private:
     GLfloat ambientStrength_ = 1.0;
 
     QVector<geometry::figure*> figures;
-
+    //QVector<std::unique_ptr<geometry::figure>> figures;
     // Shader program handler.
     std::unique_ptr<QOpenGLShaderProgram> program_ = nullptr;
 

@@ -1,9 +1,9 @@
 #pragma once
-#include "figure.hpp"
+#include "figureinformation.h"
 
 namespace geometry{
 
-class Cube final: public figure {
+class Cube final: public FigureInformation {
 public:
     void init(GLfloat width, QVector3D center);
 private:

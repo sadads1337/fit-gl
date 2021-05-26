@@ -41,8 +41,6 @@ void geometry::Cube::init(GLfloat width, QVector3D center)
         gVertexes.append(VertexData({0.5f, -0.5f, -0.5f}, {0.0f, -1.0f, 0.0f}));
         gVertexes.append(VertexData({0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}));
 
-
-
         gIndexes.append(0);
         gIndexes.append(3);
         gIndexes.append(6);

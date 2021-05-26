@@ -15,21 +15,12 @@ struct VertexData {
 class figure
 {
 public:
+    virtual QVector<VertexData> getVertexes() const noexcept = 0;
+    virtual QVector<GLushort> getIndexes() const noexcept = 0;
+
+    [[nodiscard]] virtual QVector3D getRotationAxis() const noexcept = 0;
+    [[nodiscard]] virtual QVector3D getCenter() const noexcept = 0;
+
     virtual ~figure() = default;
-
-    QVector<VertexData> getVertexes();
-    QVector<GLushort> getIndexes();
-
-    QVector3D getRotationAxis();
-    QVector3D getCenter();
-protected:
-    QVector<GLushort> gIndexes;
-    QVector<VertexData> gVertexes;
-
-    QOpenGLBuffer vBuf;
-    QOpenGLBuffer indBuf{QOpenGLBuffer::IndexBuffer};
-
-    QVector3D center = {0.0, 0.0, 0.0};
-    QVector3D rotationAxis{0., 1., 0.};
 };
 }

@@ -15,11 +15,11 @@ void UIWindow::init()
     vertexesBuf.bind();
     indexesBuf.bind();
 
-    vertexesBuf.allocate(this->figures[0]->getVertexes().data(),
+    vertexesBuf.allocate(this->figures[0]->getVertexes().cbegin(),
                          static_cast<std::int32_t>(
                              this->figures[0]->getVertexes().size() * sizeof(decltype(this->figures[0]->getVertexes())::value_type)));
 
-    indexesBuf.allocate(this->figures[0]->getIndexes().data(),
+    indexesBuf.allocate(this->figures[0]->getIndexes().cbegin(),
                         static_cast<std::int32_t>(
                            this->figures[0]->getIndexes().size() * sizeof(decltype(this->figures[0]->getIndexes())::value_type)));
 
@@ -48,7 +48,6 @@ void UIWindow::render()
     program_->bind();
 
     QMatrix4x4 matrix0;
-    //QMatrix4x4 model0;
     matrix0.perspective(60.0f, (float)width() / height(), 0.1f, 100.0f);
 
     matrix0.translate(figures[0]->getCenter());
@@ -58,7 +57,7 @@ void UIWindow::render()
     program_->setUniformValue(matrixUniform_, matrix0);
     program_->setUniformValue(ambientStrength_, 1.0f);
 
-    program_->setUniformValue("qt_color_set", QVector4D{1.0f, 1.0f, 1.0f, 1});
+    program_->setUniformValue("col", QVector4D{1.0f, 1.0f, 1.0f, 1});
     program_->setUniformValue("normalMatrix", matrix0.normalMatrix());
     program_->setUniformValue("modeChange", 0);//GOURAUD -> 0 or PHONG -> 1
     program_->enableAttributeArray(norm_);
@@ -82,7 +81,7 @@ void UIWindow::render()
       program_->setUniformValue(ambientStrength_, 0.1f);
       program_->setUniformValue(matrixUniform_, matrix);
       program_->setUniformValue("normalMatrix", matrix.normalMatrix());
-      program_->setUniformValue("qt_color_set", changeColor_);
+      program_->setUniformValue("col", changeColor_);
 
       program_->enableAttributeArray(norm_);
       program_->enableAttributeArray(posAttr_);
@@ -97,8 +96,9 @@ void UIWindow::render()
     ++frame_;
 }
 
-void UIWindow::addObj(geometry::figure *f)
+void UIWindow::addObj(geometry::figure * const f)
 {
+    //std::unique_ptr<geometry::figure> tmp = std::make_unique<geometry::figure>(f);
     this->figures.append(f);
 }
 

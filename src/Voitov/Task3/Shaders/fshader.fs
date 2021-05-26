@@ -1,7 +1,7 @@
 #version 120
 
 uniform highp int modeChange;
-uniform vec4 qt_color_set;
+uniform vec4 col;
 uniform vec3 viewDir;
 
 uniform vec4 lightColor = vec4(1.0, 1.0, 1.0, 1.0);
@@ -18,7 +18,7 @@ void main() {
 
     //GOURAUD
     if (modeChange == 0){
-        gl_FragColor = v_lightColor * qt_color_set;
+        gl_FragColor = v_lightColor * col;
     };
 
     //PHONG
@@ -39,6 +39,6 @@ void main() {
         float specularAngle = pow(max(dot(viewDir, reflectDir), 0.0), 1000);
         vec4 specular = specularStrength * specularAngle * lightColor;
 
-        gl_FragColor = (ambient + diffuse + specular) * qt_color_set;
+        gl_FragColor = (ambient + diffuse + specular) * col;
     };
 }

@@ -7,18 +7,18 @@ VertexData::VertexData(QVector3D position, QVector3D normal){
     this->norm = normal;
 }
 
-QVector<VertexData> figure::getVertexes(){
-    return this->gVertexes;
-}
-QVector<GLushort> figure::getIndexes(){
-    return this->gIndexes;
-}
+//QVector<VertexData> figure::getVertexes(){
+//    return this->gVertexes;
+//}
+//QVector<GLushort> figure::getIndexes(){
+//    return this->gIndexes;
+//}
 
-QVector3D figure::getRotationAxis(){
-    return this->rotationAxis;
-}
+//QVector3D figure::getRotationAxis(){
+//    return this->rotationAxis;
+//}
 
-QVector3D figure::getCenter(){
-    return this->center;
-}
+//QVector3D figure::getCenter(){
+//    return this->center;
+//}
 }
