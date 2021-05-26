@@ -5,10 +5,6 @@ CubeWindow::CubeWindow(QWindow *parent)
 {
 }
 
-CubeWindow::~CubeWindow()
-{
-}
-
 void CubeWindow::init()//called once
 {
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);//rgb and 0-transparent 1-opaque
@@ -16,12 +12,26 @@ void CubeWindow::init()//called once
     glEnable(GL_DEPTH_TEST);//depth buffer
     glEnable(GL_CULL_FACE);//clipping back faces
 
-    Init_Shaders();
+    //shaders
+    m_shader_program = std::make_unique<QOpenGLShaderProgram>(this);
+    m_shader_program->addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/v_shader.vsh");
+    m_shader_program->addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/f_shader.fsh");
+    m_shader_program->link();
+
+    //TEXTURE
+    m_shader_texture = std::shared_ptr<QOpenGLTexture>(new QOpenGLTexture(QImage(":/cube.jpg").mirrored()));
+    //Set nearest filtering mode for texture minification
+    m_shader_texture->setMinificationFilter(QOpenGLTexture::Nearest);
+    //Set bilinear filtering mode for texture magnification
+    m_shader_texture->setMagnificationFilter(QOpenGLTexture::Linear);
+    //Wrap texture coordinates by repeating
+    m_shader_texture->setWrapMode(QOpenGLTexture::Repeat);
+
     Init_Cube(0.0f, 0.0f, 0.0f, 1.0f);
 
-    matrixUniform_ = m_shader_program.uniformLocation("qt_ModelViewProjectionMatrix");
-    vertex_location = m_shader_program.attributeLocation("qt_Vertex");
-    texture_location = m_shader_program.attributeLocation("qt_MultiTexCoord0");
+    matrixUniform_ = m_shader_program->uniformLocation("qt_ModelViewProjectionMatrix");
+    vertex_location = m_shader_program->attributeLocation("qt_Vertex");
+    texture_location = m_shader_program->attributeLocation("qt_MultiTexCoord0");
 }
 
 void CubeWindow::render()//paint
@@ -38,20 +48,19 @@ void CubeWindow::render()//paint
 
     m_shader_texture->bind(0);
 
-    m_shader_program.bind();
-    m_shader_program.setUniformValue("qt_ModelViewProjectionMatrix", m_projection_matrix * model_view_matrix);
-    m_shader_program.setUniformValue("qt_Texture0", 0);
-    //m_shader_program.setUniformValue("qt_ColorSet", changeColor);//color
+    m_shader_program->bind();
+    m_shader_program->setUniformValue("qt_ModelViewProjectionMatrix", m_projection_matrix * model_view_matrix);
+    m_shader_program->setUniformValue("qt_Texture0", 0);
 
     int offset = 0;
 
-    m_shader_program.enableAttributeArray(vertex_location);
-    m_shader_program.setAttributeBuffer(vertex_location, GL_FLOAT, offset, 3, sizeof(Vertex_Data));
+    m_shader_program->enableAttributeArray(vertex_location);
+    m_shader_program->setAttributeBuffer(vertex_location, GL_FLOAT, offset, 3, sizeof(Vertex_Data));
 
     offset += sizeof(QVector3D);
 
-    m_shader_program.enableAttributeArray(texture_location);
-    m_shader_program.setAttributeBuffer(texture_location, GL_FLOAT, offset, 2, sizeof(Vertex_Data));
+    m_shader_program->enableAttributeArray(texture_location);
+    m_shader_program->setAttributeBuffer(texture_location, GL_FLOAT, offset, 2, sizeof(Vertex_Data));
 
     m_vertex_buffer.bind();
     m_index_buffer.bind();
@@ -61,48 +70,41 @@ void CubeWindow::render()//paint
     ++frame_;
 }
 
-void CubeWindow::Init_Shaders()//load shaders
-{
-    m_shader_program.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/v_shader.vsh");
-    m_shader_program.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/f_shader.fsh");
-    m_shader_program.link();
-}
-
 void CubeWindow::Init_Cube(float x, float y, float z, float width)
 {
     float wd2 = width / 2.0f;//wd2 = width divided by 2
     QVector<Vertex_Data> vertexes;
 
     //z
-    vertexes.append(Vertex_Data(QVector3D(x - wd2, y + wd2, z + wd2), QVector2D(0.0, 1.0), QVector3D(0.0, 0.0, 1.0)));
-    vertexes.append(Vertex_Data(QVector3D(x - wd2, y - wd2, z + wd2), QVector2D(0.0, 0.0), QVector3D(0.0, 0.0, 1.0)));
-    vertexes.append(Vertex_Data(QVector3D(x + wd2, y + wd2, z + wd2), QVector2D(1.0, 1.0), QVector3D(0.0, 0.0, 1.0)));
-    vertexes.append(Vertex_Data(QVector3D(x + wd2, y - wd2, z + wd2), QVector2D(1.0, 0.0), QVector3D(0.0, 0.0, 1.0)));
+    vertexes.append(Vertex_Data{QVector3D(x - wd2, y + wd2, z + wd2), QVector2D(0.0, 1.0), QVector3D(0.0, 0.0, 1.0)});
+    vertexes.append(Vertex_Data{QVector3D(x - wd2, y - wd2, z + wd2), QVector2D(0.0, 0.0), QVector3D(0.0, 0.0, 1.0)});
+    vertexes.append(Vertex_Data{QVector3D(x + wd2, y + wd2, z + wd2), QVector2D(1.0, 1.0), QVector3D(0.0, 0.0, 1.0)});
+    vertexes.append(Vertex_Data{QVector3D(x + wd2, y - wd2, z + wd2), QVector2D(1.0, 0.0), QVector3D(0.0, 0.0, 1.0)});
     //x
-    vertexes.append(Vertex_Data(QVector3D(x + wd2, y - wd2, z + wd2), QVector2D(0.0, 1.0), QVector3D(1.0, 0.0, 0.0)));
-    vertexes.append(Vertex_Data(QVector3D(x + wd2, y - wd2, z - wd2), QVector2D(0.0, 0.0), QVector3D(1.0, 0.0, 0.0)));
-    vertexes.append(Vertex_Data(QVector3D(x + wd2, y + wd2, z + wd2), QVector2D(1.0, 1.0), QVector3D(1.0, 0.0, 0.0)));
-    vertexes.append(Vertex_Data(QVector3D(x + wd2, y + wd2, z - wd2), QVector2D(1.0, 0.0), QVector3D(1.0, 0.0, 0.0)));
+    vertexes.append(Vertex_Data{QVector3D(x + wd2, y - wd2, z + wd2), QVector2D(0.0, 1.0), QVector3D(1.0, 0.0, 0.0)});
+    vertexes.append(Vertex_Data{QVector3D(x + wd2, y - wd2, z - wd2), QVector2D(0.0, 0.0), QVector3D(1.0, 0.0, 0.0)});
+    vertexes.append(Vertex_Data{QVector3D(x + wd2, y + wd2, z + wd2), QVector2D(1.0, 1.0), QVector3D(1.0, 0.0, 0.0)});
+    vertexes.append(Vertex_Data{QVector3D(x + wd2, y + wd2, z - wd2), QVector2D(1.0, 0.0), QVector3D(1.0, 0.0, 0.0)});
     //y
-    vertexes.append(Vertex_Data(QVector3D(x + wd2, y + wd2, z + wd2), QVector2D(0.0, 1.0), QVector3D(0.0, 1.0, 0.0)));
-    vertexes.append(Vertex_Data(QVector3D(x + wd2, y + wd2, z - wd2), QVector2D(0.0, 0.0), QVector3D(0.0, 1.0, 0.0)));
-    vertexes.append(Vertex_Data(QVector3D(x - wd2, y + wd2, z + wd2), QVector2D(1.0, 1.0), QVector3D(0.0, 1.0, 0.0)));
-    vertexes.append(Vertex_Data(QVector3D(x - wd2, y + wd2, z - wd2), QVector2D(1.0, 0.0), QVector3D(0.0, 1.0, 0.0)));
+    vertexes.append(Vertex_Data{QVector3D(x + wd2, y + wd2, z + wd2), QVector2D(0.0, 1.0), QVector3D(0.0, 1.0, 0.0)});
+    vertexes.append(Vertex_Data{QVector3D(x + wd2, y + wd2, z - wd2), QVector2D(0.0, 0.0), QVector3D(0.0, 1.0, 0.0)});
+    vertexes.append(Vertex_Data{QVector3D(x - wd2, y + wd2, z + wd2), QVector2D(1.0, 1.0), QVector3D(0.0, 1.0, 0.0)});
+    vertexes.append(Vertex_Data{QVector3D(x - wd2, y + wd2, z - wd2), QVector2D(1.0, 0.0), QVector3D(0.0, 1.0, 0.0)});
     //-z
-    vertexes.append(Vertex_Data(QVector3D(x + wd2, y + wd2, z - wd2), QVector2D(0.0, 1.0), QVector3D(0.0, 0.0, -1.0)));
-    vertexes.append(Vertex_Data(QVector3D(x + wd2, y - wd2, z - wd2), QVector2D(0.0, 0.0), QVector3D(0.0, 0.0, -1.0)));
-    vertexes.append(Vertex_Data(QVector3D(x - wd2, y + wd2, z - wd2), QVector2D(1.0, 1.0), QVector3D(0.0, 0.0, -1.0)));
-    vertexes.append(Vertex_Data(QVector3D(x - wd2, y - wd2, z - wd2), QVector2D(1.0, 0.0), QVector3D(0.0, 0.0, -1.0)));
+    vertexes.append(Vertex_Data{QVector3D(x + wd2, y + wd2, z - wd2), QVector2D(0.0, 1.0), QVector3D(0.0, 0.0, -1.0)});
+    vertexes.append(Vertex_Data{QVector3D(x + wd2, y - wd2, z - wd2), QVector2D(0.0, 0.0), QVector3D(0.0, 0.0, -1.0)});
+    vertexes.append(Vertex_Data{QVector3D(x - wd2, y + wd2, z - wd2), QVector2D(1.0, 1.0), QVector3D(0.0, 0.0, -1.0)});
+    vertexes.append(Vertex_Data{QVector3D(x - wd2, y - wd2, z - wd2), QVector2D(1.0, 0.0), QVector3D(0.0, 0.0, -1.0)});
     //-x
-    vertexes.append(Vertex_Data(QVector3D(x - wd2, y + wd2, z + wd2), QVector2D(0.0, 1.0), QVector3D(-1.0, 0.0, 0.0)));
-    vertexes.append(Vertex_Data(QVector3D(x - wd2, y + wd2, z - wd2), QVector2D(0.0, 0.0), QVector3D(-1.0, 0.0, 0.0)));
-    vertexes.append(Vertex_Data(QVector3D(x - wd2, y - wd2, z + wd2), QVector2D(1.0, 1.0), QVector3D(-1.0, 0.0, 0.0)));
-    vertexes.append(Vertex_Data(QVector3D(x - wd2, y - wd2, z - wd2), QVector2D(1.0, 0.0), QVector3D(-1.0, 0.0, 0.0)));
+    vertexes.append(Vertex_Data{QVector3D(x - wd2, y + wd2, z + wd2), QVector2D(0.0, 1.0), QVector3D(-1.0, 0.0, 0.0)});
+    vertexes.append(Vertex_Data{QVector3D(x - wd2, y + wd2, z - wd2), QVector2D(0.0, 0.0), QVector3D(-1.0, 0.0, 0.0)});
+    vertexes.append(Vertex_Data{QVector3D(x - wd2, y - wd2, z + wd2), QVector2D(1.0, 1.0), QVector3D(-1.0, 0.0, 0.0)});
+    vertexes.append(Vertex_Data{QVector3D(x - wd2, y - wd2, z - wd2), QVector2D(1.0, 0.0), QVector3D(-1.0, 0.0, 0.0)});
     //-y
-    vertexes.append(Vertex_Data(QVector3D(x - wd2, y - wd2, z + wd2), QVector2D(0.0, 1.0), QVector3D(0.0, -1.0, 0.0)));
-    vertexes.append(Vertex_Data(QVector3D(x - wd2, y - wd2, z - wd2), QVector2D(0.0, 0.0), QVector3D(0.0, -1.0, 0.0)));
-    vertexes.append(Vertex_Data(QVector3D(x + wd2, y - wd2, z + wd2), QVector2D(1.0, 1.0), QVector3D(0.0, -1.0, 0.0)));
-    vertexes.append(Vertex_Data(QVector3D(x + wd2, y - wd2, z - wd2), QVector2D(1.0, 0.0), QVector3D(0.0, -1.0, 0.0)));
+    vertexes.append(Vertex_Data{QVector3D(x - wd2, y - wd2, z + wd2), QVector2D(0.0, 1.0), QVector3D(0.0, -1.0, 0.0)});
+    vertexes.append(Vertex_Data{QVector3D(x - wd2, y - wd2, z - wd2), QVector2D(0.0, 0.0), QVector3D(0.0, -1.0, 0.0)});
+    vertexes.append(Vertex_Data{QVector3D(x + wd2, y - wd2, z + wd2), QVector2D(1.0, 1.0), QVector3D(0.0, -1.0, 0.0)});
+    vertexes.append(Vertex_Data{QVector3D(x + wd2, y - wd2, z - wd2), QVector2D(1.0, 0.0), QVector3D(0.0, -1.0, 0.0)});
 
     QVector<GLuint> indexes;
     for (int i = 0; i < 24; i += 4) {
@@ -117,29 +119,10 @@ void CubeWindow::Init_Cube(float x, float y, float z, float width)
     m_vertex_buffer.create();
     m_vertex_buffer.bind();
     m_vertex_buffer.allocate(vertexes.constData(), vertexes.size() * sizeof(Vertex_Data));
-    //m_vertex_buffer.release();
 
     m_index_buffer.create();
     m_index_buffer.bind();
     m_index_buffer.allocate(indexes.constData(), indexes.size() * sizeof(GLuint));
-    //m_index_buffer.release();
-
-    //TEXTURE
-    m_shader_texture = new QOpenGLTexture(QImage(":/cube.jpg").mirrored());
-    //Set nearest filtering mode for texture minification
-    m_shader_texture->setMinificationFilter(QOpenGLTexture::Nearest);
-    //Set bilinear filtering mode for texture magnification
-    m_shader_texture->setMagnificationFilter(QOpenGLTexture::Linear);
-    //Wrap texture coordinates by repeating
-    m_shader_texture->setWrapMode(QOpenGLTexture::Repeat);
-}
-
-void CubeWindow::keyPressEvent(QKeyEvent *event) {
-  if (event->key() == Qt::Key_Space) {
-    QColor color = QColorDialog::getColor();
-    changeColor = QVector4D(color.red() / 255.0, color.green() / 255.0,
-                            color.blue() / 255.0, 1);
-  }
 }
 
 void CubeWindow::mousePressEvent(QMouseEvent *event) {
