@@ -5,41 +5,41 @@ void geometry::Cube::init(GLfloat width, QVector3D center)
     this->vBuf.create();
     this->indBuf.create();
 
-    this->width = width / 2.0f;
-    this->center = center;
+    this->half_width = width / 2.0f;
+    this->center_ = center;
     //initialize block
     {
-        gVertexes.append(VertexData({0.5f, 0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}));
-        gVertexes.append(VertexData({0.5f, 0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}));
-        gVertexes.append(VertexData({0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}));
+        gVertexes.append(VertexData({half_width, half_width, half_width}, {0.0f, 0.0f, 1.0f}));
+        gVertexes.append(VertexData({half_width, half_width, half_width}, {0.0f, 1.0f, 0.0f}));
+        gVertexes.append(VertexData({half_width, half_width, half_width}, {1.0f, 0.0f, 0.0f}));
 
-        gVertexes.append(VertexData({-0.5f, 0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}));
-        gVertexes.append(VertexData({-0.5f, 0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}));
-        gVertexes.append(VertexData({-0.5f, 0.5f, 0.5f}, {-1.0f, 0.0f, 0.0f}));
+        gVertexes.append(VertexData({-half_width, half_width, half_width}, {0.0f, 0.0f, 1.0f}));
+        gVertexes.append(VertexData({-half_width, half_width, half_width}, {0.0f, 1.0f, 0.0f}));
+        gVertexes.append(VertexData({-half_width, half_width, half_width}, {-1.0f, 0.0f, 0.0f}));
 
-        gVertexes.append(VertexData({0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}));
-        gVertexes.append(VertexData({0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}));
-        gVertexes.append(VertexData({0.5f, -0.5f, 0.5f}, {0.0f, -1.0f, 0.0f}));
+        gVertexes.append(VertexData({half_width, -half_width, half_width}, {0.0f, 0.0f, 1.0f}));
+        gVertexes.append(VertexData({half_width, -half_width, half_width}, {1.0f, 0.0f, 0.0f}));
+        gVertexes.append(VertexData({half_width, -half_width, half_width}, {0.0f, -1.0f, 0.0f}));
 
-        gVertexes.append(VertexData({-0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}));
-        gVertexes.append(VertexData({-0.5f, -0.5f, 0.5f}, {-1.0f, 0.0f, 0.0f}));
-        gVertexes.append(VertexData({-0.5f, -0.5f, 0.5f}, {0.0f, -1.0f, 0.0f}));
+        gVertexes.append(VertexData({-half_width, -half_width, half_width}, {0.0f, 0.0f, 1.0f}));
+        gVertexes.append(VertexData({-half_width, -half_width, half_width}, {-1.0f, 0.0f, 0.0f}));
+        gVertexes.append(VertexData({-half_width, -half_width, half_width}, {0.0f, -1.0f, 0.0f}));
 
-        gVertexes.append(VertexData({0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}));
-        gVertexes.append(VertexData({0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}));
-        gVertexes.append(VertexData({0.5f, 0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}));
+        gVertexes.append(VertexData({half_width, half_width, -half_width}, {0.0f, 0.0f, -1.0f}));
+        gVertexes.append(VertexData({half_width, half_width, -half_width}, {1.0f, 0.0f, 0.0f}));
+        gVertexes.append(VertexData({half_width, half_width, -half_width}, {0.0f, 1.0f, 0.0f}));
 
-        gVertexes.append(VertexData({-0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}));
-        gVertexes.append(VertexData({-0.5f, 0.5f, -0.5f}, {-1.0f, 0.0f, 0.0f}));
-        gVertexes.append(VertexData({-0.5f, 0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}));
+        gVertexes.append(VertexData({-half_width, half_width, -half_width}, {0.0f, 0.0f, -1.0f}));
+        gVertexes.append(VertexData({-half_width, half_width, -half_width}, {-1.0f, 0.0f, 0.0f}));
+        gVertexes.append(VertexData({-half_width, half_width, -half_width}, {0.0f, 1.0f, 0.0f}));
 
-        gVertexes.append(VertexData({-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}));
-        gVertexes.append(VertexData({-0.5f, -0.5f, -0.5f}, {-1.0f, 0.0f, 0.0f}));
-        gVertexes.append(VertexData({-0.5f, -0.5f, -0.5f}, {0.0f, -1.0f, 0.0f}));
+        gVertexes.append(VertexData({-half_width, -half_width, -half_width}, {0.0f, 0.0f, -1.0f}));
+        gVertexes.append(VertexData({-half_width, -half_width, -half_width}, {-1.0f, 0.0f, 0.0f}));
+        gVertexes.append(VertexData({-half_width, -half_width, -half_width}, {0.0f, -1.0f, 0.0f}));
 
-        gVertexes.append(VertexData({0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}));
-        gVertexes.append(VertexData({0.5f, -0.5f, -0.5f}, {0.0f, -1.0f, 0.0f}));
-        gVertexes.append(VertexData({0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}));
+        gVertexes.append(VertexData({half_width, -half_width, -half_width}, {0.0f, 0.0f, -1.0f}));
+        gVertexes.append(VertexData({half_width, -half_width, -half_width}, {0.0f, -1.0f, 0.0f}));
+        gVertexes.append(VertexData({half_width, -half_width, -half_width}, {1.0f, 0.0f, 0.0f}));
 
         gIndexes.append(0);
         gIndexes.append(3);
