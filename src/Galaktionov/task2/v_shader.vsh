@@ -20,6 +20,5 @@ void main(void)
     float d3 = sqrt(1 - x * x / 2 - y * y / 2 + x * x * y * y / 3);
     vec4 morphing = vec4(x + (x * d1 - x) * sinus(time), y + (y * d2 - y) * sinus(time), z + (z * d3 - z) * sinus(time), 1.0);
     gl_Position = qt_ModelViewProjectionMatrix * morphing;
-    //gl_Position = qt_ModelViewProjectionMatrix * qt_Vertex;
     qt_TexCoord0 = qt_MultiTexCoord0;
 }

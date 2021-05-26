@@ -1,11 +1,7 @@
 #include "CubeWindow.h"
 
 CubeWindow::CubeWindow(QWindow *parent)
-    : fgl::GLWindow(parent), m_shader_texture(0), m_index_buffer(QOpenGLBuffer::IndexBuffer)
-{
-}
-
-CubeWindow::~CubeWindow()
+    : fgl::GLWindow(parent), m_shader_texture(nullptr), m_index_buffer(QOpenGLBuffer::IndexBuffer)
 {
 }
 
@@ -18,12 +14,26 @@ void CubeWindow::init()//called once
 
     start = std::chrono::system_clock::now();
 
-    Init_Shaders();
+    //shaders
+    m_shader_program = std::make_unique<QOpenGLShaderProgram>(this);
+    m_shader_program->addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/v_shader.vsh");
+    m_shader_program->addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/f_shader.fsh");
+    m_shader_program->link();
+
+    //TEXTURE
+    m_shader_texture = std::shared_ptr<QOpenGLTexture>(new QOpenGLTexture(QImage(":/cube.jpg").mirrored()));
+    //Set nearest filtering mode for texture minification
+    m_shader_texture->setMinificationFilter(QOpenGLTexture::Nearest);
+    //Set bilinear filtering mode for texture magnification
+    m_shader_texture->setMagnificationFilter(QOpenGLTexture::Linear);
+    //Wrap texture coordinates by repeating
+    m_shader_texture->setWrapMode(QOpenGLTexture::Repeat);
+
     Init_Cube(0.0f, 0.0f, 0.0f, 2.0f, 7);
 
-    matrixUniform_ = m_shader_program.uniformLocation("qt_ModelViewProjectionMatrix");
-    vertex_location = m_shader_program.attributeLocation("qt_Vertex");
-    texture_location = m_shader_program.attributeLocation("qt_MultiTexCoord0");
+    matrixUniform_ = m_shader_program->uniformLocation("qt_ModelViewProjectionMatrix");
+    vertex_location = m_shader_program->attributeLocation("qt_Vertex");
+    texture_location = m_shader_program->attributeLocation("qt_MultiTexCoord0");
 }
 
 void CubeWindow::render()//paint
@@ -43,37 +53,29 @@ void CubeWindow::render()//paint
 
     m_shader_texture->bind(0);
 
-    m_shader_program.bind();
-    m_shader_program.setUniformValue("qt_ModelViewProjectionMatrix", m_projection_matrix * model_view_matrix);
-    m_shader_program.setUniformValue("qt_Texture0", 0);//texture
-    //m_shader_program.setUniformValue("qt_ColorSet", changeColor);//color
-    m_shader_program.setUniformValue("time", time_.count());
+    m_shader_program->bind();
+    m_shader_program->setUniformValue("qt_ModelViewProjectionMatrix", m_projection_matrix * model_view_matrix);
+    m_shader_program->setUniformValue("qt_Texture0", 0);//texture
+    m_shader_program->setUniformValue("time", time_.count());
 
     int offset = 0;
 
-    m_shader_program.enableAttributeArray(vertex_location);
-    m_shader_program.setAttributeBuffer(vertex_location, GL_FLOAT, offset, 3, sizeof(Vertex_Data));
+    m_shader_program->enableAttributeArray(vertex_location);
+    m_shader_program->setAttributeBuffer(vertex_location, GL_FLOAT, offset, 3, sizeof(Vertex_Data));
 
     offset += sizeof(QVector3D);
 
-    m_shader_program.enableAttributeArray(texture_location);
-    m_shader_program.setAttributeBuffer(texture_location, GL_FLOAT, offset, 2, sizeof(Vertex_Data));
+    m_shader_program->enableAttributeArray(texture_location);
+    m_shader_program->setAttributeBuffer(texture_location, GL_FLOAT, offset, 2, sizeof(Vertex_Data));
 
     m_vertex_buffer.bind();
     m_index_buffer.bind();
 
-    glDrawElements(GL_TRIANGLES, m_index_buffer.size(), GL_UNSIGNED_INT, 0);//draw triangles
+    glDrawElements(GL_TRIANGLES, m_index_buffer.size(), GL_UNSIGNED_INT, nullptr);//draw triangles
 
-    m_shader_program.disableAttributeArray(vertex_location);
-    m_shader_program.release();
+    m_shader_program->disableAttributeArray(vertex_location);
+    m_shader_program->release();
     ++frame_;
-}
-
-void CubeWindow::Init_Shaders()//load shaders
-{
-    m_shader_program.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, ":/v_shader.vsh");
-    m_shader_program.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, ":/f_shader.fsh");
-    m_shader_program.link();
 }
 
 void CubeWindow::Init_Cube(float x, float y, float z, float width, int num)
@@ -84,50 +86,50 @@ void CubeWindow::Init_Cube(float x, float y, float z, float width, int num)
     //z
     for (int i = 0; i < num; i++)
         for (int j = 0; j < num; j++) {
-            vertexes.append(Vertex_Data(QVector3D(x - wd2 + wdn * j      , y + wd2 - wdn * i      , z + wd2), QVector2D(0.0, 1.0), QVector3D(0.0, 0.0, 1.0)));
-            vertexes.append(Vertex_Data(QVector3D(x - wd2 + wdn * j      , y + wd2 - wdn * (1 + i), z + wd2), QVector2D(0.0, 0.0), QVector3D(0.0, 0.0, 1.0)));
-            vertexes.append(Vertex_Data(QVector3D(x - wd2 + wdn * (1 + j), y + wd2 - wdn * i      , z + wd2), QVector2D(1.0, 1.0), QVector3D(0.0, 0.0, 1.0)));
-            vertexes.append(Vertex_Data(QVector3D(x - wd2 + wdn * (1 + j), y + wd2 - wdn * (1 + i), z + wd2), QVector2D(1.0, 0.0), QVector3D(0.0, 0.0, 1.0)));
+            vertexes.append(Vertex_Data{QVector3D(x - wd2 + wdn * j      , y + wd2 - wdn * i      , z + wd2), QVector2D(0.0, 1.0), QVector3D(0.0, 0.0, 1.0)});
+            vertexes.append(Vertex_Data{QVector3D(x - wd2 + wdn * j      , y + wd2 - wdn * (1 + i), z + wd2), QVector2D(0.0, 0.0), QVector3D(0.0, 0.0, 1.0)});
+            vertexes.append(Vertex_Data{QVector3D(x - wd2 + wdn * (1 + j), y + wd2 - wdn * i      , z + wd2), QVector2D(1.0, 1.0), QVector3D(0.0, 0.0, 1.0)});
+            vertexes.append(Vertex_Data{QVector3D(x - wd2 + wdn * (1 + j), y + wd2 - wdn * (1 + i), z + wd2), QVector2D(1.0, 0.0), QVector3D(0.0, 0.0, 1.0)});
         }
     //x
     for (int i = 0; i < num; i++)
         for (int j = 0; j < num; j++) {
-            vertexes.append(Vertex_Data(QVector3D(x + wd2, y - wd2 + wdn * j      , z + wd2 - wdn * i      ), QVector2D(0.0, 1.0), QVector3D(1.0, 0.0, 0.0)));
-            vertexes.append(Vertex_Data(QVector3D(x + wd2, y - wd2 + wdn * j      , z + wd2 - wdn * (1 + i)), QVector2D(0.0, 0.0), QVector3D(1.0, 0.0, 0.0)));
-            vertexes.append(Vertex_Data(QVector3D(x + wd2, y - wd2 + wdn * (1 + j), z + wd2 - wdn * i      ), QVector2D(1.0, 1.0), QVector3D(1.0, 0.0, 0.0)));
-            vertexes.append(Vertex_Data(QVector3D(x + wd2, y - wd2 + wdn * (1 + j), z + wd2 - wdn * (1 + i)), QVector2D(1.0, 0.0), QVector3D(1.0, 0.0, 0.0)));
+            vertexes.append(Vertex_Data{QVector3D(x + wd2, y - wd2 + wdn * j      , z + wd2 - wdn * i      ), QVector2D(0.0, 1.0), QVector3D(1.0, 0.0, 0.0)});
+            vertexes.append(Vertex_Data{QVector3D(x + wd2, y - wd2 + wdn * j      , z + wd2 - wdn * (1 + i)), QVector2D(0.0, 0.0), QVector3D(1.0, 0.0, 0.0)});
+            vertexes.append(Vertex_Data{QVector3D(x + wd2, y - wd2 + wdn * (1 + j), z + wd2 - wdn * i      ), QVector2D(1.0, 1.0), QVector3D(1.0, 0.0, 0.0)});
+            vertexes.append(Vertex_Data{QVector3D(x + wd2, y - wd2 + wdn * (1 + j), z + wd2 - wdn * (1 + i)), QVector2D(1.0, 0.0), QVector3D(1.0, 0.0, 0.0)});
         }
     //y
     for (int i = 0; i < num; i++)
         for (int j = 0; j < num; j++) {
-            vertexes.append(Vertex_Data(QVector3D(x + wd2 - wdn * j      , y + wd2, z + wd2 - wdn * i      ), QVector2D(0.0, 1.0), QVector3D(0.0, 1.0, 0.0)));
-            vertexes.append(Vertex_Data(QVector3D(x + wd2 - wdn * j      , y + wd2, z + wd2 - wdn * (1 + i)), QVector2D(0.0, 0.0), QVector3D(0.0, 1.0, 0.0)));
-            vertexes.append(Vertex_Data(QVector3D(x + wd2 - wdn * (1 + j), y + wd2, z + wd2 - wdn * i      ), QVector2D(1.0, 1.0), QVector3D(0.0, 1.0, 0.0)));
-            vertexes.append(Vertex_Data(QVector3D(x + wd2 - wdn * (1 + j), y + wd2, z + wd2 - wdn * (1 + i)), QVector2D(1.0, 0.0), QVector3D(0.0, 1.0, 0.0)));
+            vertexes.append(Vertex_Data{QVector3D(x + wd2 - wdn * j      , y + wd2, z + wd2 - wdn * i      ), QVector2D(0.0, 1.0), QVector3D(0.0, 1.0, 0.0)});
+            vertexes.append(Vertex_Data{QVector3D(x + wd2 - wdn * j      , y + wd2, z + wd2 - wdn * (1 + i)), QVector2D(0.0, 0.0), QVector3D(0.0, 1.0, 0.0)});
+            vertexes.append(Vertex_Data{QVector3D(x + wd2 - wdn * (1 + j), y + wd2, z + wd2 - wdn * i      ), QVector2D(1.0, 1.0), QVector3D(0.0, 1.0, 0.0)});
+            vertexes.append(Vertex_Data{QVector3D(x + wd2 - wdn * (1 + j), y + wd2, z + wd2 - wdn * (1 + i)), QVector2D(1.0, 0.0), QVector3D(0.0, 1.0, 0.0)});
         }
     //-z
     for (int i = 0; i < num; i++)
         for (int j = 0; j < num; j++) {
-            vertexes.append(Vertex_Data(QVector3D(x + wd2 - wdn * j      , y + wd2 - wdn * i      , z - wd2), QVector2D(0.0, 1.0), QVector3D(0.0, 0.0, -1.0)));
-            vertexes.append(Vertex_Data(QVector3D(x + wd2 - wdn * j      , y + wd2 - wdn * (1 + i), z - wd2), QVector2D(0.0, 0.0), QVector3D(0.0, 0.0, -1.0)));
-            vertexes.append(Vertex_Data(QVector3D(x + wd2 - wdn * (1 + j), y + wd2 - wdn * i      , z - wd2), QVector2D(1.0, 1.0), QVector3D(0.0, 0.0, -1.0)));
-            vertexes.append(Vertex_Data(QVector3D(x + wd2 - wdn * (1 + j), y + wd2 - wdn * (1 + i), z - wd2), QVector2D(1.0, 0.0), QVector3D(0.0, 0.0, -1.0)));
+            vertexes.append(Vertex_Data{QVector3D(x + wd2 - wdn * j      , y + wd2 - wdn * i      , z - wd2), QVector2D(0.0, 1.0), QVector3D(0.0, 0.0, -1.0)});
+            vertexes.append(Vertex_Data{QVector3D(x + wd2 - wdn * j      , y + wd2 - wdn * (1 + i), z - wd2), QVector2D(0.0, 0.0), QVector3D(0.0, 0.0, -1.0)});
+            vertexes.append(Vertex_Data{QVector3D(x + wd2 - wdn * (1 + j), y + wd2 - wdn * i      , z - wd2), QVector2D(1.0, 1.0), QVector3D(0.0, 0.0, -1.0)});
+            vertexes.append(Vertex_Data{QVector3D(x + wd2 - wdn * (1 + j), y + wd2 - wdn * (1 + i), z - wd2), QVector2D(1.0, 0.0), QVector3D(0.0, 0.0, -1.0)});
         }
     //-x
     for (int i = 0; i < num; i++)
         for (int j = 0; j < num; j++) {
-            vertexes.append(Vertex_Data(QVector3D(x - wd2, y + wd2 - wdn * j      , z + wd2 - wdn * i      ), QVector2D(0.0, 1.0), QVector3D(-1.0, 0.0, 0.0)));
-            vertexes.append(Vertex_Data(QVector3D(x - wd2, y + wd2 - wdn * j      , z + wd2 - wdn * (1 + i)), QVector2D(0.0, 0.0), QVector3D(-1.0, 0.0, 0.0)));
-            vertexes.append(Vertex_Data(QVector3D(x - wd2, y + wd2 - wdn * (1 + j), z + wd2 - wdn * i      ), QVector2D(1.0, 1.0), QVector3D(-1.0, 0.0, 0.0)));
-            vertexes.append(Vertex_Data(QVector3D(x - wd2, y + wd2 - wdn * (1 + j), z + wd2 - wdn * (1 + i)), QVector2D(1.0, 0.0), QVector3D(-1.0, 0.0, 0.0)));
+            vertexes.append(Vertex_Data{QVector3D(x - wd2, y + wd2 - wdn * j      , z + wd2 - wdn * i      ), QVector2D(0.0, 1.0), QVector3D(-1.0, 0.0, 0.0)});
+            vertexes.append(Vertex_Data{QVector3D(x - wd2, y + wd2 - wdn * j      , z + wd2 - wdn * (1 + i)), QVector2D(0.0, 0.0), QVector3D(-1.0, 0.0, 0.0)});
+            vertexes.append(Vertex_Data{QVector3D(x - wd2, y + wd2 - wdn * (1 + j), z + wd2 - wdn * i      ), QVector2D(1.0, 1.0), QVector3D(-1.0, 0.0, 0.0)});
+            vertexes.append(Vertex_Data{QVector3D(x - wd2, y + wd2 - wdn * (1 + j), z + wd2 - wdn * (1 + i)), QVector2D(1.0, 0.0), QVector3D(-1.0, 0.0, 0.0)});
         }
     //-y
     for (int i = 0; i < num; i++)
         for (int j = 0; j < num; j++) {
-            vertexes.append(Vertex_Data(QVector3D(x - wd2 + wdn * j      , y - wd2, z + wd2 - wdn * i      ), QVector2D(0.0, 1.0), QVector3D(0.0, -1.0, 0.0)));
-            vertexes.append(Vertex_Data(QVector3D(x - wd2 + wdn * j      , y - wd2, z + wd2 - wdn * (1 + i)), QVector2D(0.0, 0.0), QVector3D(0.0, -1.0, 0.0)));
-            vertexes.append(Vertex_Data(QVector3D(x - wd2 + wdn * (1 + j), y - wd2, z + wd2 - wdn * i      ), QVector2D(1.0, 1.0), QVector3D(0.0, -1.0, 0.0)));
-            vertexes.append(Vertex_Data(QVector3D(x - wd2 + wdn * (1 + j), y - wd2, z + wd2 - wdn * (1 + i)), QVector2D(1.0, 0.0), QVector3D(0.0, -1.0, 0.0)));
+            vertexes.append(Vertex_Data{QVector3D(x - wd2 + wdn * j      , y - wd2, z + wd2 - wdn * i      ), QVector2D(0.0, 1.0), QVector3D(0.0, -1.0, 0.0)});
+            vertexes.append(Vertex_Data{QVector3D(x - wd2 + wdn * j      , y - wd2, z + wd2 - wdn * (1 + i)), QVector2D(0.0, 0.0), QVector3D(0.0, -1.0, 0.0)});
+            vertexes.append(Vertex_Data{QVector3D(x - wd2 + wdn * (1 + j), y - wd2, z + wd2 - wdn * i      ), QVector2D(1.0, 1.0), QVector3D(0.0, -1.0, 0.0)});
+            vertexes.append(Vertex_Data{QVector3D(x - wd2 + wdn * (1 + j), y - wd2, z + wd2 - wdn * (1 + i)), QVector2D(1.0, 0.0), QVector3D(0.0, -1.0, 0.0)});
         }
 
     QVector<GLuint> indexes;
@@ -143,29 +145,10 @@ void CubeWindow::Init_Cube(float x, float y, float z, float width, int num)
     m_vertex_buffer.create();
     m_vertex_buffer.bind();
     m_vertex_buffer.allocate(vertexes.constData(), vertexes.size() * sizeof(Vertex_Data));
-    //m_vertex_buffer.release();
 
     m_index_buffer.create();
     m_index_buffer.bind();
     m_index_buffer.allocate(indexes.constData(), indexes.size() * sizeof(GLuint));
-    //m_index_buffer.release();
-
-    //TEXTURE
-    m_shader_texture = new QOpenGLTexture(QImage(":/cube.jpg").mirrored());
-    //Set nearest filtering mode for texture minification
-    m_shader_texture->setMinificationFilter(QOpenGLTexture::Nearest);
-    //Set bilinear filtering mode for texture magnification
-    m_shader_texture->setMagnificationFilter(QOpenGLTexture::Linear);
-    //Wrap texture coordinates by repeating
-    m_shader_texture->setWrapMode(QOpenGLTexture::Repeat);
-}
-
-void CubeWindow::keyPressEvent(QKeyEvent *event) {
-  if (event->key() == Qt::Key_Space) {
-    QColor color = QColorDialog::getColor();
-    changeColor = QVector4D(color.red() / 255.0, color.green() / 255.0,
-                            color.blue() / 255.0, 1);
-  }
 }
 
 void CubeWindow::mousePressEvent(QMouseEvent *event) {
