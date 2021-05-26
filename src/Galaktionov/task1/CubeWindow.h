@@ -28,7 +28,7 @@ struct Vertex_Data {
 class CubeWindow final : public fgl::GLWindow {
 
 public:
-  CubeWindow(QWindow *parent = 0);
+  CubeWindow(QWindow *parent = nullptr);
 
   void init() override;
   void render() override;
@@ -41,7 +41,7 @@ protected:
 
 private:
   QMatrix4x4 m_projection_matrix;
-  std::shared_ptr<QOpenGLShaderProgram> m_shader_program;
+  std::unique_ptr<QOpenGLShaderProgram> m_shader_program;
   std::shared_ptr<QOpenGLTexture> m_shader_texture;
 
   QOpenGLBuffer m_vertex_buffer;
