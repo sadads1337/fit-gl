@@ -20,14 +20,6 @@
 #include <QWindow>
 
 struct Vertex_Data {
-    Vertex_Data()
-    {
-    }
-    Vertex_Data(QVector3D pos, QVector2D tex, QVector3D norm):
-        position(pos), texture_coordinates(tex), normal(norm)
-    {
-    }
-
     QVector3D position;
     QVector2D texture_coordinates;
     QVector3D normal;
@@ -37,23 +29,20 @@ class CubeWindow final : public fgl::GLWindow {
 
 public:
   CubeWindow(QWindow *parent = 0);
-  ~CubeWindow() override;
 
   void init() override;
   void render() override;
 
 protected:
-  void Init_Shaders();
   void Init_Cube(float x, float y, float z, float width);
 
   void mousePressEvent(QMouseEvent *e) override;
   void mouseReleaseEvent(QMouseEvent *e) override;
-  void keyPressEvent(QKeyEvent *event) override;
 
 private:
   QMatrix4x4 m_projection_matrix;
-  QOpenGLShaderProgram m_shader_program;
-  QOpenGLTexture *m_shader_texture;
+  std::shared_ptr<QOpenGLShaderProgram> m_shader_program;
+  std::shared_ptr<QOpenGLTexture> m_shader_texture;
 
   QOpenGLBuffer m_vertex_buffer;
   QOpenGLBuffer m_index_buffer;
@@ -63,7 +52,6 @@ private:
   GLint texture_location;
   GLint matrixUniform_;
 
-  QVector4D changeColor{1.0, 1.0, 0.0, 1};
   QVector2D mousePressPosition{0.0, 0.0};
   QVector3D rotationAxis{0.0, 1.0, 0.0};
 };
