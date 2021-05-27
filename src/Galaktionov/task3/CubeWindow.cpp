@@ -1,6 +1,6 @@
 #include "CubeWindow.h"
 
-std::array<QVector3D, 17> cubes_arr{
+constexpr std::array<QVector3D, 17> cubes_arr{
             QVector3D(-0.5f, 0.0f,-1.0f),QVector3D( 0.5f, 0.0f,-1.0f),
 
             QVector3D(-2.0f, 1.0f,-2.5f),QVector3D(-2.0f, 0.0f,-2.5f),QVector3D(-2.0f,-1.0f,-2.5f),
@@ -10,7 +10,7 @@ std::array<QVector3D, 17> cubes_arr{
             QVector3D( 2.0f, 1.0f,-2.5f),QVector3D( 2.0f, 0.0f,-2.5f),QVector3D( 2.0f,-1.0f,-2.5f)
 };
 
-std::array<Vertex_Data, 24> vertexes{{
+constexpr std::array<Vertex_Data, 24> vertexes{{
         //z
         Vertex_Data{{-0.5f, 0.5f, 0.5f}, { 0.0f, 0.0f, 1.0f}},
         Vertex_Data{{-0.5f,-0.5f, 0.5f}, { 0.0f, 0.0f, 1.0f}},
@@ -43,7 +43,7 @@ std::array<Vertex_Data, 24> vertexes{{
         Vertex_Data{{ 0.5f,-0.5f,-0.5f}, { 0.0f,-1.0f, 0.0f}}
                                       }};
 
-std::array<GLuint, 36> indexes{{
+constexpr std::array<GLuint, 36> indexes{{
         //z
          0,  1,  2,  2,  1,  3,
         //x
