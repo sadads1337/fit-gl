@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>GuroSceneObject.vert</file>
+        <file>GuroSceneObject.frag</file>
+        <file>LightSource.vert</file>
+    </qresource>
+</RCC>
